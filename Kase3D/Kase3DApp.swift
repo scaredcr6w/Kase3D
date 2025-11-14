@@ -11,6 +11,7 @@ import SwiftUI
 struct Kase3DApp: App {
     var body: some Scene {
         WindowGroup {
+            //
             ContentView()
         }
     }
