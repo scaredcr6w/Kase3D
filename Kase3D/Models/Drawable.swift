@@ -8,7 +8,7 @@
 import Foundation
 import MetalKit
 
-protocol Drawable: AnyObject, Sendable, Transformable {
+protocol Drawable: AnyObject, Transformable {
     var vertexBuffer: MTLBuffer? { get set }
     var indexBuffer: MTLBuffer? { get set }
     var indexCount: Int { get }
