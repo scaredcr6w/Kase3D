@@ -36,7 +36,6 @@ final class Renderer: NSObject {
         
         self.library = library
         
-        // pipeline state object
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         pipelineDescriptor.vertexFunction = vertexFunction
         pipelineDescriptor.fragmentFunction = fragmentFunction
@@ -52,12 +51,7 @@ final class Renderer: NSObject {
         
         super.init()
         
-        uniforms.viewMatrix = float4x4(
-            [            1,             0,             0, 0],
-            [            0,             1,             0, 0],
-            [            0,             0,             1, 0],
-            [            0,             0,            -3, 1]
-        )
+        uniforms.viewMatrix = Matrix.viewMatrix(x: 0, y: 0, z: -3)
         
         metalView.clearColor = MTLClearColor(
             red: 0.1,
@@ -67,23 +61,6 @@ final class Renderer: NSObject {
         )
         
         metalView.delegate = self
-    }
-    
-    func createProjectionMatrix(aspectRatio: Float) -> float4x4 {
-        let fov = Float.pi / 2
-        let near: Float = 0.1
-        let far: Float = 100.0
-        
-        let f = 1.0 / tan(fov / 2.0)
-        
-        var matrix = float4x4()
-        matrix[0, 0] = f / aspectRatio
-        matrix[1, 1] = f
-        matrix[2, 2] = (far + near) / (near - far)
-        matrix[2, 3] = -1.0
-        matrix[3, 2] = (2 * far * near) / (near - far)
-        
-        return matrix
     }
 }
 
@@ -109,7 +86,7 @@ extension Renderer: MTKViewDelegate {
         
         renderEncoder.setRenderPipelineState(pipelineState)
         
-        let projectionMatrix = createProjectionMatrix(aspectRatio: Float((view.bounds.width / view.bounds.height)))
+        let projectionMatrix = Matrix.projectionMatrix(aspectRatio: Float((view.bounds.width / view.bounds.height)))
         uniforms.projectionMatrix = projectionMatrix
 
         model.position.y = -0.6
