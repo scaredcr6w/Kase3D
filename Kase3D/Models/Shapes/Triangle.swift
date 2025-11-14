@@ -27,9 +27,9 @@ final class Triangle: Shape {
     
     func setupGeometry() {
         vertices = [
-            Vertex(position: SIMD3<Float>(0.0, 0.5, 0.0)),    // top
-            Vertex(position: SIMD3<Float>(-0.5, -0.5, 0.0)),  // bottom-left
-            Vertex(position: SIMD3<Float>(0.5, -0.5, 0.0))    // bottom-right
+            Vertex(position: SIMD3<Float>(0.0, 0.5, 0.0)),
+            Vertex(position: SIMD3<Float>(-0.5, -0.5, 0.0)),
+            Vertex(position: SIMD3<Float>(0.5, -0.5, 0.0))
         ]
         
         indices = [0, 1, 2]
