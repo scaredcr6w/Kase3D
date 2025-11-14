@@ -39,7 +39,7 @@ struct MetalViewRepresentable: ViewRepresentable {
     }
     
     #elseif os(iOS)
-    func makeUIView(context: Context) {
+    func makeUIView(context: Context) -> MTKView {
         metalView
     }
     
