@@ -27,14 +27,35 @@ final class Renderer: NSObject {
         
         self.device = device
         self.commandQueue = commandQueue
-        metalView.device = device
+        self.library = library
         
+        metalView.device = device
         self.model = Triangle(device: device)
         
+        guard let pipelineState = Self.createPipelineState(
+            device: device,
+            library: library,
+            metalView: metalView,
+            model: model
+        ) else { return nil }
+        
+        self.pipelineState = pipelineState
+        
+        super.init()
+        
+        self.setupUniforms(for: metalView)
+        self.setupMetalView(metalView)
+        metalView.delegate = self
+    }
+    
+    private static func createPipelineState(
+        device: MTLDevice,
+        library: MTLLibrary,
+        metalView: MTKView,
+        model: Drawable
+    ) -> MTLRenderPipelineState? {
         let vertexFunction = library.makeFunction(name: "vertex_main")
         let fragmentFunction = library.makeFunction(name: "fragment_main")
-        
-        self.library = library
         
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         pipelineDescriptor.vertexFunction = vertexFunction
@@ -43,61 +64,74 @@ final class Renderer: NSObject {
         pipelineDescriptor.vertexDescriptor = model.vertexDescriptor
         
         do {
-            self.pipelineState = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
+            return try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
         } catch {
             print(error.localizedDescription)
             return nil
         }
-        
-        super.init()
-        
+    }
+    
+    private func setupUniforms(for metalView: MTKView) {
         uniforms.viewMatrix = Matrix.viewMatrix(x: 0, y: 0, z: -3)
-        
+        uniforms.projectionMatrix = Matrix.projectionMatrix(aspectRatio: Float((metalView.bounds.width / metalView.bounds.height)))
+    }
+    
+    private func setupMetalView(_ metalView: MTKView) {
         metalView.clearColor = MTLClearColor(
             red: 0.1,
             green: 0.1,
             blue: 0.1,
             alpha: 1.0
         )
-        
-        metalView.delegate = self
     }
 }
 
 extension Renderer: MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        
+        uniforms.projectionMatrix = Matrix.projectionMatrix(
+            aspectRatio: Float(size.width / size.height)
+        )
     }
     
     func draw(in view: MTKView) {
         guard let drawable = view.currentDrawable,
               let renderPassDescriptor = view.currentRenderPassDescriptor,
-              let commandBuffer = commandQueue.makeCommandBuffer() else {
-            return
-        }
-
-        renderPassDescriptor.colorAttachments[0].loadAction = .clear
-        renderPassDescriptor.colorAttachments[0].storeAction = .store
-
-        guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) else {
-            commandBuffer.commit()
+              let commandBuffer = commandQueue.makeCommandBuffer(),
+              let renderEncoder = Self.createRenderEncoder(commandBuffer: commandBuffer, descriptor: renderPassDescriptor) else {
             return
         }
         
-        renderEncoder.setRenderPipelineState(pipelineState)
-        
-        let projectionMatrix = Matrix.projectionMatrix(aspectRatio: Float((view.bounds.width / view.bounds.height)))
-        uniforms.projectionMatrix = projectionMatrix
-
-        model.position.y = -0.6
-        uniforms.modelMatrix = model.transform.modelMatrix
-        
-        renderEncoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 11)
-        
-        model.render(encoder: renderEncoder)
-
+        self.encodeRenderCommands(renderEncoder: renderEncoder, view: view)
         renderEncoder.endEncoding()
         commandBuffer.present(drawable)
         commandBuffer.commit()
+    }
+    
+    private static func createRenderEncoder(
+        commandBuffer: MTLCommandBuffer,
+        descriptor: MTLRenderPassDescriptor
+    ) -> MTLRenderCommandEncoder? {
+        descriptor.colorAttachments[0].loadAction = .clear
+        descriptor.colorAttachments[0].storeAction = .store
+        
+        return commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
+    }
+    
+    private func encodeRenderCommands(renderEncoder: MTLRenderCommandEncoder, view: MTKView) {
+        renderEncoder.setRenderPipelineState(pipelineState)
+        
+        updateModelTransform()
+        renderEncoder.setVertexBytes(
+            &uniforms,
+            length: MemoryLayout<Uniforms>.size,
+            index: 11
+        )
+        
+        model.render(encoder: renderEncoder)
+    }
+    
+    private func updateModelTransform() {
+        model.position.y = -0.6
+        uniforms.modelMatrix = model.transform.modelMatrix
     }
 }
