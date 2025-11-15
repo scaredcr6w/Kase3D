@@ -8,11 +8,15 @@
 import Foundation
 import MetalKit
 
-final class Renderer: NSObject, Sendable {
+@MainActor
+final class Renderer: NSObject {
     let device: MTLDevice
     let commandQueue: MTLCommandQueue
     let library: MTLLibrary
     let pipelineState: MTLRenderPipelineState
+    
+    var model: Drawable
+    var uniforms = Uniforms()
     
     init?(metalView: MTKView) {
         guard let device = MTLCreateSystemDefaultDevice(),
@@ -25,17 +29,18 @@ final class Renderer: NSObject, Sendable {
         self.commandQueue = commandQueue
         metalView.device = device
         
+        self.model = Triangle(device: device)
+        
         let vertexFunction = library.makeFunction(name: "vertex_main")
         let fragmentFunction = library.makeFunction(name: "fragment_main")
         
         self.library = library
         
-        // pipeline state object
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         pipelineDescriptor.vertexFunction = vertexFunction
         pipelineDescriptor.fragmentFunction = fragmentFunction
-        
         pipelineDescriptor.colorAttachments[0].pixelFormat = metalView.colorPixelFormat
+        pipelineDescriptor.vertexDescriptor = model.vertexDescriptor
         
         do {
             self.pipelineState = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
@@ -45,6 +50,8 @@ final class Renderer: NSObject, Sendable {
         }
         
         super.init()
+        
+        uniforms.viewMatrix = Matrix.viewMatrix(x: 0, y: 0, z: -3)
         
         metalView.clearColor = MTLClearColor(
             red: 0.1,
@@ -59,7 +66,7 @@ final class Renderer: NSObject, Sendable {
 
 extension Renderer: MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        //
+        
     }
     
     func draw(in view: MTKView) {
@@ -69,7 +76,6 @@ extension Renderer: MTKViewDelegate {
             return
         }
 
-        // Configure render pass (clear is handled by view.clearColor)
         renderPassDescriptor.colorAttachments[0].loadAction = .clear
         renderPassDescriptor.colorAttachments[0].storeAction = .store
 
@@ -77,11 +83,19 @@ extension Renderer: MTKViewDelegate {
             commandBuffer.commit()
             return
         }
-
-        // Set pipeline state; no vertex buffers yet (just a clear)
+        
         renderEncoder.setRenderPipelineState(pipelineState)
+        
+        let projectionMatrix = Matrix.projectionMatrix(aspectRatio: Float((view.bounds.width / view.bounds.height)))
+        uniforms.projectionMatrix = projectionMatrix
 
-        // End encoding and present
+        model.position.y = -0.6
+        uniforms.modelMatrix = model.transform.modelMatrix
+        
+        renderEncoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 11)
+        
+        model.render(encoder: renderEncoder)
+
         renderEncoder.endEncoding()
         commandBuffer.present(drawable)
         commandBuffer.commit()
