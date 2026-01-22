@@ -146,6 +146,9 @@
 			);
 			mainGroup = 0F35552E2EC705C2006C8218;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				0F60658C2F2281FE009693E8 /* XCLocalSwiftPackageReference "../Kase3DEngine" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0F3555382EC705C2006C8218 /* Products */;
 			projectDirPath = "";
@@ -493,6 +496,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		0F60658C2F2281FE009693E8 /* XCLocalSwiftPackageReference "../Kase3DEngine" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Kase3DEngine;
+		};
+/* End XCLocalSwiftPackageReference section */
 	};
 	rootObject = 0F35552F2EC705C2006C8218 /* Project object */;
 }
