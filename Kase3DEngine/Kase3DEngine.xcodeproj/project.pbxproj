@@ -7,198 +7,205 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0FE10F762F22B35D003082BF /* Kase3DEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE10F752F22B35D003082BF /* Kase3DEngine.framework */; };
-		0FE10F772F22B35D003082BF /* Kase3DEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE10F752F22B35D003082BF /* Kase3DEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0FE10F4F2F22B2B7003082BF /* Kase3DEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE10F452F22B2B6003082BF /* Kase3DEngine.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		0F3555452EC705C4006C8218 /* PBXContainerItemProxy */ = {
+		0FE10F502F22B2B7003082BF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 0F35552F2EC705C2006C8218 /* Project object */;
+			containerPortal = 0FE10F3C2F22B2B6003082BF /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0F3555362EC705C2006C8218;
-			remoteInfo = Kase3D;
+			remoteGlobalIDString = 0FE10F442F22B2B6003082BF;
+			remoteInfo = Kase3DEngine;
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		0FE10F782F22B35D003082BF /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				0FE10F772F22B35D003082BF /* Kase3DEngine.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		0F3555372EC705C2006C8218 /* Kase3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kase3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0F3555442EC705C4006C8218 /* Kase3DTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kase3DTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0FE10F752F22B35D003082BF /* Kase3DEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Kase3DEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FE10F452F22B2B6003082BF /* Kase3DEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Kase3DEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FE10F4E2F22B2B7003082BF /* Kase3DEngineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kase3DEngineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0FE10F722F22B31A003082BF /* Exceptions for "Kase3DEngine" folder in "Kase3DEngine" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Geometry/MTLVertexDescriptor+Extensions.swift",
+				Rendering/Renderer.swift,
+				Shaders/Fragment.metal,
+				Shaders/Vertex.metal,
+			);
+			target = 0FE10F442F22B2B6003082BF /* Kase3DEngine */;
+		};
+		0FE10F732F22B31B003082BF /* Exceptions for "Kase3DEngine" folder in "Kase3DEngineTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Geometry/MTLVertexDescriptor+Extensions.swift",
+				Rendering/Renderer.swift,
+				Shaders/Fragment.metal,
+				Shaders/Vertex.metal,
+			);
+			target = 0FE10F4D2F22B2B7003082BF /* Kase3DEngineTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		0F3555392EC705C2006C8218 /* Kase3D */ = {
+		0FE10F522F22B2B7003082BF /* Kase3DEngineTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Kase3D;
+			path = Kase3DEngineTests;
 			sourceTree = "<group>";
 		};
-		0F3555472EC705C4006C8218 /* Kase3DTests */ = {
+		0FE10F662F22B305003082BF /* Kase3DEngine */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Kase3DTests;
+			exceptions = (
+				0FE10F722F22B31A003082BF /* Exceptions for "Kase3DEngine" folder in "Kase3DEngine" target */,
+				0FE10F732F22B31B003082BF /* Exceptions for "Kase3DEngine" folder in "Kase3DEngineTests" target */,
+			);
+			path = Kase3DEngine;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		0F3555342EC705C2006C8218 /* Frameworks */ = {
+		0FE10F422F22B2B6003082BF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0FE10F762F22B35D003082BF /* Kase3DEngine.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0F3555412EC705C4006C8218 /* Frameworks */ = {
+		0FE10F4B2F22B2B7003082BF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FE10F4F2F22B2B7003082BF /* Kase3DEngine.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0F35552E2EC705C2006C8218 = {
+		0FE10F3B2F22B2B6003082BF = {
 			isa = PBXGroup;
 			children = (
-				0F3555392EC705C2006C8218 /* Kase3D */,
-				0F3555472EC705C4006C8218 /* Kase3DTests */,
-				0FE10F742F22B35D003082BF /* Frameworks */,
-				0F3555382EC705C2006C8218 /* Products */,
+				0FE10F662F22B305003082BF /* Kase3DEngine */,
+				0FE10F522F22B2B7003082BF /* Kase3DEngineTests */,
+				0FE10F462F22B2B6003082BF /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		0F3555382EC705C2006C8218 /* Products */ = {
+		0FE10F462F22B2B6003082BF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0F3555372EC705C2006C8218 /* Kase3D.app */,
-				0F3555442EC705C4006C8218 /* Kase3DTests.xctest */,
+				0FE10F452F22B2B6003082BF /* Kase3DEngine.framework */,
+				0FE10F4E2F22B2B7003082BF /* Kase3DEngineTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		0FE10F742F22B35D003082BF /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				0FE10F752F22B35D003082BF /* Kase3DEngine.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
-/* Begin PBXNativeTarget section */
-		0F3555362EC705C2006C8218 /* Kase3D */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0F3555582EC705C4006C8218 /* Build configuration list for PBXNativeTarget "Kase3D" */;
-			buildPhases = (
-				0F3555332EC705C2006C8218 /* Sources */,
-				0F3555342EC705C2006C8218 /* Frameworks */,
-				0F3555352EC705C2006C8218 /* Resources */,
-				0FE10F782F22B35D003082BF /* Embed Frameworks */,
+/* Begin PBXHeadersBuildPhase section */
+		0FE10F402F22B2B6003082BF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				0F3555392EC705C2006C8218 /* Kase3D */,
-			);
-			name = Kase3D;
-			packageProductDependencies = (
-			);
-			productName = Kase3D;
-			productReference = 0F3555372EC705C2006C8218 /* Kase3D.app */;
-			productType = "com.apple.product-type.application";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0F3555432EC705C4006C8218 /* Kase3DTests */ = {
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		0FE10F442F22B2B6003082BF /* Kase3DEngine */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0F35555B2EC705C4006C8218 /* Build configuration list for PBXNativeTarget "Kase3DTests" */;
+			buildConfigurationList = 0FE10F572F22B2B7003082BF /* Build configuration list for PBXNativeTarget "Kase3DEngine" */;
 			buildPhases = (
-				0F3555402EC705C4006C8218 /* Sources */,
-				0F3555412EC705C4006C8218 /* Frameworks */,
-				0F3555422EC705C4006C8218 /* Resources */,
+				0FE10F402F22B2B6003082BF /* Headers */,
+				0FE10F412F22B2B6003082BF /* Sources */,
+				0FE10F422F22B2B6003082BF /* Frameworks */,
+				0FE10F432F22B2B6003082BF /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				0F3555462EC705C4006C8218 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				0F3555472EC705C4006C8218 /* Kase3DTests */,
-			);
-			name = Kase3DTests;
+			name = Kase3DEngine;
 			packageProductDependencies = (
 			);
-			productName = Kase3DTests;
-			productReference = 0F3555442EC705C4006C8218 /* Kase3DTests.xctest */;
+			productName = Kase3DEngine;
+			productReference = 0FE10F452F22B2B6003082BF /* Kase3DEngine.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		0FE10F4D2F22B2B7003082BF /* Kase3DEngineTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0FE10F5A2F22B2B7003082BF /* Build configuration list for PBXNativeTarget "Kase3DEngineTests" */;
+			buildPhases = (
+				0FE10F4A2F22B2B7003082BF /* Sources */,
+				0FE10F4B2F22B2B7003082BF /* Frameworks */,
+				0FE10F4C2F22B2B7003082BF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0FE10F512F22B2B7003082BF /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				0FE10F522F22B2B7003082BF /* Kase3DEngineTests */,
+				0FE10F662F22B305003082BF /* Kase3DEngine */,
+			);
+			name = Kase3DEngineTests;
+			packageProductDependencies = (
+			);
+			productName = Kase3DEngineTests;
+			productReference = 0FE10F4E2F22B2B7003082BF /* Kase3DEngineTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		0F35552F2EC705C2006C8218 /* Project object */ = {
+		0FE10F3C2F22B2B6003082BF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2610;
-				LastUpgradeCheck = 2610;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
-					0F3555362EC705C2006C8218 = {
-						CreatedOnToolsVersion = 26.1.1;
+					0FE10F442F22B2B6003082BF = {
+						CreatedOnToolsVersion = 26.2;
 					};
-					0F3555432EC705C4006C8218 = {
-						CreatedOnToolsVersion = 26.1.1;
-						TestTargetID = 0F3555362EC705C2006C8218;
+					0FE10F4D2F22B2B7003082BF = {
+						CreatedOnToolsVersion = 26.2;
 					};
 				};
 			};
-			buildConfigurationList = 0F3555322EC705C2006C8218 /* Build configuration list for PBXProject "Kase3D" */;
+			buildConfigurationList = 0FE10F3F2F22B2B6003082BF /* Build configuration list for PBXProject "Kase3DEngine" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 0F35552E2EC705C2006C8218;
+			mainGroup = 0FE10F3B2F22B2B6003082BF;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 0F3555382EC705C2006C8218 /* Products */;
+			productRefGroup = 0FE10F462F22B2B6003082BF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0F3555362EC705C2006C8218 /* Kase3D */,
-				0F3555432EC705C4006C8218 /* Kase3DTests */,
+				0FE10F442F22B2B6003082BF /* Kase3DEngine */,
+				0FE10F4D2F22B2B7003082BF /* Kase3DEngineTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		0F3555352EC705C2006C8218 /* Resources */ = {
+		0FE10F432F22B2B6003082BF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0F3555422EC705C4006C8218 /* Resources */ = {
+		0FE10F4C2F22B2B7003082BF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -208,14 +215,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		0F3555332EC705C2006C8218 /* Sources */ = {
+		0FE10F412F22B2B6003082BF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0F3555402EC705C4006C8218 /* Sources */ = {
+		0FE10F4A2F22B2B7003082BF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -225,15 +232,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0F3555462EC705C4006C8218 /* PBXTargetDependency */ = {
+		0FE10F512F22B2B7003082BF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0F3555362EC705C2006C8218 /* Kase3D */;
-			targetProxy = 0F3555452EC705C4006C8218 /* PBXContainerItemProxy */;
+			target = 0FE10F442F22B2B6003082BF /* Kase3DEngine */;
+			targetProxy = 0FE10F502F22B2B7003082BF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0F3555562EC705C4006C8218 /* Debug */ = {
+		0FE10F552F22B2B7003082BF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -267,6 +274,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 37925SQG82;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -291,12 +299,13 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_OBJC_BRIDGING_HEADER = Kase3D/Shaders/Commons.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		0F3555572EC705C4006C8218 /* Release */ = {
+		0FE10F562F22B2B7003082BF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -330,6 +339,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 37925SQG82;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -347,114 +357,113 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OBJC_BRIDGING_HEADER = Kase3D/Shaders/Commons.h;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
-		0F3555592EC705C4006C8218 /* Debug */ = {
+		0FE10F582F22B2B7003082BF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 37925SQG82;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.scaredcr6w.Kase3D;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.scaredcr6w.Kase3DEngine;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;
+				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.1;
+				XROS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = Debug;
 		};
-		0F35555A2EC705C4006C8218 /* Release */ = {
+		0FE10F592F22B2B7003082BF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 37925SQG82;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.scaredcr6w.Kase3D;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.scaredcr6w.Kase3DEngine;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;
+				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.1;
+				XROS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = Release;
 		};
-		0F35555C2EC705C4006C8218 /* Debug */ = {
+		0FE10F5B2F22B2B7003082BF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 37925SQG82;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.scaredcr6w.Kase3DTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.scaredcr6w.Kase3DEngineTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
@@ -464,23 +473,22 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Kase3D.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Kase3D";
-				XROS_DEPLOYMENT_TARGET = 26.1;
+				XROS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = Debug;
 		};
-		0F35555D2EC705C4006C8218 /* Release */ = {
+		0FE10F5C2F22B2B7003082BF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 37925SQG82;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.scaredcr6w.Kase3DTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.scaredcr6w.Kase3DEngineTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
@@ -490,42 +498,41 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Kase3D.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Kase3D";
-				XROS_DEPLOYMENT_TARGET = 26.1;
+				XROS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0F3555322EC705C2006C8218 /* Build configuration list for PBXProject "Kase3D" */ = {
+		0FE10F3F2F22B2B6003082BF /* Build configuration list for PBXProject "Kase3DEngine" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0F3555562EC705C4006C8218 /* Debug */,
-				0F3555572EC705C4006C8218 /* Release */,
+				0FE10F552F22B2B7003082BF /* Debug */,
+				0FE10F562F22B2B7003082BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0F3555582EC705C4006C8218 /* Build configuration list for PBXNativeTarget "Kase3D" */ = {
+		0FE10F572F22B2B7003082BF /* Build configuration list for PBXNativeTarget "Kase3DEngine" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0F3555592EC705C4006C8218 /* Debug */,
-				0F35555A2EC705C4006C8218 /* Release */,
+				0FE10F582F22B2B7003082BF /* Debug */,
+				0FE10F592F22B2B7003082BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0F35555B2EC705C4006C8218 /* Build configuration list for PBXNativeTarget "Kase3DTests" */ = {
+		0FE10F5A2F22B2B7003082BF /* Build configuration list for PBXNativeTarget "Kase3DEngineTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0F35555C2EC705C4006C8218 /* Debug */,
-				0F35555D2EC705C4006C8218 /* Release */,
+				0FE10F5B2F22B2B7003082BF /* Debug */,
+				0FE10F5C2F22B2B7003082BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 0F35552F2EC705C2006C8218 /* Project object */;
+	rootObject = 0FE10F3C2F22B2B6003082BF /* Project object */;
 }
