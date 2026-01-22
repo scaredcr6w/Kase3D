@@ -9,12 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        NavigationSplitView {
-            Text("toolPlaceholder")
-        } detail: {
-            MetalView()
-        }
-
+        MetalView()
     }
 }
 
