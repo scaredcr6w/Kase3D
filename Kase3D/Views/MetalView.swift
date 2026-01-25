@@ -11,9 +11,13 @@ import Kase3DEngine
 
 struct MetalView: View {
     @State private var metalView: MTKView = MTKView()
+    @State private var displayController: DisplayController?
     
     var body: some View {
-        MetalViewRepresentable(metalView: $metalView)
+        MetalViewRepresentable(metalView: $metalView, controller: displayController)
+            .onAppear {
+                displayController = DisplayController(metalView: metalView)
+            }
     }
 }
 
@@ -25,6 +29,7 @@ typealias ViewRepresentable = UIViewRepresentable
 
 struct MetalViewRepresentable: ViewRepresentable {
     @Binding var metalView: MTKView
+    let controller: DisplayController?
     
     #if os(macOS)
     func makeNSView(context: Context) -> some NSView {
