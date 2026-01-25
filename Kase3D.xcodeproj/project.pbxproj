@@ -166,7 +166,7 @@
 			mainGroup = 0F35552E2EC705C2006C8218;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				0FF1BEF32F26288A0002EC23 /* XCRemoteSwiftPackageReference "Kase3DEngine" */,
+				0FF1BEF42F262F7E0002EC23 /* XCLocalSwiftPackageReference "../Kase3DEngine" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0F3555382EC705C2006C8218 /* Products */;
@@ -528,16 +528,12 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		0FF1BEF32F26288A0002EC23 /* XCRemoteSwiftPackageReference "Kase3DEngine" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/scaredcr6w/Kase3DEngine";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		0FF1BEF42F262F7E0002EC23 /* XCLocalSwiftPackageReference "../Kase3DEngine" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Kase3DEngine;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 	};
 	rootObject = 0F35552F2EC705C2006C8218 /* Project object */;
 }
