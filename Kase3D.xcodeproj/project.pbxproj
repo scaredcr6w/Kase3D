@@ -6,11 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		0FE10FE42F26143B003082BF /* Kase3DEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE10FE02F26143B003082BF /* Kase3DEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		0FE10FE62F26147F003082BF /* Kase3DEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE10FE02F26143B003082BF /* Kase3DEngine.framework */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		0F3555452EC705C4006C8218 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -19,35 +14,7 @@
 			remoteGlobalIDString = 0F3555362EC705C2006C8218;
 			remoteInfo = Kase3D;
 		};
-		0FE10FDF2F26143B003082BF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0FE10FA72F261416003082BF /* Kase3DEngine.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 0FE10F452F22B2B6003082BF;
-			remoteInfo = Kase3DEngine;
-		};
-		0FE10FE72F261499003082BF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0FE10FA72F261416003082BF /* Kase3DEngine.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 0FE10F442F22B2B6003082BF;
-			remoteInfo = Kase3DEngine;
-		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		0FE10FE52F26143B003082BF /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				0FE10FE42F26143B003082BF /* Kase3DEngine.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0F3555372EC705C2006C8218 /* Kase3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kase3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,7 +41,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0FE10FE62F26147F003082BF /* Kase3DEngine.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,7 +85,6 @@
 		0FE10FA82F261416003082BF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0FE10FE02F26143B003082BF /* Kase3DEngine.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -134,12 +99,10 @@
 				0F3555332EC705C2006C8218 /* Sources */,
 				0F3555342EC705C2006C8218 /* Frameworks */,
 				0F3555352EC705C2006C8218 /* Resources */,
-				0FE10FE52F26143B003082BF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				0FE10FE82F261499003082BF /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				0F3555392EC705C2006C8218 /* Kase3D */,
@@ -203,6 +166,7 @@
 			mainGroup = 0F35552E2EC705C2006C8218;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				0FF1BEF32F26288A0002EC23 /* XCRemoteSwiftPackageReference "Kase3DEngine" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0F3555382EC705C2006C8218 /* Products */;
@@ -220,16 +184,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		0FE10FE02F26143B003082BF /* Kase3DEngine.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Kase3DEngine.framework;
-			remoteRef = 0FE10FDF2F26143B003082BF /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		0F3555352EC705C2006C8218 /* Resources */ = {
@@ -270,11 +224,6 @@
 			isa = PBXTargetDependency;
 			target = 0F3555362EC705C2006C8218 /* Kase3D */;
 			targetProxy = 0F3555452EC705C4006C8218 /* PBXContainerItemProxy */;
-		};
-		0FE10FE82F261499003082BF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Kase3DEngine;
-			targetProxy = 0FE10FE72F261499003082BF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -578,6 +527,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0FF1BEF32F26288A0002EC23 /* XCRemoteSwiftPackageReference "Kase3DEngine" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scaredcr6w/Kase3DEngine";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 0F35552F2EC705C2006C8218 /* Project object */;
 }
