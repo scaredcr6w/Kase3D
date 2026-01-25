@@ -66,6 +66,17 @@
                ReferencedContainer = "container:Kase3D.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "0F2077732F263C6E00485E9E"
+               BuildableName = "Kase3DEngineTests.xctest"
+               BlueprintName = "Kase3DEngineTests"
+               ReferencedContainer = "container:Kase3D.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

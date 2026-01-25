@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MetalKit
+import Kase3DEngine
 
 struct MetalView: View {
     @State private var metalView: MTKView = MTKView()
