@@ -85,6 +85,11 @@
 			path = Kase3DTests;
 			sourceTree = "<group>";
 		};
+		0FBA377D2F2642D500053582 /* ci_scripts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ci_scripts;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +129,7 @@
 		0F35552E2EC705C2006C8218 = {
 			isa = PBXGroup;
 			children = (
+				0FBA377D2F2642D500053582 /* ci_scripts */,
 				0F3555392EC705C2006C8218 /* Kase3D */,
 				0F3555472EC705C4006C8218 /* Kase3DTests */,
 				0F20776D2F263C6E00485E9E /* Kase3DEngine */,
@@ -219,6 +225,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				0F3555392EC705C2006C8218 /* Kase3D */,
+				0FBA377D2F2642D500053582 /* ci_scripts */,
 			);
 			name = Kase3D;
 			packageProductDependencies = (
