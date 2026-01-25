@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0FE10F762F22B35D003082BF /* Kase3DEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE10F752F22B35D003082BF /* Kase3DEngine.framework */; };
-		0FE10F772F22B35D003082BF /* Kase3DEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE10F752F22B35D003082BF /* Kase3DEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0FE10FE42F26143B003082BF /* Kase3DEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE10FE02F26143B003082BF /* Kase3DEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0FE10FE62F26147F003082BF /* Kase3DEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE10FE02F26143B003082BF /* Kase3DEngine.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -19,16 +19,30 @@
 			remoteGlobalIDString = 0F3555362EC705C2006C8218;
 			remoteInfo = Kase3D;
 		};
+		0FE10FDF2F26143B003082BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0FE10FA72F261416003082BF /* Kase3DEngine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0FE10F452F22B2B6003082BF;
+			remoteInfo = Kase3DEngine;
+		};
+		0FE10FE72F261499003082BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0FE10FA72F261416003082BF /* Kase3DEngine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 0FE10F442F22B2B6003082BF;
+			remoteInfo = Kase3DEngine;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		0FE10F782F22B35D003082BF /* Embed Frameworks */ = {
+		0FE10FE52F26143B003082BF /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0FE10F772F22B35D003082BF /* Kase3DEngine.framework in Embed Frameworks */,
+				0FE10FE42F26143B003082BF /* Kase3DEngine.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -39,6 +53,7 @@
 		0F3555372EC705C2006C8218 /* Kase3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kase3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F3555442EC705C4006C8218 /* Kase3DTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kase3DTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FE10F752F22B35D003082BF /* Kase3DEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Kase3DEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FE10FA72F261416003082BF /* Kase3DEngine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Kase3DEngine.xcodeproj; path = ../Kase3DEngine/Kase3DEngine.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -59,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0FE10F762F22B35D003082BF /* Kase3DEngine.framework in Frameworks */,
+				0FE10FE62F26147F003082BF /* Kase3DEngine.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,9 +110,18 @@
 		0FE10F742F22B35D003082BF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0FE10FA72F261416003082BF /* Kase3DEngine.xcodeproj */,
 				0FE10F752F22B35D003082BF /* Kase3DEngine.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0FE10FA82F261416003082BF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0FE10FE02F26143B003082BF /* Kase3DEngine.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -110,11 +134,12 @@
 				0F3555332EC705C2006C8218 /* Sources */,
 				0F3555342EC705C2006C8218 /* Frameworks */,
 				0F3555352EC705C2006C8218 /* Resources */,
-				0FE10F782F22B35D003082BF /* Embed Frameworks */,
+				0FE10FE52F26143B003082BF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				0FE10FE82F261499003082BF /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				0F3555392EC705C2006C8218 /* Kase3D */,
@@ -157,7 +182,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2610;
-				LastUpgradeCheck = 2610;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					0F3555362EC705C2006C8218 = {
 						CreatedOnToolsVersion = 26.1.1;
@@ -182,6 +207,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0F3555382EC705C2006C8218 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 0FE10FA82F261416003082BF /* Products */;
+					ProjectRef = 0FE10FA72F261416003082BF /* Kase3DEngine.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				0F3555362EC705C2006C8218 /* Kase3D */,
@@ -189,6 +220,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		0FE10FE02F26143B003082BF /* Kase3DEngine.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Kase3DEngine.framework;
+			remoteRef = 0FE10FDF2F26143B003082BF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		0F3555352EC705C2006C8218 /* Resources */ = {
@@ -230,6 +271,11 @@
 			target = 0F3555362EC705C2006C8218 /* Kase3D */;
 			targetProxy = 0F3555452EC705C4006C8218 /* PBXContainerItemProxy */;
 		};
+		0FE10FE82F261499003082BF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Kase3DEngine;
+			targetProxy = 0FE10FE72F261499003082BF /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -267,6 +313,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 37925SQG82;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -330,6 +377,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 37925SQG82;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -358,6 +406,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 37925SQG82;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -404,6 +453,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 37925SQG82;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -449,6 +499,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 37925SQG82;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
@@ -475,6 +526,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 37925SQG82;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
