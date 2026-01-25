@@ -18,9 +18,11 @@ public final class Renderer: NSObject {
     var params = Params()
     
     public init(metalView: MTKView) {
+        let bundle = Bundle(for: type(of: self))
+        
         guard let device = MTLCreateSystemDefaultDevice(),
               let commandQueue = device.makeCommandQueue(),
-              let library = device.makeDefaultLibrary() else {
+              let library = try? device.makeDefaultLibrary(bundle: bundle) else {
             fatalError("Cannot reach GPU")
         }
         

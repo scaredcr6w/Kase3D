@@ -13,5 +13,13 @@ struct Kase3DApp: App {
         WindowGroup {
             ContentView()
         }
+        .commands {
+            CommandGroup(after: .newItem) {
+                Button("Import File...") {
+                    
+                }
+                .keyboardShortcut("i")
+            }
+        }
     }
 }
