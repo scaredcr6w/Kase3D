@@ -7,16 +7,13 @@
 
 import SwiftUI
 import MetalKit
+import Kase3DEngine
 
 struct MetalView: View {
     @State private var metalView: MTKView = MTKView()
-    @State private var renderer: Renderer?
     
     var body: some View {
         MetalViewRepresentable(metalView: $metalView)
-            .onAppear {
-                renderer = Renderer(metalView: metalView)
-            }
     }
 }
 
