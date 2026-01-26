@@ -6,19 +6,40 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
+import Kase3DEngine
 
 @main
 struct Kase3DApp: App {
+    @State private var isFileImporterPresented: Bool = false
+    private var sceneManager: SceneManager = .init()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(sceneManager)
         }
         .commands {
             CommandGroup(after: .newItem) {
                 Button("Import File...") {
-                    
+                  isFileImporterPresented = true
                 }
                 .keyboardShortcut("i")
+                .fileImporter(
+                    isPresented: $isFileImporterPresented,
+                    allowedContentTypes: [.usdz]) { result in
+                        switch result {
+                        case .success(let url):
+                            if url.startAccessingSecurityScopedResource() {
+                                defer { url.stopAccessingSecurityScopedResource() }
+                                sceneManager.loadModel(from: url)
+                            } else {
+                                print("Failed to access security-scoped resource")
+                            }
+                        case .failure(let error):
+                            print(error.localizedDescription)
+                        }
+                    }
             }
         }
     }

@@ -36,7 +36,7 @@ public final class Renderer: NSObject {
         buildPipelineState(metalView: metalView)
         buildDepthStencilState()
         
-        metalView.clearColor = MTLClearColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+        metalView.clearColor = MTLClearColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 0.8)
         metalView.depthStencilPixelFormat = .depth32Float
     }
     

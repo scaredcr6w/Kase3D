@@ -15,20 +15,15 @@ final class Model: Transformable {
     
     init() { }
     
-    init(name: String) throws {
-        guard let assetURL = Bundle.main.url(
-            forResource: name,
-            withExtension: nil
-        ) else {
-            throw ModelError.failedToLoad
-        }
-        
+    init(assetURL: URL) throws {
         let allocator = MTKMeshBufferAllocator(device: Renderer.device)
         let asset = MDLAsset(
             url: assetURL,
             vertexDescriptor: .defaultLayout,
             bufferAllocator: allocator
         )
+        
+        asset.loadTextures()
         
         do {
             let (mdlMeshes, mtkMeshes) = try MTKMesh.newMeshes(
@@ -39,9 +34,9 @@ final class Model: Transformable {
             meshes = try zip(mdlMeshes, mtkMeshes).map {
                 try Mesh(mdlMesh: $0.0, mtkMesh: $0.1)
             }
-            self.name = name
+            self.name = assetURL.lastPathComponent
         } catch {
-            
+            print(error.localizedDescription)
         }
     }
     
@@ -63,7 +58,7 @@ final class Model: Transformable {
     ) {
         var uniforms = vertex
         var params = fragment
-        
+        params.tiling = tiling
         uniforms.modelMatrix = transform.modelMatrix
         uniforms.normalMatrix = transform.modelMatrix.upperLeft
         

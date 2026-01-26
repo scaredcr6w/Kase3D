@@ -8,15 +8,16 @@
 import MetalKit
 
 public class DisplayController: NSObject {
-    var scene: DisplayScene
+    var sceneManager: SceneManager
     var renderer: Renderer
     var fps: Double = 0
     var deltaTime: Double = 0
     var lastTime: Double = CFAbsoluteTimeGetCurrent()
     
-    public init(metalView: MTKView) {
+    public init(sceneManager: SceneManager, metalView: MTKView) {
         renderer = Renderer(metalView: metalView)
-        scene = DisplayScene()
+        self.sceneManager = sceneManager
+        sceneManager.displayScene = DisplayScene()
         super.init()
         metalView.delegate = self
         fps = Double(metalView.preferredFramesPerSecond)
@@ -25,14 +26,14 @@ public class DisplayController: NSObject {
 
 extension DisplayController: MTKViewDelegate {
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        scene.update(size: size)
+        sceneManager.displayScene.update(size: size)
     }
     
     public func draw(in view: MTKView) {
         let currentTime = CFAbsoluteTimeGetCurrent()
         let deltaTime = (currentTime - lastTime)
         lastTime = currentTime
-        scene.update(deltaTime: Float(deltaTime))
-        renderer.draw(scene: scene, in: view)
+        sceneManager.displayScene.update(deltaTime: Float(deltaTime))
+        renderer.draw(scene: sceneManager.displayScene, in: view)
     }
 }
