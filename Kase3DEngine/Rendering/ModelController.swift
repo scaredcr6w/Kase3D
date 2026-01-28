@@ -26,16 +26,17 @@ public class ModelController: NSObject {
 
 extension ModelController: MTKViewDelegate {
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        sceneManager.modelScene?.update(size: size)
+        guard sceneManager.modelScene != nil else { return }
+        sceneManager.modelScene.update(size: size)
     }
     
     public func draw(in view: MTKView) {
-        guard var modelScene = sceneManager.modelScene else { return }
+        guard sceneManager.modelScene != nil else { return }
         
         let currentTime = CFAbsoluteTimeGetCurrent()
         let deltaTime = (currentTime - lastTime)
         lastTime = currentTime
-        modelScene.update(deltaTime: Float(deltaTime))
-        renderer.draw(scene: modelScene, in: view)
+        sceneManager.modelScene.update(deltaTime: Float(deltaTime))
+        renderer.draw(scene: sceneManager.modelScene, in: view)
     }
 }

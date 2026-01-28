@@ -9,12 +9,14 @@ import Foundation
 
 @Observable
 public final class SceneManager {
-    var modelScene: ModelScene?
+    var modelScene: ModelScene!
     
     public init() { }
     
     public func loadModel(from assetURL: URL) {
+        guard modelScene != nil else { return }
+        
         let model = Model(assetURL: assetURL)
-        modelScene?.models.append(model)
+        modelScene.models.append(model)
     }
 }
