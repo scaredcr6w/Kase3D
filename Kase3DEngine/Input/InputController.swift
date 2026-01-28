@@ -52,10 +52,6 @@ class InputController {
                     self.mouseScroll.y = yVal
                 }
             }
-        
-        #if os(macOS)
-        NSEvent.addLocalMonitorForEvents(matching: [.keyUp, .keyDown], handler: { _ in nil })
-        #endif
     }
     
     struct Point {

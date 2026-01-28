@@ -15,7 +15,7 @@ final class Model: Transformable {
     
     init() { }
     
-    init(assetURL: URL) throws {
+    init(assetURL: URL) {
         let allocator = MTKMeshBufferAllocator(device: Renderer.device)
         let asset = MDLAsset(
             url: assetURL,
@@ -44,6 +44,7 @@ final class Model: Transformable {
         if let texture = TextureController.loadTexture(name: name) {
             switch type {
             case BaseColor:
+                guard !meshes.indices.isEmpty, !meshes[0].submeshes.indices.isEmpty else { return }
                 meshes[0].submeshes[0].textures.baseColor = texture
             default:
                 break

@@ -17,13 +17,13 @@ public final class Renderer: NSObject {
     var uniforms = Uniforms()
     var params = Params()
     
-    public init(metalView: MTKView) {
+    public init(metalView: MTKView) throws {
         let bundle = Bundle(for: type(of: self))
         
         guard let device = MTLCreateSystemDefaultDevice(),
               let commandQueue = device.makeCommandQueue(),
               let library = try? device.makeDefaultLibrary(bundle: bundle) else {
-            fatalError("Cannot reach GPU")
+            throw RendererError.failedToReachGPU
         }
         
         Self.device = device

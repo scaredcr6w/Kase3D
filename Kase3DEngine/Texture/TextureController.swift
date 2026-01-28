@@ -21,13 +21,16 @@ struct TextureController {
             .generateMipmaps: true
         ]
         
-        let texture = try? textureLoader.newTexture(
+        if let texture = try? textureLoader.newTexture(
             texture: texture,
             options: textureLoaderOptions
-        )
-        textures[name] = texture
+        ) {
+            textures[name] = texture
+            
+            return texture
+        }
         
-        return texture
+        return nil
     }
     
     static func loadTexture(name: String) -> MTLTexture? {

@@ -49,7 +49,7 @@ private extension MDLMaterial {
            let mdlTexture = property.textureSamplerValue?.texture {
             return TextureController.loadTexture(
                 texture: mdlTexture,
-                name: property.name
+                name: property.textureName
             )
         }
         

@@ -6,20 +6,15 @@
 //
 
 import Foundation
-import Combine
 
 @Observable
 public final class SceneManager {
-    var displayScene: DisplayScene!
+    var displayScene: DisplayScene?
     
     public init() { }
     
     public func loadModel(from assetURL: URL) {
-        do {
-            let model = try Model(assetURL: assetURL)
-            displayScene.models.append(model)
-        } catch {
-            print(error.localizedDescription)
-        }
+        let model = Model(assetURL: assetURL)
+        displayScene?.models.append(model)
     }
 }

@@ -14,8 +14,8 @@ public class DisplayController: NSObject {
     var deltaTime: Double = 0
     var lastTime: Double = CFAbsoluteTimeGetCurrent()
     
-    public init(sceneManager: SceneManager, metalView: MTKView) {
-        renderer = Renderer(metalView: metalView)
+    public init(sceneManager: SceneManager, metalView: MTKView) throws {
+        renderer = try Renderer(metalView: metalView)
         self.sceneManager = sceneManager
         sceneManager.displayScene = DisplayScene()
         super.init()
