@@ -8,21 +8,25 @@
 import MetalKit
 
 public final class Renderer: NSObject {
-    var device: MTLDevice
+    static var device: MTLDevice!
     var commandQueue: MTLCommandQueue
     var library: MTLLibrary
-    
     var pipelineState: MTLRenderPipelineState!
     var depthStencilState: MTLDepthStencilState!
     
-    public init(metalView: MTKView) {
+    var uniforms = Uniforms()
+    var params = Params()
+    
+    public init(metalView: MTKView) throws {
+        let bundle = Bundle(for: type(of: self))
+        
         guard let device = MTLCreateSystemDefaultDevice(),
               let commandQueue = device.makeCommandQueue(),
-              let library = device.makeDefaultLibrary() else {
-            fatalError("Cannot reach GPU")
+              let library = try? device.makeDefaultLibrary(bundle: bundle) else {
+            throw RendererError.failedToReachGPU
         }
         
-        self.device = device
+        Self.device = device
         self.commandQueue = commandQueue
         self.library = library
         metalView.device = device
@@ -32,7 +36,8 @@ public final class Renderer: NSObject {
         buildPipelineState(metalView: metalView)
         buildDepthStencilState()
         
-        metalView.clearColor = MTLClearColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+        metalView.clearColor = MTLClearColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 0.8)
+        metalView.depthStencilPixelFormat = .depth32Float
     }
     
     private func buildPipelineState(metalView: MTKView) {
@@ -46,7 +51,7 @@ public final class Renderer: NSObject {
         descriptor.vertexDescriptor = MTLVertexDescriptor.defaultLayout
         
         do {
-            self.pipelineState = try device.makeRenderPipelineState(descriptor: descriptor)
+            self.pipelineState = try Self.device.makeRenderPipelineState(descriptor: descriptor)
         } catch {
             fatalError(error.localizedDescription)
         }
@@ -56,6 +61,51 @@ public final class Renderer: NSObject {
         let descriptor = MTLDepthStencilDescriptor()
         descriptor.depthCompareFunction = .less
         descriptor.isDepthWriteEnabled = true
-        self.depthStencilState = device.makeDepthStencilState(descriptor: descriptor)
+        self.depthStencilState = Self.device.makeDepthStencilState(descriptor: descriptor)
+    }
+}
+
+extension Renderer {
+    func updateUniforms(scene: ModelScene) {
+        uniforms.viewMatrix = scene.camera.viewMatrix
+        uniforms.projectionMatrix = scene.camera.projectionMatrix
+        params.lightCount = UInt32(scene.lighting.lights.count)
+        params.cameraPosition = scene.camera.position
+    }
+    
+    func draw(scene: ModelScene, in view: MTKView) {
+        guard let commandBuffer = commandQueue.makeCommandBuffer(),
+              let descriptor = view.currentRenderPassDescriptor,
+              let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
+            return
+        }
+        
+        updateUniforms(scene: scene)
+        
+        renderEncoder.setDepthStencilState(depthStencilState)
+        renderEncoder.setRenderPipelineState(pipelineState)
+        
+        var lights = scene.lighting.lights
+        renderEncoder.setFragmentBytes(
+            &lights,
+            length: MemoryLayout<Light>.stride * lights.count,
+            index: LightBuffer.index
+        )
+        
+        for model in scene.models {
+            model.render(
+                encoder: renderEncoder,
+                uniforms: uniforms,
+                params: params
+            )
+        }
+        
+        renderEncoder.endEncoding()
+        guard let drawable = view.currentDrawable else {
+            return
+        }
+        
+        commandBuffer.present(drawable)
+        commandBuffer.commit()
     }
 }
