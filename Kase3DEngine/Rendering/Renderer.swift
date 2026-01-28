@@ -66,14 +66,14 @@ public final class Renderer: NSObject {
 }
 
 extension Renderer {
-    func updateUniforms(scene: DisplayScene) {
+    func updateUniforms(scene: ModelScene) {
         uniforms.viewMatrix = scene.camera.viewMatrix
         uniforms.projectionMatrix = scene.camera.projectionMatrix
         params.lightCount = UInt32(scene.lighting.lights.count)
         params.cameraPosition = scene.camera.position
     }
     
-    func draw(scene: DisplayScene, in view: MTKView) {
+    func draw(scene: ModelScene, in view: MTKView) {
         guard let commandBuffer = commandQueue.makeCommandBuffer(),
               let descriptor = view.currentRenderPassDescriptor,
               let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {

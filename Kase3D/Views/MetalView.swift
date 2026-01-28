@@ -12,15 +12,15 @@ import Kase3DEngine
 struct MetalView: View {
     @Environment(SceneManager.self) private var sceneManager: SceneManager
     @State private var metalView: MTKView = MTKView()
-    @State private var displayController: DisplayController?
+    @State private var modelController: ModelController?
     @State private var didError: Bool = false
     @State private var errorMessage: String = ""
     
     var body: some View {
-        MetalViewRepresentable(metalView: $metalView, controller: displayController)
+        MetalViewRepresentable(metalView: $metalView, controller: modelController)
             .onAppear {
                 do {
-                    displayController = try DisplayController(sceneManager: sceneManager, metalView: metalView)
+                    modelController = try ModelController(sceneManager: sceneManager, metalView: metalView)
                 } catch {
                     didError = true
                     errorMessage = error.localizedDescription
@@ -48,7 +48,7 @@ typealias ViewRepresentable = UIViewRepresentable
 
 struct MetalViewRepresentable: ViewRepresentable {
     @Binding var metalView: MTKView
-    let controller: DisplayController?
+    let controller: ModelController?
     
     #if os(macOS)
     func makeNSView(context: Context) -> some NSView {

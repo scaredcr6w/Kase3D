@@ -1,5 +1,5 @@
 //
-//  DisplayController.swift
+//  ModelController.swift
 //  Kase3DEngine
 //
 //  Created by Anda Levente on 2026. 01. 25..
@@ -7,7 +7,7 @@
 
 import MetalKit
 
-public class DisplayController: NSObject {
+public class ModelController: NSObject {
     var sceneManager: SceneManager
     var renderer: Renderer
     var fps: Double = 0
@@ -17,23 +17,25 @@ public class DisplayController: NSObject {
     public init(sceneManager: SceneManager, metalView: MTKView) throws {
         renderer = try Renderer(metalView: metalView)
         self.sceneManager = sceneManager
-        sceneManager.displayScene = DisplayScene()
+        sceneManager.modelScene = ModelScene()
         super.init()
         metalView.delegate = self
         fps = Double(metalView.preferredFramesPerSecond)
     }
 }
 
-extension DisplayController: MTKViewDelegate {
+extension ModelController: MTKViewDelegate {
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        sceneManager.displayScene.update(size: size)
+        sceneManager.modelScene?.update(size: size)
     }
     
     public func draw(in view: MTKView) {
+        guard var modelScene = sceneManager.modelScene else { return }
+        
         let currentTime = CFAbsoluteTimeGetCurrent()
         let deltaTime = (currentTime - lastTime)
         lastTime = currentTime
-        sceneManager.displayScene.update(deltaTime: Float(deltaTime))
-        renderer.draw(scene: sceneManager.displayScene, in: view)
+        modelScene.update(deltaTime: Float(deltaTime))
+        renderer.draw(scene: modelScene, in: view)
     }
 }

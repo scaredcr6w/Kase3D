@@ -1,5 +1,5 @@
 //
-//  DisplayScene.swift
+//  ModelScene.swift
 //  Kase3DEngine
 //
 //  Created by Anda Levente on 2026. 01. 25..
@@ -7,7 +7,7 @@
 
 import MetalKit
 
-struct DisplayScene {
+struct ModelScene {
     var models: [Model] = []
     var camera = ArcballCamera()
     let lighting = SceneLighting()
