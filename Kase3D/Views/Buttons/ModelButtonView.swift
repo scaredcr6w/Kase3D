@@ -20,7 +20,7 @@ struct ModelButtonView: View {
                 .font(.system(size: 60))
                 .padding(8)
                 .frame(width: size, height: size)
-                .glassEffect(.clear.tint(.gray), in: .rect(cornerRadius: 8))
+                .glassEffect(.clear.tint(.gray).interactive(), in: .rect(cornerRadius: 8))
             
             Text(viewModel.bookmark.fileName)
                 .font(.title2)

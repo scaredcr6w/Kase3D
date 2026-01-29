@@ -11,15 +11,25 @@ struct WelcomeView: View {
     @Environment(RecentFilesManager.self) private var recentsManager
     
     var body: some View {
-        Grid {
-            GridRow {
-                ForEach(recentsManager.recentBookmarks, id: \.fileName) { bookmark in
-                    ModelButtonView(bookmark: bookmark)
+        VStack(alignment: .leading) {
+            Text("Recently Opened Models")
+                .font(.system(size: 40))
+                .fontWeight(.bold)
+                .foregroundStyle(.white)
+                .padding([.top, .leading], 32)
+            
+            Divider()
+            
+            Grid {
+                GridRow {
+                    ForEach(recentsManager.recentBookmarks, id: \.fileName) { bookmark in
+                        ModelButtonView(bookmark: bookmark)
+                    }
                 }
+                .padding(32)
             }
-            .padding(32)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 }
 
