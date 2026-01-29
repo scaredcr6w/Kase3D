@@ -22,12 +22,12 @@ struct WelcomeView: View {
             
             Grid {
                 GridRow {
-                    ForEach(recentsManager.recentBookmarks, id: \.fileName) { bookmark in
+                    ForEach(recentsManager.recentBookmarks) { bookmark in
                         ModelButtonView(bookmark: bookmark)
                     }
                 }
-                .padding(32)
             }
+            .padding(32)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
     }

@@ -45,16 +45,9 @@ struct Kase3DApp: App {
                     }
                 
                 Menu("Open Recent") {
-                    ForEach(recentsManager.recentBookmarks, id: \.fileName) { bookmark in
+                    ForEach(recentsManager.recentBookmarks) { bookmark in
                         Button(bookmark.fileName) {
-                            if let url = recentsManager.resolveBookmark(bookmark) {
-                                if url.startAccessingSecurityScopedResource() {
-                                    defer { url.stopAccessingSecurityScopedResource() }
-                                    sceneManager.loadModel(from: url)
-                                } else {
-                                    print("Failed to access security-scoped resource")
-                                }
-                            }
+                            recentsManager.startAccessing(bookmark: bookmark, sceneManager.loadModel(from:))
                         }
                     }
                 }

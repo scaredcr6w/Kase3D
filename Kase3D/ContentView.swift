@@ -14,7 +14,7 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             MetalView()
-            if !sceneManager.isModelLoaded {
+            if !sceneManager.hasLoadedAnyModel {
                 WelcomeView()
             }
         }

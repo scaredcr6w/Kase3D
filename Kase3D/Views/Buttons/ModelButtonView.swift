@@ -27,15 +27,7 @@ struct ModelButtonView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            if let url = recentsManager.resolveBookmark(viewModel.bookmark) {
-                guard url.startAccessingSecurityScopedResource() else {
-                    print("Failed to access security-scoped resource")
-                    return
-                }
-                defer { url.stopAccessingSecurityScopedResource() }
-                
-                sceneManager.loadModel(from: url)
-            }
+            recentsManager.startAccessing(bookmark: viewModel.bookmark, sceneManager.loadModel(from:))
         }
     }
 }

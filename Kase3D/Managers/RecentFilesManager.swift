@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct RecentFileBookmark: Codable {
+struct RecentFileBookmark: Codable, Identifiable {
+    var id = UUID()
     let bookmarkData: Data
     let fileName: String
 }
@@ -39,7 +40,7 @@ final class RecentFilesManager {
                 fileName: url.lastPathComponent
             )
             
-            recentBookmarks.removeAll { $0.fileName == bookmark.fileName }
+            recentBookmarks.removeAll { $0.id == bookmark.id }
             recentBookmarks.insert(bookmark, at: 0)
             
             if recentBookmarks.count > 10 {
@@ -90,6 +91,18 @@ final class RecentFilesManager {
             recentBookmarks = try JSONDecoder().decode([RecentFileBookmark].self, from: data)
         } catch {
             print("Failed to load bookmarks: \(error.localizedDescription)")
+        }
+    }
+    
+    func startAccessing(bookmark: RecentFileBookmark, _ completion: (URL) -> Void) {
+        if let url = resolveBookmark(bookmark) {
+            guard url.startAccessingSecurityScopedResource() else {
+                print("Failed to access security-scoped resource")
+                return
+            }
+            defer { url.stopAccessingSecurityScopedResource() }
+            
+            completion(url)
         }
     }
 }
