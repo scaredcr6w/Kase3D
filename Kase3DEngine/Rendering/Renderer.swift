@@ -12,6 +12,7 @@ public final class Renderer: NSObject {
     var commandQueue: MTLCommandQueue
     var library: MTLLibrary
     var pipelineState: MTLRenderPipelineState!
+    var gridPipelineState: MTLRenderPipelineState!
     var depthStencilState: MTLDepthStencilState!
     
     var uniforms = Uniforms()
@@ -34,6 +35,7 @@ public final class Renderer: NSObject {
         super.init()
         
         buildPipelineState(metalView: metalView)
+        buildGridPipelineState(metalView: metalView)
         buildDepthStencilState()
         
         metalView.clearColor = MTLClearColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 0.8)
@@ -52,6 +54,23 @@ public final class Renderer: NSObject {
         
         do {
             self.pipelineState = try Self.device.makeRenderPipelineState(descriptor: descriptor)
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    private func buildGridPipelineState(metalView: MTKView) {
+        let vertexFunction = library.makeFunction(name: "vertex_grid_plane")
+        let fragmentFunction = library.makeFunction(name: "fragment_grid_plane")
+        let descriptor = MTLRenderPipelineDescriptor()
+        descriptor.vertexFunction = vertexFunction
+        descriptor.fragmentFunction = fragmentFunction
+        descriptor.colorAttachments[0].pixelFormat = metalView.colorPixelFormat
+        descriptor.depthAttachmentPixelFormat = .depth32Float
+        descriptor.vertexDescriptor = MTLVertexDescriptor.simpleLayout
+        
+        do {
+            self.gridPipelineState = try Self.device.makeRenderPipelineState(descriptor: descriptor)
         } catch {
             fatalError(error.localizedDescription)
         }
@@ -83,6 +102,12 @@ extension Renderer {
         updateUniforms(scene: scene)
         
         renderEncoder.setDepthStencilState(depthStencilState)
+        
+        if let gridPlane = scene.gridPlane {
+            renderEncoder.setRenderPipelineState(gridPipelineState)
+            gridPlane.render(encoder: renderEncoder, uniforms: uniforms)
+        }
+        
         renderEncoder.setRenderPipelineState(pipelineState)
         
         var lights = scene.lighting.lights

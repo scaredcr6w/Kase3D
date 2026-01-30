@@ -30,3 +30,7 @@ fragment float4 fragment_main(constant Params &params [[buffer(ParamsBuffer)]],
                                  baseColor);
     return float4(color, 1);
 }
+
+fragment float4 fragment_grid_plane() {
+    return float4(1, 1, 1, 1);
+}
