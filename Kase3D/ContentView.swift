@@ -6,10 +6,18 @@
 //
 
 import SwiftUI
+import Kase3DEngine
 
 struct ContentView: View {
+    @Environment(SceneManager.self) private var sceneManager
+    
     var body: some View {
-        MetalView()
+        ZStack {
+            MetalView()
+            if !sceneManager.hasLoadedAnyModel {
+                WelcomeView()
+            }
+        }
     }
 }
 

@@ -13,11 +13,13 @@ import Kase3DEngine
 struct Kase3DApp: App {
     @State private var isFileImporterPresented: Bool = false
     private var sceneManager: SceneManager = .init()
+    private var recentsManager: RecentFilesManager = .init()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(sceneManager)
+                .environment(recentsManager)
         }
         .commands {
             CommandGroup(after: .newItem) {
@@ -32,6 +34,7 @@ struct Kase3DApp: App {
                         case .success(let url):
                             if url.startAccessingSecurityScopedResource() {
                                 defer { url.stopAccessingSecurityScopedResource() }
+                                recentsManager.addRecentFile(url)
                                 sceneManager.loadModel(from: url)
                             } else {
                                 print("Failed to access security-scoped resource")
@@ -40,6 +43,14 @@ struct Kase3DApp: App {
                             print(error.localizedDescription)
                         }
                     }
+                
+                Menu("Open Recent") {
+                    ForEach(recentsManager.recentBookmarks) { bookmark in
+                        Button(bookmark.fileName) {
+                            recentsManager.startAccessing(bookmark: bookmark, sceneManager.loadModel(from:))
+                        }
+                    }
+                }
             }
         }
     }

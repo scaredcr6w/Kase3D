@@ -10,6 +10,7 @@ import Foundation
 @Observable
 public final class SceneManager {
     var modelScene: ModelScene!
+    public var hasLoadedAnyModel: Bool = false
     
     public init() { }
     
@@ -18,5 +19,6 @@ public final class SceneManager {
         
         let model = Model(assetURL: assetURL)
         modelScene.models.append(model)
+        hasLoadedAnyModel = true
     }
 }
