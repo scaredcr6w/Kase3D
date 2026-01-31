@@ -26,10 +26,11 @@ vertex VertexOut vertex_main(VertexIn in [[stage_in]],
     return out;
 }
 
-vertex VertexOut vertex_grid_plane(VertexIn in [[stage_in]],
-                            constant Uniforms &uniforms [[buffer(UniformsBuffer)]]) {
+vertex PositionVertexOut vertex_grid_plane(PositionVertexIn in [[stage_in]],
+                                constant Uniforms &uniforms [[buffer(UniformsBuffer)]]) {
     float4 position = uniforms.projectionMatrix * uniforms.viewMatrix * uniforms.modelMatrix * in.position;
-    VertexOut out {
+    
+    PositionVertexOut out {
         .position = position
     };
     

@@ -22,3 +22,11 @@ struct VertexOut {
     float3 worldNormal;
 };
 
+struct PositionVertexIn {
+    float4 position [[attribute(Position)]];
+};
+
+struct PositionVertexOut {
+    float4 position [[position]];
+};
+

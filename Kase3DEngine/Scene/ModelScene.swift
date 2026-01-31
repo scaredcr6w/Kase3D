@@ -20,7 +20,7 @@ struct ModelScene {
             rotation: [-0.73, 13.3, 0.0]
         )
         
-        gridPlane = Plane(size: 1000, divisions: 250)
+        gridPlane = Plane(size: camera.far * 2)
     }
     
     mutating func update(size: CGSize) {

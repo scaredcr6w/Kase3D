@@ -11,16 +11,16 @@ final class Plane: Transformable {
     var transform: Transform = .init()
     var mesh: MTKMesh!
     
-    init(size: Float = 10, divisions: Int = 20) {
+    init(size: Float = 10) {
         self.transform.scale = 1
-        buildMesh(size: size, divisions: divisions)
+        buildMesh(size: size)
     }
     
-    private func buildMesh(size: Float, divisions: Int) {
+    private func buildMesh(size: Float) {
         let allocator = MTKMeshBufferAllocator(device: Renderer.device)
         let mdlMesh = MDLMesh(
             planeWithExtent: [size, 0, size],
-            segments: [UInt32(divisions), UInt32(divisions)],
+            segments: [UInt32(size / 2), UInt32(size / 2)],
             geometryType: .lines,
             allocator: allocator
         )
@@ -30,7 +30,7 @@ final class Plane: Transformable {
         do {
             mesh = try MTKMesh(mesh: mdlMesh, device: Renderer.device)
         } catch {
-            print("Failed to create plane mesh: \(error.localizedDescription)")
+            fatalError("Failed to create plane mesh: \(error.localizedDescription)")
         }
     }
     
