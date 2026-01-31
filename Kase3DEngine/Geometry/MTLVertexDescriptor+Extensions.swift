@@ -38,11 +38,29 @@ extension MDLVertexDescriptor {
         
         return descriptor
     }
+    
+    static var simpleLayout: MDLVertexDescriptor {
+        let descriptor = MDLVertexDescriptor()
+        descriptor.attributes[Position.index] = MDLVertexAttribute(
+            name: MDLVertexAttributePosition,
+            format: .float3,
+            offset: 0,
+            bufferIndex: VertexBuffer.index
+        )
+        
+        descriptor.layouts[VertexBuffer.index] = MDLVertexBufferLayout(stride: MemoryLayout<float3>.stride)
+        
+        return descriptor
+    }
 }
 
 extension MTLVertexDescriptor {
     static var defaultLayout: MTLVertexDescriptor? {
         MTKMetalVertexDescriptorFromModelIO(.defaultLayout)
+    }
+    
+    static var simpleLayout: MTLVertexDescriptor? {
+        MTKMetalVertexDescriptorFromModelIO(.simpleLayout)
     }
 }
 

@@ -22,5 +22,17 @@ vertex VertexOut vertex_main(VertexIn in [[stage_in]],
         .worldPosition = worldPosition.xyz / worldPosition.w,
         .worldNormal = uniforms.normalMatrix * in.normal
     };
+    
+    return out;
+}
+
+vertex PositionVertexOut vertex_grid_plane(PositionVertexIn in [[stage_in]],
+                                constant Uniforms &uniforms [[buffer(UniformsBuffer)]]) {
+    float4 position = uniforms.projectionMatrix * uniforms.viewMatrix * uniforms.modelMatrix * in.position;
+    
+    PositionVertexOut out {
+        .position = position
+    };
+    
     return out;
 }
