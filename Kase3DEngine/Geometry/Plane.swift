@@ -30,7 +30,7 @@ final class Plane: Transformable {
         do {
             mesh = try MTKMesh(mesh: mdlMesh, device: Renderer.device)
         } catch {
-            fatalError("Failed to create plane mesh: \(error.localizedDescription)")
+            fatalError("\(MeshError.failedToLoad): \(error.localizedDescription)")
         }
     }
     

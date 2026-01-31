@@ -35,9 +35,12 @@ final class Model: Transformable {
                 try Mesh(mdlMesh: $0.0, mtkMesh: $0.1)
             }
             self.name = assetURL.lastPathComponent
+        } catch MeshError.failedToLoad {
+            print(MeshError.failedToLoad.localizedDescription)
         } catch {
             print(error.localizedDescription)
         }
+            
     }
     
     func setTexture(name: String, type: TextureIndices) {
