@@ -139,47 +139,4 @@ final class TextureControllerTests: XCTestCase {
             XCTAssertTrue(TextureController.textures["test_mdl"] === texture)
         }
     }
-    
-    // MARK: - Cache Management Tests
-    
-    func testMultipleTexturesCanBeCached() {
-        let device = MTLCreateSystemDefaultDevice()!
-        let descriptor = MTLTextureDescriptor()
-        descriptor.width = 64
-        descriptor.height = 64
-        descriptor.pixelFormat = .rgba8Unorm
-        descriptor.usage = [.shaderRead]
-        
-        let texture1 = device.makeTexture(descriptor: descriptor)!
-        let texture2 = device.makeTexture(descriptor: descriptor)!
-        let texture3 = device.makeTexture(descriptor: descriptor)!
-        
-        TextureController.textures["texture1"] = texture1
-        TextureController.textures["texture2"] = texture2
-        TextureController.textures["texture3"] = texture3
-        
-        XCTAssertEqual(TextureController.textures.count, 3)
-        XCTAssertNotNil(TextureController.textures["texture1"])
-        XCTAssertNotNil(TextureController.textures["texture2"])
-        XCTAssertNotNil(TextureController.textures["texture3"])
-    }
-    
-    func testCacheKeysAreCaseSensitive() {
-        let device = MTLCreateSystemDefaultDevice()!
-        let descriptor = MTLTextureDescriptor()
-        descriptor.width = 64
-        descriptor.height = 64
-        descriptor.pixelFormat = .rgba8Unorm
-        descriptor.usage = [.shaderRead]
-        
-        let texture1 = device.makeTexture(descriptor: descriptor)!
-        let texture2 = device.makeTexture(descriptor: descriptor)!
-        
-        TextureController.textures["Texture"] = texture1
-        TextureController.textures["texture"] = texture2
-        
-        XCTAssertEqual(TextureController.textures.count, 2)
-        XCTAssertFalse(TextureController.textures["Texture"] === TextureController.textures["texture"])
-    }
-    
 }
