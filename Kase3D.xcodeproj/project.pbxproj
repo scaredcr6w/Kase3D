@@ -62,6 +62,7 @@
 		0F2077742F263C6E00485E9E /* Kase3DEngineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kase3DEngineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F3555372EC705C2006C8218 /* Kase3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kase3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F3555442EC705C4006C8218 /* Kase3DTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kase3DTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F3797ED2F406FC50036FA99 /* Kase3DEngine.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = Kase3DEngine.xctestplan; path = Kase3DEngineTests/Kase3DEngine.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -129,6 +130,7 @@
 		0F35552E2EC705C2006C8218 = {
 			isa = PBXGroup;
 			children = (
+				0F3797ED2F406FC50036FA99 /* Kase3DEngine.xctestplan */,
 				0FBA377D2F2642D500053582 /* ci_scripts */,
 				0F3555392EC705C2006C8218 /* Kase3D */,
 				0F3555472EC705C4006C8218 /* Kase3DTests */,
