@@ -27,8 +27,10 @@ final class TextureControllerTests: XCTestCase {
         XCTAssertTrue(TextureController.textures.isEmpty)
     }
     
-    func testTexturesCacheCanStoreTextures() {
-        let device = MTLCreateSystemDefaultDevice()!
+    func testTexturesCacheCanStoreTextures() throws {
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            throw XCTSkip("Cannot reach gpu")
+        }
         let descriptor = MTLTextureDescriptor()
         descriptor.width = 64
         descriptor.height = 64
@@ -48,8 +50,10 @@ final class TextureControllerTests: XCTestCase {
         XCTAssertNil(result)
     }
     
-    func testLoadTextureByNameReturnsCachedTexture() {
-        let device = MTLCreateSystemDefaultDevice()!
+    func testLoadTextureByNameReturnsCachedTexture() throws {
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            throw XCTSkip("Cannot reach gpu")
+        }
         let descriptor = MTLTextureDescriptor()
         descriptor.width = 64
         descriptor.height = 64
@@ -67,8 +71,10 @@ final class TextureControllerTests: XCTestCase {
         XCTAssertEqual(TextureController.textures.count, 1, "Cache size should remain 1")
     }
     
-    func testLoadTextureFromMDLTextureReturnsCachedTexture() {
-        let device = MTLCreateSystemDefaultDevice()!
+    func testLoadTextureFromMDLTextureReturnsCachedTexture() throws {
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            throw XCTSkip("Cannot reach gpu")
+        }
         let descriptor = MTLTextureDescriptor()
         descriptor.width = 64
         descriptor.height = 64
@@ -87,8 +93,10 @@ final class TextureControllerTests: XCTestCase {
         XCTAssertTrue(result === mockTexture, "Should return the same cached texture instance")
     }
     
-    func testCachePreventsDuplicateLoading() {
-        let device = MTLCreateSystemDefaultDevice()!
+    func testCachePreventsDuplicateLoading() throws {
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            throw XCTSkip("Cannot reach gpu")
+        }
         let descriptor = MTLTextureDescriptor()
         descriptor.width = 128
         descriptor.height = 128
