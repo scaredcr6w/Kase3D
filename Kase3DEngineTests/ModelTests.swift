@@ -89,7 +89,11 @@ final class ModelTests: XCTestCase {
     
     // MARK: - SetTexture Method Tests
     
-    func testSetTextureDoesNotCrashWithEmptyMeshes() {
+    func testSetTextureDoesNotCrashWithEmptyMeshes() throws {
+        guard let _ = MTLCreateSystemDefaultDevice() else {
+            throw XCTSkip("Cannot reach gpu")
+        }
+        
         let model = Model()
         
         model.setTexture(name: "test_texture", type: BaseColor)

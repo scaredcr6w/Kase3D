@@ -44,7 +44,10 @@ final class TextureControllerTests: XCTestCase {
         XCTAssertNotNil(TextureController.textures["test"])
     }
     
-    func testLoadTextureByNameReturnsNilForNonexistentTexture() {
+    func testLoadTextureByNameReturnsNilForNonexistentTexture() throws {
+        guard let _ = MTLCreateSystemDefaultDevice() else {
+            throw XCTSkip("Cannot reach gpu")
+        }
         let result = TextureController.loadTexture(name: "nonexistent_texture_12345")
         
         XCTAssertNil(result)
@@ -117,7 +120,10 @@ final class TextureControllerTests: XCTestCase {
     
     // MARK: - Texture Loading Options Tests
     
-    func testLoadTextureFromMDLUsesCorrectOptions() {
+    func testLoadTextureFromMDLUsesCorrectOptions() throws {
+        guard let _ = MTLCreateSystemDefaultDevice() else {
+            throw XCTSkip("Cannot reach gpu")
+        }
         let width = 2
         let height = 2
         let pixelData: [UInt8] = [
