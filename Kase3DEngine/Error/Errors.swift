@@ -9,11 +9,24 @@ import Foundation
 
 enum MeshError: Error {
     case failedToLoad
+    
+    var localizedDescription: String {
+        switch self {
+        case .failedToLoad:
+            String(localized: "Failed to load Model Meshes.")
+        }
+    }
 }
 
 enum ModelError: Error {
     case failedToLoad
-    case failedToGenerate
+    
+    var localizedDescription: String {
+        switch self {
+        case .failedToLoad:
+            String(localized: "Failed to load Model.")
+        }
+    }
 }
 
 enum RendererError: Error {
@@ -22,7 +35,7 @@ enum RendererError: Error {
     var localizedDescription: String {
         switch self {
         case .failedToReachGPU:
-            "Unable to reach graphics unit."
+            String(localized: "Unable to reach graphics unit.")
         }
     }
 }
