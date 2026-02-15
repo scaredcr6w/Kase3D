@@ -7,7 +7,7 @@
 
 import GameController
 
-class InputController: @unchecked Sendable {
+final class InputController: @unchecked Sendable {
     static let shared = InputController()
     
     @Locked var leftMouseDown = false
@@ -45,8 +45,7 @@ class InputController: @unchecked Sendable {
                 }
                 
                 mouse?.mouseInput?.scroll.valueChangedHandler = { _, xVal, yVal in
-                    self.mouseScroll.x = xVal
-                    self.mouseScroll.y = yVal
+                    self.mouseScroll = Point(x: xVal, y: yVal)
                 }
             }
         }
