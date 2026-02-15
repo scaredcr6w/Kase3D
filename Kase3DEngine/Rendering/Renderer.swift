@@ -7,6 +7,7 @@
 
 import MetalKit
 
+@MainActor
 public final class Renderer: NSObject {
     static var device: MTLDevice!
     var commandQueue: MTLCommandQueue

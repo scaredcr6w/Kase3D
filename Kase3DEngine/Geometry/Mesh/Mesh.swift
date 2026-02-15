@@ -11,6 +11,7 @@ struct Mesh {
     var vertexBuffers: [MTLBuffer]
     var submeshes: [Submesh]
     
+    @MainActor
     init(mdlMesh: MDLMesh, mtkMesh: MTKMesh) throws {
         var vertexBuffers: [MTLBuffer] = []
         
@@ -22,12 +23,17 @@ struct Mesh {
         
         guard let subMeshes = mdlMesh.submeshes else { throw MeshError.failedToLoad }
         
-        submeshes = try zip(subMeshes, mtkMesh.submeshes).map { mesh in
-            guard let mdlSubmesh = mesh.0 as? MDLSubmesh else {
+        var builtSubmeshes: [Submesh] = []
+        builtSubmeshes.reserveCapacity(mtkMesh.submeshes.count)
+        
+        for (mdlAny, mtkSub) in zip(subMeshes, mtkMesh.submeshes) {
+            guard let mdlSubmesh = mdlAny as? MDLSubmesh else {
                 throw MeshError.failedToLoad
             }
-            
-            return Submesh(mdlSubmesh: mdlSubmesh, mtkSubmesh: mesh.1)
+            let submesh = Submesh(mdlSubmesh: mdlSubmesh, mtkSubmesh: mtkSub)
+            builtSubmeshes.append(submesh)
         }
+        
+        self.submeshes = builtSubmeshes
     }
 }

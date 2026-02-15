@@ -13,6 +13,7 @@ struct ModelScene {
     var camera = ArcballCamera()
     let lighting = SceneLighting()
     
+    @MainActor
     init() {
         camera.distance = 2.5
         camera.transform = Transform(

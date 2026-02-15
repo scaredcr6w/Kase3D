@@ -14,6 +14,7 @@ public final class SceneManager {
     
     public init() { }
     
+    @MainActor
     public func loadModel(from assetURL: URL) {
         guard modelScene != nil else { return }
         

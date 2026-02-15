@@ -7,6 +7,7 @@
 
 import MetalKit
 
+@MainActor
 struct TextureController {
     static var textures: [String: MTLTexture] = [:]
     
