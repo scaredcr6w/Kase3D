@@ -8,13 +8,13 @@
 import Foundation
 
 @Observable
+@MainActor
 public final class SceneManager {
     var modelScene: ModelScene!
     public var hasLoadedAnyModel: Bool = false
     
     public init() { }
     
-    @MainActor
     public func loadModel(from assetURL: URL) {
         guard modelScene != nil else { return }
         
