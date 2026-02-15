@@ -7,6 +7,7 @@
 
 import MetalKit
 
+@MainActor
 final class Model: Transformable {
     var transform: Transform = .init()
     var meshes: [Mesh] = []

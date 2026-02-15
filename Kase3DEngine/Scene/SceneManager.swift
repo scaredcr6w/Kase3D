@@ -8,6 +8,7 @@
 import Foundation
 
 @Observable
+@MainActor
 public final class SceneManager {
     var modelScene: ModelScene!
     public var hasLoadedAnyModel: Bool = false

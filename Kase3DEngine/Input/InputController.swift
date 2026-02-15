@@ -7,22 +7,20 @@
 
 import GameController
 
-class InputController {
+final class InputController: @unchecked Sendable {
     static let shared = InputController()
     
-    var leftMouseDown = false
-    var mouseDelta = Point.zero
-    var mouseScroll = Point.zero
+    @Locked var leftMouseDown = false
+    @Locked var mouseDelta = Point.zero
+    @Locked var mouseScroll = Point.zero
     
-    var keysPressed: Set<GCKeyCode> = []
+    @Locked var keysPressed: Set<GCKeyCode> = []
     
     private init() {
         let center = NotificationCenter.default
         
-        center.addObserver(
-            forName: .GCKeyboardDidConnect,
-            object: nil,
-            queue: nil) { notification in
+        Task {
+            for await notification in center.notifications(for: .GCKeyboardDidConnect) {
                 let keyboard = notification.object as? GCKeyboard
                 keyboard?.keyboardInput?.keyChangedHandler = { _, _, keyCode, pressed in
                     if pressed {
@@ -32,11 +30,10 @@ class InputController {
                     }
                 }
             }
+        }
         
-        center.addObserver(
-            forName: .GCMouseDidConnect,
-            object: nil,
-            queue: nil) { notification in
+        Task {
+            for await notification in center.notifications(for: .GCMouseDidConnect) {
                 let mouse = notification.object as? GCMouse
                 
                 mouse?.mouseInput?.leftButton.pressedChangedHandler = { _, _, pressed in
@@ -48,15 +45,21 @@ class InputController {
                 }
                 
                 mouse?.mouseInput?.scroll.valueChangedHandler = { _, xVal, yVal in
-                    self.mouseScroll.x = xVal
-                    self.mouseScroll.y = yVal
+                    self.mouseScroll = Point(x: xVal, y: yVal)
                 }
             }
+        }
     }
     
-    struct Point {
+    struct Point: Sendable {
         var x: Float
         var y: Float
         static let zero = Point(x: 0, y: 0)
+    }
+}
+
+extension NotificationCenter {
+    func notifications(for name: Notification.Name) -> NotificationCenter.Notifications {
+        notifications(named: name)
     }
 }

@@ -9,6 +9,7 @@ import XCTest
 import MetalKit
 @testable import Kase3DEngine
 
+@MainActor
 final class TextureControllerTests: XCTestCase {
     override func setUp() {
         super.setUp()

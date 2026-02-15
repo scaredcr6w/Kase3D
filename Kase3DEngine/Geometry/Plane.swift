@@ -7,6 +7,7 @@
 
 import MetalKit
 
+@MainActor
 final class Plane: Transformable {
     var transform: Transform = .init()
     var mesh: MTKMesh!

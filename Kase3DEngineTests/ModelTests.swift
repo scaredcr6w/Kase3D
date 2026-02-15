@@ -9,6 +9,7 @@ import XCTest
 import MetalKit
 @testable import Kase3DEngine
 
+@MainActor
 final class ModelTests: XCTestCase {
     
     // MARK: - Initialization Tests
