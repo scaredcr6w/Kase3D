@@ -15,10 +15,10 @@ struct ModelScene {
     
     @MainActor
     init() {
-        camera.distance = 2.5
+        camera.distance = 20
         camera.transform = Transform(
-            position: [-1.18, 1.57, -1.28],
-            rotation: [-0.73, 13.3, 0.0]
+            position: [0, 3, 0],
+            rotation: [-0.78, 3.14, 0.0]
         )
         
         gridPlane = Plane(size: camera.far * 2)

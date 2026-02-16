@@ -23,7 +23,7 @@ struct ArcballCamera: Camera {
     let minDistance: Float = 0
     let maxDistance: Float = 20
     var target: float3 = [0, 0, 0]
-    var distance: Float = 2.5
+    var distance: Float = 0
     
     var shift: float3 = [0, 0, 0]
     
@@ -54,18 +54,6 @@ struct ArcballCamera: Camera {
     mutating func update(deltaTime: Float) {
         let input = InputController.shared
         
-        let scrollSens = Settings.touchZoomSensitivity
-        distance -= Float((input.magnification)) * scrollSens
-        distance = min(maxDistance, distance)
-        distance = max(minDistance, distance)
-        input.magnification = 0
-        
-        let dragSens = Settings.mouseDragSensitivity
-        rotation.x += input.mouseDelta.y * dragSens
-        rotation.y += input.mouseDelta.x * dragSens
-        rotation.x = max(-.pi / 2, min(rotation.x, .pi / 2))
-        input.mouseDelta = .zero
-        
         let panSens = Settings.mousePanSensitivity
         let panInput = float3(input.mousePan.x * panSens, 0, -input.mousePan.y * panSens)
         let yawMatrix = float4x4(rotationY: rotation.y)
@@ -77,6 +65,18 @@ struct ArcballCamera: Camera {
         target -= forwardPan * topDownFactor
         target.y -= panInput.z * horizontalFactor
         input.mousePan = .zero
+        
+        let scrollSens = Settings.touchZoomSensitivity
+        distance -= Float((input.magnification)) * scrollSens
+        distance = min(maxDistance, distance)
+        distance = max(minDistance, distance)
+        input.magnification = 0
+        
+        let dragSens = Settings.mouseDragSensitivity
+        rotation.x += input.mouseDelta.y * dragSens
+        rotation.y += input.mouseDelta.x * dragSens
+        rotation.x = max(-.pi / 2, min(rotation.x, .pi / 2))
+        input.mouseDelta = .zero
         
         let rotateMatrix = float4x4(rotationYXZ: [-rotation.x, rotation.y, 0])
         let distanceVector = float4(0, 0, -distance, 0)
