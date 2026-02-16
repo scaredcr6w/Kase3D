@@ -25,8 +25,6 @@ struct ArcballCamera: Camera {
     var target: float3 = [0, 0, 0]
     var distance: Float = 0
     
-    var shift: float3 = [0, 0, 0]
-    
     var projectionMatrix: float4x4 {
         float4x4(
             projectionFov: fov,
@@ -41,7 +39,7 @@ struct ArcballCamera: Camera {
         if target == position {
             matrix = (float4x4(translation: target) * float4x4(rotationYXZ: rotation)).inverse
         } else {
-            matrix = float4x4(eye: position, center: target, up: [0, 1, 0])
+            matrix = float4x4(eye: position, center: target, up: [0, 1, 0]) // TODO: lookAt matrix causing jitters when forward and up vector cross product is close to 0
         }
         
         return matrix
