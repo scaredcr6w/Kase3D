@@ -95,13 +95,13 @@ struct QArcballCamera {
     var near: Float = 0.1
     var far: Float = 100
     
-    var cameraPosition: float3 {
+    var position: float3 {
         let localOffset = float3(0, 0, distance)
         return target + orientation.act(localOffset)
     }
     
     var viewMatrix: float4x4 {
-        let position = cameraPosition
+        let position = position
         let rotationMatrix = float4x4(orientation.conjugate)
         let translationMatrix = float4x4(translation: position)
         
@@ -142,13 +142,22 @@ struct QArcballCamera {
         let deltaY = mouseDelta.y * dragSens
         
         let yawQuat = simd_quatf(angle: deltaX, axis: float3(0, 1, 0))
+        let tempOrientation = yawQuat * orientation
         
-        let right = orientation.act(float3(1, 0, 0))
-        let pitchQuat = simd_quatf(angle: -deltaY, axis: right)
+        let forward = tempOrientation.act(float3(0, 0, -1))
+        let currentPitch = asin(max(-1.0, min(1.0, forward.y)))
+        let maxPitch: Float = .pi / 2 - 0.01
+        let clampedDeltaY = max(-maxPitch - currentPitch, min(maxPitch - currentPitch, -deltaY))
         
-        orientation = pitchQuat * yawQuat * orientation
+        if abs(clampedDeltaY) > 0.001 {
+            let right = tempOrientation.act(float3(1, 0, 0))
+            let pitchQuat = simd_quatf(angle: clampedDeltaY, axis: right)
+            orientation = pitchQuat * tempOrientation
+        } else {
+            orientation = tempOrientation
+        }
+        
         orientation = orientation.normalized
-        
         input.mouseDelta = .zero
     }
     

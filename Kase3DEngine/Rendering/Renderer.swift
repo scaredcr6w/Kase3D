@@ -90,7 +90,7 @@ extension Renderer {
         uniforms.viewMatrix = scene.camera.viewMatrix
         uniforms.projectionMatrix = scene.camera.projectionMatrix
         params.lightCount = UInt32(scene.lighting.lights.count)
-        params.cameraPosition = scene.camera.cameraPosition
+        params.cameraPosition = scene.camera.position
     }
     
     func draw(scene: ModelScene, in view: MTKView) {
@@ -104,10 +104,8 @@ extension Renderer {
         
         renderEncoder.setDepthStencilState(depthStencilState)
         
-        if let gridPlane = scene.gridPlane {
-            renderEncoder.setRenderPipelineState(gridPipelineState)
-            gridPlane.render(encoder: renderEncoder, uniforms: uniforms)
-        }
+        renderEncoder.setRenderPipelineState(gridPipelineState)
+        scene.gridPlane.render(encoder: renderEncoder, uniforms: uniforms)
         
         renderEncoder.setRenderPipelineState(pipelineState)
         

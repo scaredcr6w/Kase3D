@@ -9,19 +9,13 @@ import MetalKit
 
 struct ModelScene {
     var models: [Model] = []
-    var gridPlane: Plane?
-    var camera = ArcballCamera()
+    var gridPlane: Plane
+    var camera = QArcballCamera()
     let lighting = SceneLighting()
     
     @MainActor
     init() {
-        camera.distance = 20
-        camera.transform = Transform(
-            position: [0, 3, 0],
-            rotation: [-0.78, 3.14, 0.0]
-        )
-        
-        gridPlane = Plane(size: camera.far * 2)
+        gridPlane = Plane(size: 100)
     }
     
     mutating func update(size: CGSize) {
