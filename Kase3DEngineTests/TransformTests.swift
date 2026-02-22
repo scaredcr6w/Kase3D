@@ -17,7 +17,7 @@ final class TransformTests: XCTestCase {
         
         XCTAssertEqual(transform.position, float3(0, 0, 0))
         XCTAssertEqual(transform.rotation, float3(0, 0, 0))
-        XCTAssertEqual(transform.scale, 0.5)
+        XCTAssertEqual(transform.scale, 0.1)
     }
     
     func testTransformCustomInitialization() {

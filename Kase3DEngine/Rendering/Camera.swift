@@ -7,7 +7,7 @@
 
 import CoreGraphics
 
-protocol Camera: Transformable {
+protocol Camera {
     var projectionMatrix: float4x4 { get }
     var viewMatrix: float4x4 { get }
     mutating func update(size: CGSize)
@@ -15,85 +15,17 @@ protocol Camera: Transformable {
 }
 
 struct ArcballCamera: Camera {
-    var transform: Transform = .init()
-    var aspect: Float = 1
-    var fov = Float(70).toRadians
-    var near: Float = 0.1
-    var far: Float = 100
-    let minDistance: Float = 0
-    let maxDistance: Float = 20
-    var target: float3 = [0, 0, 0]
-    var distance: Float = 0
-    
-    var projectionMatrix: float4x4 {
-        float4x4(
-            projectionFov: fov,
-            near: near,
-            far: far,
-            aspect: aspect
-        )
-    }
-    
-    var viewMatrix: float4x4 {
-        let matrix: float4x4
-        if target == position {
-            matrix = (float4x4(translation: target) * float4x4(rotationYXZ: rotation)).inverse
-        } else {
-            matrix = float4x4(eye: position, center: target, up: [0, 1, 0]) // TODO: lookAt matrix causing jitters when forward and up vector cross product is close to 0
-        }
-        
-        return matrix
-    }
-    
-    mutating func update(size: CGSize) {
-        aspect = Float(size.width / size.height)
-    }
-    
-    mutating func update(deltaTime: Float) {
-        let input = InputController.shared
-        
-        let panSens = Settings.mousePanSensitivity
-        let panInput = float3(input.mousePan.x * panSens, 0, -input.mousePan.y * panSens)
-        let yawMatrix = float4x4(rotationY: rotation.y)
-        let horizontalPan = (yawMatrix * float4(panInput.x, 0, 0, 0)).xyz
-        target -= horizontalPan
-        let forwardPan = (yawMatrix * float4(0, 0, panInput.z, 0)).xyz
-        let horizontalFactor = abs(cos(rotation.x))
-        let topDownFactor = abs(sin(rotation.x))
-        target -= forwardPan * topDownFactor
-        target.y -= panInput.z * horizontalFactor
-        input.mousePan = .zero
-        
-        let scrollSens = Settings.touchZoomSensitivity
-        distance -= Float((input.magnification)) * scrollSens
-        distance = min(maxDistance, distance)
-        distance = max(minDistance, distance)
-        input.magnification = 0
-        
-        let dragSens = Settings.mouseDragSensitivity
-        rotation.x += input.mouseDelta.y * dragSens
-        rotation.y += input.mouseDelta.x * dragSens
-        rotation.x = max(-.pi / 2, min(rotation.x, .pi / 2))
-        input.mouseDelta = .zero
-        
-        let rotateMatrix = float4x4(rotationYXZ: [-rotation.x, rotation.y, 0])
-        let distanceVector = float4(0, 0, -distance, 0)
-        let rotatedVector = rotateMatrix * distanceVector
-        position = target + rotatedVector.xyz
-    }
-}
-
-struct QArcballCamera {
     var distance: Float
     var target: float3
     var orientation: simd_quatf
     
     var screenSize: float2 = [0, 0]
-    
     var fov: Float = Float(70).toRadians
     var aspect: Float = 1
     var near: Float = 0.1
     var far: Float = 100
+    var minDistance: Float = 0.1
+    var maxDistance: Float = 20
     
     var position: float3 {
         let localOffset = float3(0, 0, distance)
@@ -117,7 +49,7 @@ struct QArcballCamera {
         )
     }
     
-    init(distance: Float = 5, target: float3 = .zero) {
+    init(distance: Float = 2.5, target: float3 = .zero) {
         self.distance = distance
         self.target = target
         self.orientation = simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
@@ -129,14 +61,18 @@ struct QArcballCamera {
     }
     
     mutating func update(deltaTime: Float) {
-        drag()
-        pan()
-        zoom()
+        let input = InputController.shared
+        
+        drag(input.mouseDelta)
+        pan(input.mousePan)
+        zoom(Float(input.magnification))
+        
+        input.mouseDelta = .zero
+        input.mousePan = .zero
+        input.magnification = .zero
     }
     
-    private mutating func drag() {
-        let input = InputController.shared
-        let mouseDelta = input.mouseDelta
+    mutating func drag(_ mouseDelta: float2) {
         let dragSens = Settings.mouseDragSensitivity
         
         let deltaX = mouseDelta.x * dragSens
@@ -159,20 +95,15 @@ struct QArcballCamera {
         }
         
         orientation = orientation.normalized
-        input.mouseDelta = .zero
     }
     
-    private mutating func zoom() {
-        let input = InputController.shared
+    mutating func zoom(_ magnification: Float) {
         let scrollSens = Settings.touchZoomSensitivity
-        distance -= Float(input.magnification) * scrollSens
+        distance -= magnification * scrollSens
         distance = max(0.1, distance)
-        input.magnification = 0
     }
     
-    private mutating func pan() {
-        let input = InputController.shared
-        let panInput = input.mousePan
+    mutating func pan(_ panInput: float2) {
         let panSens = Settings.mousePanSensitivity
         
         let right = orientation.act(float3(1, 0, 0))
@@ -189,8 +120,6 @@ struct QArcballCamera {
         let forwardPanNormalized = length(forwardPan) > 0.001 ? normalize(forwardPan) : float3(0, 0, 1)
         target -= forwardPanNormalized * panInput.y * panSens * topDownFactor
         target.y -= panInput.y * panSens * horizontalFactor
-        
-        input.mousePan = .zero
     }
     
     private func mapToSphere(_ screenPos: float2) -> float3 {

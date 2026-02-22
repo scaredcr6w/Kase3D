@@ -10,7 +10,7 @@ import MetalKit
 struct ModelScene {
     var models: [Model] = []
     var gridPlane: Plane
-    var camera = QArcballCamera()
+    var camera = ArcballCamera()
     let lighting = SceneLighting()
     
     @MainActor
