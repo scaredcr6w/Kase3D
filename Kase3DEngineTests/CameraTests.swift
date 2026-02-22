@@ -272,7 +272,7 @@ final class ArcballCameraTests: XCTestCase {
         camera.drag(float2.zero)
         
         XCTAssertEqual(camera.orientation.real, initialOrientation.real, accuracy: 0.001)
-        XCTAssertEqual(camera.orientation.imag, initialOrientation.imag, accuracy: 0.001)
+        XCTAssertEqual(camera.orientation.imag, initialOrientation.imag)
     }
     
     func testNoPanWithZeroInput() {

@@ -100,7 +100,7 @@ struct ArcballCamera: Camera {
     mutating func zoom(_ magnification: Float) {
         let scrollSens = Settings.touchZoomSensitivity
         distance -= magnification * scrollSens
-        distance = max(0.1, distance)
+        distance = max(minDistance, min(maxDistance, distance))
     }
     
     mutating func pan(_ panInput: float2) {
@@ -120,19 +120,5 @@ struct ArcballCamera: Camera {
         let forwardPanNormalized = length(forwardPan) > 0.001 ? normalize(forwardPan) : float3(0, 0, 1)
         target -= forwardPanNormalized * panInput.y * panSens * topDownFactor
         target.y -= panInput.y * panSens * horizontalFactor
-    }
-    
-    private func mapToSphere(_ screenPos: float2) -> float3 {
-        let x = (2.0 * screenPos.x - screenSize.x) / screenSize.x
-        let y = (screenSize.y - 2.0 * screenPos.y) / screenSize.y
-        
-        let lenghtSquared = x * x + y * y
-        
-        if lenghtSquared <= 1.0 {
-            let z = sqrt(1.0 - lenghtSquared)
-            return normalize(float3(x, y, z))
-        }
-        
-        return normalize(float3(x, y, 0))
     }
 }
