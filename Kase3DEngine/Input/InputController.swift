@@ -10,13 +10,13 @@ import GameController
 final class InputController: @unchecked Sendable {
     static let shared = InputController()
     
-    @Locked var mouseDelta = Point.zero
+    @Locked var mouseDelta = float2.zero
     @Locked var magnification: CGFloat = 0
-    @Locked var mousePan = Point.zero
+    @Locked var mousePan = float2.zero
     
     private init() {
         NSEvent.addLocalMonitorForEvents(matching: .leftMouseDragged) { event in
-            self.mouseDelta = Point(x: Float(event.deltaX), y: -Float(event.deltaY))
+            self.mouseDelta = float2(Float(event.deltaX), -Float(event.deltaY))
             return event
         }
         
@@ -26,20 +26,8 @@ final class InputController: @unchecked Sendable {
         }
         
         NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { event in
-            self.mousePan = Point(x: Float(event.scrollingDeltaX), y: Float(event.scrollingDeltaY))
+            self.mousePan = float2(Float(event.scrollingDeltaX), Float(event.scrollingDeltaY))
             return event
         }
-    }
-    
-    struct Point: Sendable {
-        var x: Float
-        var y: Float
-        static let zero = Point(x: 0, y: 0)
-    }
-}
-
-extension NotificationCenter {
-    func notifications(for name: Notification.Name) -> NotificationCenter.Notifications {
-        notifications(named: name)
     }
 }
