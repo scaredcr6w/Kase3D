@@ -130,10 +130,11 @@ struct QArcballCamera {
     
     mutating func update(deltaTime: Float) {
         drag()
+        pan()
         zoom()
     }
     
-    mutating func drag() {
+    private mutating func drag() {
         let input = InputController.shared
         let mouseDelta = input.mouseDelta
         let dragSens = Settings.mouseDragSensitivity
@@ -161,12 +162,35 @@ struct QArcballCamera {
         input.mouseDelta = .zero
     }
     
-    mutating func zoom() {
+    private mutating func zoom() {
         let input = InputController.shared
         let scrollSens = Settings.touchZoomSensitivity
         distance -= Float(input.magnification) * scrollSens
         distance = max(0.1, distance)
         input.magnification = 0
+    }
+    
+    private mutating func pan() {
+        let input = InputController.shared
+        let panInput = input.mousePan
+        let panSens = Settings.mousePanSensitivity
+        
+        let right = orientation.act(float3(1, 0, 0))
+        let forward = orientation.act(float3(0, 0, 1))
+        
+        let pitchAngle = asin(max(-1.0, min(1.0, forward.y)))
+        let horizontalFactor = abs(cos(pitchAngle))
+        let topDownFactor = abs(sin(pitchAngle))
+        
+        let horizontalPan = right * panInput.x * panSens
+        target += horizontalPan
+        
+        let forwardPan = float3(forward.x, 0, forward.z)
+        let forwardPanNormalized = length(forwardPan) > 0.001 ? normalize(forwardPan) : float3(0, 0, 1)
+        target -= forwardPanNormalized * panInput.y * panSens * topDownFactor
+        target.y -= panInput.y * panSens * horizontalFactor
+        
+        input.mousePan = .zero
     }
     
     private func mapToSphere(_ screenPos: float2) -> float3 {
