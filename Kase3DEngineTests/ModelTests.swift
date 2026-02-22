@@ -22,7 +22,7 @@ final class ModelTests: XCTestCase {
         XCTAssertTrue(model.meshes.isEmpty)
         XCTAssertEqual(model.transform.position, float3(0, 0, 0))
         XCTAssertEqual(model.transform.rotation, float3(0, 0, 0))
-        XCTAssertEqual(model.transform.scale, 0.5)
+        XCTAssertEqual(model.transform.scale, 0.1)
     }
     
     // MARK: - Property Tests

@@ -10,7 +10,7 @@ import Foundation
 struct Transform {
     var position: float3 = [0, 0, 0]
     var rotation: float3 = [0, 0, 0]
-    var scale: Float = 0.5
+    var scale: Float = 0.1
     
     var modelMatrix: matrix_float4x4 {
         let translation = float4x4(translation: position)

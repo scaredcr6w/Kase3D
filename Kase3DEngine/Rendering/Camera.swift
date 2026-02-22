@@ -7,7 +7,7 @@
 
 import CoreGraphics
 
-protocol Camera: Transformable {
+protocol Camera {
     var projectionMatrix: float4x4 { get }
     var viewMatrix: float4x4 { get }
     mutating func update(size: CGSize)
@@ -15,15 +15,30 @@ protocol Camera: Transformable {
 }
 
 struct ArcballCamera: Camera {
-    var transform: Transform = .init()
+    var distance: Float
+    var target: float3
+    var orientation: simd_quatf
+    
+    var screenSize: float2 = [0, 0]
+    var fov: Float = Float(70).toRadians
     var aspect: Float = 1
-    var fov = Float(70).toRadians
     var near: Float = 0.1
     var far: Float = 100
-    let minDistance: Float = 0
-    let maxDistance: Float = 20
-    var target: float3 = [0, 0, 0]
-    var distance: Float = 2.5
+    var minDistance: Float = 0.1
+    var maxDistance: Float = 20
+    
+    var position: float3 {
+        let localOffset = float3(0, 0, distance)
+        return target + orientation.act(localOffset)
+    }
+    
+    var viewMatrix: float4x4 {
+        let position = position
+        let rotationMatrix = float4x4(orientation.conjugate)
+        let translationMatrix = float4x4(translation: position)
+        
+        return rotationMatrix * translationMatrix
+    }
     
     var projectionMatrix: float4x4 {
         float4x4(
@@ -34,41 +49,76 @@ struct ArcballCamera: Camera {
         )
     }
     
-    var viewMatrix: float4x4 {
-        let matrix: float4x4
-        if target == position {
-            matrix = (float4x4(translation: target) * float4x4(rotationYXZ: rotation)).inverse
-        } else {
-            matrix = float4x4(eye: position, center: target, up: [0, 1, 0])
-        }
-        
-        return matrix
+    init(distance: Float = 2.5, target: float3 = .zero) {
+        self.distance = distance
+        self.target = target
+        self.orientation = simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
     }
     
     mutating func update(size: CGSize) {
+        screenSize = float2(Float(size.width), Float(size.height))
         aspect = Float(size.width / size.height)
     }
     
     mutating func update(deltaTime: Float) {
         let input = InputController.shared
         
-        let scrollSens = Settings.mouseScrollSensitivity
-        distance -= (input.mouseScroll.x + input.mouseScroll.y) * scrollSens
-        distance = min(maxDistance, distance)
-        distance = max(minDistance, distance)
-        input.mouseScroll = .zero
+        drag(input.mouseDelta)
+        pan(input.mousePan)
+        zoom(Float(input.magnification))
         
-        if input.leftMouseDown {
-            let sens = Settings.mousePanSensitivity
-            rotation.x += input.mouseDelta.y * sens
-            rotation.y += input.mouseDelta.x * sens
-            rotation.x = max(-.pi / 2, min(rotation.x, .pi / 2))
-            input.mouseDelta = .zero
+        input.mouseDelta = .zero
+        input.mousePan = .zero
+        input.magnification = .zero
+    }
+    
+    mutating func drag(_ mouseDelta: float2) {
+        let dragSens = Settings.mouseDragSensitivity
+        
+        let deltaX = mouseDelta.x * dragSens
+        let deltaY = mouseDelta.y * dragSens
+        
+        let yawQuat = simd_quatf(angle: deltaX, axis: float3(0, 1, 0))
+        let tempOrientation = yawQuat * orientation
+        
+        let forward = tempOrientation.act(float3(0, 0, -1))
+        let currentPitch = asin(max(-1.0, min(1.0, forward.y)))
+        let maxPitch: Float = .pi / 2 - 0.01
+        let clampedDeltaY = max(-maxPitch - currentPitch, min(maxPitch - currentPitch, -deltaY))
+        
+        if abs(clampedDeltaY) > 0.001 {
+            let right = tempOrientation.act(float3(1, 0, 0))
+            let pitchQuat = simd_quatf(angle: clampedDeltaY, axis: right)
+            orientation = pitchQuat * tempOrientation
+        } else {
+            orientation = tempOrientation
         }
         
-        let rotateMatrix = float4x4(rotationYXZ: [-rotation.x, rotation.y, 0])
-        let distanceVector = float4(0, 0, -distance, 0)
-        let rotatedVector = rotateMatrix * distanceVector
-        position = target + rotatedVector.xyz
+        orientation = orientation.normalized
+    }
+    
+    mutating func zoom(_ magnification: Float) {
+        let scrollSens = Settings.touchZoomSensitivity
+        distance -= magnification * scrollSens
+        distance = max(minDistance, min(maxDistance, distance))
+    }
+    
+    mutating func pan(_ panInput: float2) {
+        let panSens = Settings.mousePanSensitivity
+        
+        let right = orientation.act(float3(1, 0, 0))
+        let forward = orientation.act(float3(0, 0, 1))
+        
+        let pitchAngle = asin(max(-1.0, min(1.0, forward.y)))
+        let horizontalFactor = abs(cos(pitchAngle))
+        let topDownFactor = abs(sin(pitchAngle))
+        
+        let horizontalPan = right * panInput.x * panSens
+        target += horizontalPan
+        
+        let forwardPan = float3(forward.x, 0, forward.z)
+        let forwardPanNormalized = length(forwardPan) > 0.001 ? normalize(forwardPan) : float3(0, 0, 1)
+        target -= forwardPanNormalized * panInput.y * panSens * topDownFactor
+        target.y -= panInput.y * panSens * horizontalFactor
     }
 }

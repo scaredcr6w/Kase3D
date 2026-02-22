@@ -104,10 +104,8 @@ extension Renderer {
         
         renderEncoder.setDepthStencilState(depthStencilState)
         
-        if let gridPlane = scene.gridPlane {
-            renderEncoder.setRenderPipelineState(gridPipelineState)
-            gridPlane.render(encoder: renderEncoder, uniforms: uniforms)
-        }
+        renderEncoder.setRenderPipelineState(gridPipelineState)
+        scene.gridPlane.render(encoder: renderEncoder, uniforms: uniforms)
         
         renderEncoder.setRenderPipelineState(pipelineState)
         

@@ -10,56 +10,24 @@ import GameController
 final class InputController: @unchecked Sendable {
     static let shared = InputController()
     
-    @Locked var leftMouseDown = false
-    @Locked var mouseDelta = Point.zero
-    @Locked var mouseScroll = Point.zero
-    
-    @Locked var keysPressed: Set<GCKeyCode> = []
+    @Locked var mouseDelta = float2.zero
+    @Locked var magnification: CGFloat = 0
+    @Locked var mousePan = float2.zero
     
     private init() {
-        let center = NotificationCenter.default
-        
-        Task {
-            for await notification in center.notifications(for: .GCKeyboardDidConnect) {
-                let keyboard = notification.object as? GCKeyboard
-                keyboard?.keyboardInput?.keyChangedHandler = { _, _, keyCode, pressed in
-                    if pressed {
-                        self.keysPressed.insert(keyCode)
-                    } else {
-                        self.keysPressed.remove(keyCode)
-                    }
-                }
-            }
+        NSEvent.addLocalMonitorForEvents(matching: .leftMouseDragged) { event in
+            self.mouseDelta = float2(Float(event.deltaX), -Float(event.deltaY))
+            return event
         }
         
-        Task {
-            for await notification in center.notifications(for: .GCMouseDidConnect) {
-                let mouse = notification.object as? GCMouse
-                
-                mouse?.mouseInput?.leftButton.pressedChangedHandler = { _, _, pressed in
-                    self.leftMouseDown = pressed
-                }
-                
-                mouse?.mouseInput?.mouseMovedHandler = { _, deltaX, deltaY in
-                    self.mouseDelta = Point(x: deltaX, y: deltaY)
-                }
-                
-                mouse?.mouseInput?.scroll.valueChangedHandler = { _, xVal, yVal in
-                    self.mouseScroll = Point(x: xVal, y: yVal)
-                }
-            }
+        NSEvent.addLocalMonitorForEvents(matching: .magnify) { event in
+            self.magnification = event.magnification
+            return event
         }
-    }
-    
-    struct Point: Sendable {
-        var x: Float
-        var y: Float
-        static let zero = Point(x: 0, y: 0)
-    }
-}
-
-extension NotificationCenter {
-    func notifications(for name: Notification.Name) -> NotificationCenter.Notifications {
-        notifications(named: name)
+        
+        NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { event in
+            self.mousePan = float2(Float(event.scrollingDeltaX), Float(event.scrollingDeltaY))
+            return event
+        }
     }
 }
