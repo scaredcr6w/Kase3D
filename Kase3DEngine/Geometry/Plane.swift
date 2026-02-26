@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import Kase3DCore
 
 @MainActor
 final class Plane: Transformable {

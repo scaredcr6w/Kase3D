@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import Kase3DCore
 
 @MainActor
 final class Model: Transformable {
@@ -32,14 +33,13 @@ final class Model: Transformable {
                 device: Renderer.device
             )
             
-            meshes = try zip(mdlMeshes, mtkMeshes).map {
-                try Mesh(mdlMesh: $0.0, mtkMesh: $0.1)
+            meshes = zip(mdlMeshes, mtkMeshes).compactMap {
+                Mesh(mdlMesh: $0.0, mtkMesh: $0.1)
             }
             self.name = assetURL.lastPathComponent
-        } catch MeshError.failedToLoad {
-            print(MeshError.failedToLoad.localizedDescription)
         } catch {
-            print(error.localizedDescription)
+            let kaseError = ErrorManager.shared.map(error)
+            ErrorManager.shared.present(kaseError)
         }
             
     }

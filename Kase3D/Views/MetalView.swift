@@ -13,30 +13,12 @@ struct MetalView: View {
     @Environment(SceneManager.self) private var sceneManager: SceneManager
     @State private var metalView: MTKView = MTKView()
     @State private var modelController: ModelController?
-    @State private var didError: Bool = false
-    @State private var errorMessage: String = ""
     
     var body: some View {
         MetalViewRepresentable(metalView: $metalView, controller: modelController)
             .onAppear {
-                do {
-                    modelController = try ModelController(sceneManager: sceneManager, metalView: metalView)
-                } catch {
-                    didError = true
-                    errorMessage = error.localizedDescription
-                }
+                modelController = ModelController(sceneManager: sceneManager, metalView: metalView)
             }
-            .alert(
-                "Error",
-                isPresented: $didError) {
-                    Button("Exit") {
-                        didError = false
-                        errorMessage = ""
-                    }
-                } message: {
-                    Text(!errorMessage.isEmpty ? errorMessage : "An unexpected error occured")
-                }
-
     }
 }
 

@@ -7,15 +7,24 @@
 
 import SwiftUI
 import Kase3DEngine
+import Kase3DCore
 
 struct ContentView: View {
     @Environment(SceneManager.self) private var sceneManager
+    @State private var errorManager = ErrorManager.shared
     
     var body: some View {
         ZStack {
             MetalView()
-            if !sceneManager.hasLoadedAnyModel {
-                WelcomeView()
+                .opacity(sceneManager.hasLoadedAnyModel ? 1 : 0)
+            WelcomeView()
+                .opacity(sceneManager.hasLoadedAnyModel ? 0 : 1)
+        }
+        .overlay {
+            if let error = ErrorManager.shared.current {
+                ErrorAlert(message: error.message, retry: error.retry) {
+                    ErrorManager.shared.dismiss()
+                }
             }
         }
     }

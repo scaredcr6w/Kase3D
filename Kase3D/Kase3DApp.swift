@@ -8,6 +8,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 import Kase3DEngine
+import Kase3DCore
 
 @main
 struct Kase3DApp: App {
@@ -21,6 +22,7 @@ struct Kase3DApp: App {
                 .environment(sceneManager)
                 .environment(recentsManager)
         }
+        .windowResizability(.automatic)
         .commands {
             CommandGroup(after: .newItem) {
                 Button("Import File...") {
@@ -37,10 +39,14 @@ struct Kase3DApp: App {
                                 recentsManager.addRecentFile(url)
                                 sceneManager.loadModel(from: url)
                             } else {
-                                print("Failed to access security-scoped resource")
+                                isFileImporterPresented = false
+                                ErrorManager.shared.present(FileError.accessError) {
+                                    isFileImporterPresented = true
+                                }
                             }
                         case .failure(let error):
-                            print(error.localizedDescription)
+                            let kaseError = ErrorManager.shared.map(error)
+                            ErrorManager.shared.present(kaseError)
                         }
                     }
                 

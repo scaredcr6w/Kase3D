@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import Kase3DCore
 
 @MainActor
 public class ModelController: NSObject {
@@ -15,8 +16,13 @@ public class ModelController: NSObject {
     var deltaTime: Double = 0
     var lastTime: Double = CFAbsoluteTimeGetCurrent()
     
-    public init(sceneManager: SceneManager, metalView: MTKView) throws {
-        renderer = try Renderer(metalView: metalView)
+    public init?(sceneManager: SceneManager, metalView: MTKView) {
+        guard let renderer = Renderer(metalView: metalView) else {
+            ErrorManager.shared.present(RendererError.failedToReachGPU)
+            return nil
+        }
+        
+        self.renderer = renderer
         self.sceneManager = sceneManager
         sceneManager.modelScene = ModelScene()
         super.init()
