@@ -112,30 +112,9 @@
 		0F3797ED2F406FC50036FA99 /* Kase3DEngine.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = Kase3DEngine.xctestplan; path = Kase3DEngineTests/Kase3DEngine.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		0F02504B2F4F4FCA0043B98C /* Exceptions for "Kase3DCore" folder in "Kase3DEngine" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				PropertyWrappers/Locked.swift,
-			);
-			target = 0F20776B2F263C6E00485E9E /* Kase3DEngine */;
-		};
-		0F02504C2F4F4FCA0043B98C /* Exceptions for "Kase3DCore" folder in "Kase3DCore" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				PropertyWrappers/Locked.swift,
-			);
-			target = 0F0250262F4F4F890043B98C /* Kase3DCore */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0F0250282F4F4F890043B98C /* Kase3DCore */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				0F02504B2F4F4FCA0043B98C /* Exceptions for "Kase3DCore" folder in "Kase3DEngine" target */,
-				0F02504C2F4F4FCA0043B98C /* Exceptions for "Kase3DCore" folder in "Kase3DCore" target */,
-			);
 			path = Kase3DCore;
 			sourceTree = "<group>";
 		};

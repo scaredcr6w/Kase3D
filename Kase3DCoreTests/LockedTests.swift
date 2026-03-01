@@ -1,12 +1,12 @@
 //
 //  LockedTests.swift
-//  Kase3DEngineTests
+//  Kase3DCoreTests
 //
-//  Created by Anda Levente on 2026. 02. 15..
+//  Created by Anda Levente on 2026. 03. 01..
 //
 
 import XCTest
-@testable import Kase3DEngine
+@testable import Kase3DCore
 
 final class LockedTests: XCTestCase {
     

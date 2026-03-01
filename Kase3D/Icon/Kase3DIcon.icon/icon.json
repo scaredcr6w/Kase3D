@@ -4,6 +4,7 @@
     {
       "layers" : [
         {
+          "blend-mode" : "normal",
           "glass" : false,
           "image-name" : "kase.png",
           "name" : "kase"

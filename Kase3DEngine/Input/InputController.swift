@@ -4,8 +4,8 @@
 //
 //  Created by Anda Levente on 2026. 01. 25..
 //
-
-import GameController
+import Kase3DCore
+import AppKit
 
 final class InputController: @unchecked Sendable {
     static let shared = InputController()
