@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CryptoKit
 
 struct RecentFileBookmark: Codable, Identifiable {
     var id: String
@@ -35,8 +36,10 @@ final class RecentFilesManager {
                 relativeTo: nil
             )
             
+            let hashedURL = hashURL(url.absoluteString)
+            
             let bookmark = RecentFileBookmark(
-                id: url.absoluteString,
+                id: hashedURL,
                 bookmarkData: bookmarkData,
                 fileName: url.lastPathComponent
             )
@@ -111,5 +114,11 @@ final class RecentFilesManager {
             
             completion(url)
         }
+    }
+    
+    private func hashURL(_ urlString: String) -> String {
+        let data = Data(urlString.utf8)
+        let hash = SHA256.hash(data: data)
+        return hash.map { String(format: "%02x", $0) }.joined()
     }
 }
