@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import Kase3DCore
 
 @MainActor
 public final class Renderer: NSObject {
@@ -19,13 +20,14 @@ public final class Renderer: NSObject {
     var uniforms = Uniforms()
     var params = Params()
     
-    public init(metalView: MTKView) throws {
+    public init?(metalView: MTKView) {
         let bundle = Bundle(for: type(of: self))
         
         guard let device = MTLCreateSystemDefaultDevice(),
               let commandQueue = device.makeCommandQueue(),
               let library = try? device.makeDefaultLibrary(bundle: bundle) else {
-            throw RendererError.failedToReachGPU
+            ErrorManager.shared.present(RendererError.failedToReachGPU)
+            return nil
         }
         
         Self.device = device

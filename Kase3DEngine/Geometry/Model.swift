@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import Kase3DCore
 
 @MainActor
 final class Model: Transformable {
@@ -32,16 +33,21 @@ final class Model: Transformable {
                 device: Renderer.device
             )
             
-            meshes = try zip(mdlMeshes, mtkMeshes).map {
-                try Mesh(mdlMesh: $0.0, mtkMesh: $0.1)
+            let loadedMeshes = zip(mdlMeshes, mtkMeshes).compactMap {
+                Mesh(mdlMesh: $0.0, mtkMesh: $0.1)
             }
-            self.name = assetURL.lastPathComponent
-        } catch MeshError.failedToLoad {
-            print(MeshError.failedToLoad.localizedDescription)
-        } catch {
-            print(error.localizedDescription)
-        }
             
+            guard loadedMeshes.count == mdlMeshes.count else {
+                meshes = []
+                name = "Untitled"
+                return
+            }
+            meshes = loadedMeshes
+            name = assetURL.lastPathComponent
+        } catch {
+            let kaseError = ErrorManager.shared.map(error)
+            ErrorManager.shared.present(kaseError)
+        }
     }
     
     func setTexture(name: String, type: TextureIndices) {
