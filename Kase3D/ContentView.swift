@@ -11,7 +11,6 @@ import Kase3DCore
 
 struct ContentView: View {
     @Environment(SceneManager.self) private var sceneManager
-    @State private var errorManager = ErrorManager.shared
     
     var body: some View {
         ZStack {

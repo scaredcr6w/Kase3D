@@ -18,7 +18,6 @@ public class ModelController: NSObject {
     
     public init?(sceneManager: SceneManager, metalView: MTKView) {
         guard let renderer = Renderer(metalView: metalView) else {
-            ErrorManager.shared.present(RendererError.failedToReachGPU)
             return nil
         }
         

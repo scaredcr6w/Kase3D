@@ -33,15 +33,21 @@ final class Model: Transformable {
                 device: Renderer.device
             )
             
-            meshes = zip(mdlMeshes, mtkMeshes).compactMap {
+            let loadedMeshes = zip(mdlMeshes, mtkMeshes).compactMap {
                 Mesh(mdlMesh: $0.0, mtkMesh: $0.1)
             }
-            self.name = assetURL.lastPathComponent
+            
+            guard loadedMeshes.count == mdlMeshes.count else {
+                meshes = []
+                name = "Untitled"
+                return
+            }
+            meshes = loadedMeshes
+            name = assetURL.lastPathComponent
         } catch {
             let kaseError = ErrorManager.shared.map(error)
             ErrorManager.shared.present(kaseError)
         }
-            
     }
     
     func setTexture(name: String, type: TextureIndices) {

@@ -31,7 +31,3 @@ struct ErrorAlert: View {
         .shadow(radius: 20)
     }
 }
-
-#Preview {
-    ErrorAlert(message: "Halloo", retry: { }, dismiss: { })
-}

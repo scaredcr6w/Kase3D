@@ -1,14 +1,13 @@
 //
-//  Kase3DCoreTests.swift
-//  Kase3DCoreTests
+//  Kase3DTests.swift
+//  Kase3DTests
 //
-//  Created by Anda Levente on 2026. 02. 25..
+//  Created by Anda Levente on 2026. 03. 01..
 //
 
 import XCTest
-@testable import Kase3DCore
 
-final class Kase3DCoreTests: XCTestCase {
+final class Kase3DTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
