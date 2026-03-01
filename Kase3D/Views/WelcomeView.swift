@@ -29,12 +29,10 @@ struct WelcomeView: View {
                 }
             }
             
-            Grid {
-                ScrollView(.horizontal) {
-                    GridRow {
-                        ForEach(recentsManager.recentBookmarks) { bookmark in
-                            ModelButtonView(bookmark: bookmark)
-                        }
+            ScrollView(.horizontal) {
+                HStack {
+                    ForEach(recentsManager.recentBookmarks) { bookmark in
+                        ModelButtonView(bookmark: bookmark)
                     }
                 }
             }
