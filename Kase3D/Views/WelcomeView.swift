@@ -20,8 +20,17 @@ struct WelcomeView: View {
             
             Divider()
             
-            Grid {
-                GridRow {
+            if recentsManager.recentBookmarks.isEmpty {
+                VStack {
+                    Text("You don't have any recently opened models.")
+                        .font(.system(size: 32))
+                        .foregroundStyle(Color(nsColor: .lightGray))
+                        .padding([.top, .leading], 32)
+                }
+            }
+            
+            ScrollView(.horizontal) {
+                HStack {
                     ForEach(recentsManager.recentBookmarks) { bookmark in
                         ModelButtonView(bookmark: bookmark)
                     }
