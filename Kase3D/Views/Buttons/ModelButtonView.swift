@@ -37,10 +37,3 @@ extension ModelButtonView {
         self.viewModel = ModelButtonViewModel(bookmark: bookmark)
     }
 }
-
-#Preview {
-    ModelButtonView(bookmark: RecentFileBookmark(
-        bookmarkData: Data(),
-        fileName: "example_model.usdz"
-    ))
-}

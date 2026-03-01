@@ -8,7 +8,7 @@
 import Foundation
 
 struct RecentFileBookmark: Codable, Identifiable {
-    var id = UUID()
+    var id: String
     let bookmarkData: Data
     let fileName: String
 }
@@ -36,11 +36,12 @@ final class RecentFilesManager {
             )
             
             let bookmark = RecentFileBookmark(
+                id: url.absoluteString,
                 bookmarkData: bookmarkData,
                 fileName: url.lastPathComponent
             )
             
-            recentBookmarks.removeAll { $0.fileName == bookmark.fileName }
+            recentBookmarks.removeAll { $0.fileName == bookmark.fileName && $0.id == bookmark.id }
             recentBookmarks.insert(bookmark, at: 0)
             
             if recentBookmarks.count > 10 {
@@ -92,6 +93,12 @@ final class RecentFilesManager {
         } catch {
             print("Failed to load bookmarks: \(error.localizedDescription)")
         }
+    }
+    
+    func clearRecents() {
+        UserDefaults.standard.set(nil, forKey: key)
+        recentBookmarks = []
+        print("Bookmarks cleared")
     }
     
     func startAccessing(bookmark: RecentFileBookmark, _ completion: (URL) -> Void) {

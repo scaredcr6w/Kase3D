@@ -56,6 +56,12 @@ struct Kase3DApp: App {
                             recentsManager.startAccessing(bookmark: bookmark, sceneManager.loadModel(from:))
                         }
                     }
+                    
+                    Divider()
+                    
+                    Button("Clear Menu") {
+                        recentsManager.clearRecents()
+                    }
                 }
             }
         }
