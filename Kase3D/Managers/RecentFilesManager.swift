@@ -40,7 +40,7 @@ final class RecentFilesManager {
                 fileName: url.lastPathComponent
             )
             
-            recentBookmarks.removeAll { $0.id == bookmark.id }
+            recentBookmarks.removeAll { $0.fileName == bookmark.fileName }
             recentBookmarks.insert(bookmark, at: 0)
             
             if recentBookmarks.count > 10 {
