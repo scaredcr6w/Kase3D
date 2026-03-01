@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import CryptoKit
 
 struct RecentFileBookmark: Codable, Identifiable {
-    var id = UUID()
+    var id: String
     let bookmarkData: Data
     let fileName: String
 }
@@ -35,12 +36,15 @@ final class RecentFilesManager {
                 relativeTo: nil
             )
             
+            let hashedURL = hashURL(url.absoluteString)
+            
             let bookmark = RecentFileBookmark(
+                id: hashedURL,
                 bookmarkData: bookmarkData,
                 fileName: url.lastPathComponent
             )
             
-            recentBookmarks.removeAll { $0.id == bookmark.id }
+            recentBookmarks.removeAll { $0.fileName == bookmark.fileName && $0.id == bookmark.id }
             recentBookmarks.insert(bookmark, at: 0)
             
             if recentBookmarks.count > 10 {
@@ -94,6 +98,12 @@ final class RecentFilesManager {
         }
     }
     
+    func clearRecents() {
+        UserDefaults.standard.set(nil, forKey: key)
+        recentBookmarks = []
+        print("Bookmarks cleared")
+    }
+    
     func startAccessing(bookmark: RecentFileBookmark, _ completion: (URL) -> Void) {
         if let url = resolveBookmark(bookmark) {
             guard url.startAccessingSecurityScopedResource() else {
@@ -104,5 +114,11 @@ final class RecentFilesManager {
             
             completion(url)
         }
+    }
+    
+    private func hashURL(_ urlString: String) -> String {
+        let data = Data(urlString.utf8)
+        let hash = SHA256.hash(data: data)
+        return hash.map { String(format: "%02x", $0) }.joined()
     }
 }
