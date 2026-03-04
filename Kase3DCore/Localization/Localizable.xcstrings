@@ -1,0 +1,86 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Failed to access security-scoped resource" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zugriff auf sicherheitsrelevante Ressource fehlgeschlagen"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nem sikerült hozzáférni a biztonsági hatókörű erőforráshoz"
+          }
+        }
+      }
+    },
+    "Failed to load Model Meshes." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modellnetze konnten nicht geladen werden."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiba a Modell hálók betöltése közben."
+          }
+        }
+      }
+    },
+    "Failed to load Model." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modell konnte nicht geladen werden."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiba a Modell betöltése közben."
+          }
+        }
+      }
+    },
+    "Failed to open the selected file" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die ausgewählte Datei konnte nicht geöffnet werden."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiba a kiválasztott fájl megnyitása közben"
+          }
+        }
+      }
+    },
+    "Unable to reach graphics unit." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grafikeinheit nicht erreichbar."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A Grafikus egység nem elérhető."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

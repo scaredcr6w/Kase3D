@@ -2,7 +2,7 @@
 //  Kase3DTests.swift
 //  Kase3DTests
 //
-//  Created by Anda Levente on 2025. 11. 14..
+//  Created by Anda Levente on 2026. 03. 01..
 //
 
 import XCTest
@@ -27,7 +27,7 @@ final class Kase3DTests: XCTestCase {
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
-        measure {
+        self.measure {
             // Put the code you want to measure the time of here.
         }
     }
