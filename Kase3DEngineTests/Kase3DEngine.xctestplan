@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "BB19F1DC-CA1F-46F1-B9BB-CE8ACCEC257A",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Kase3D.xcodeproj",
+        "identifier" : "0F2077732F263C6E00485E9E",
+        "name" : "Kase3DEngineTests"
+      }
+    }
+  ],
+  "version" : 1
+}
