@@ -11,14 +11,23 @@ import Kase3DCore
 
 struct ContentView: View {
     @Environment(SceneManager.self) private var sceneManager
+    @State private var isOn = false
     
     var body: some View {
         ZStack {
             ZStack {
                 MetalView()
                     .opacity(sceneManager.hasLoadedAnyModel ? 1 : 0)
-                SideButtonColumnView()
-                    .opacity(sceneManager.hasLoadedAnyModel ? 1 : 0)
+                
+                SideButtonColumnView {
+                    VStack {
+                        ForEach(SideButton.allCases, id: \.hashValue) { button in
+                            Toggle(button.rawValue, systemImage: button.symbol, isOn: $isOn) // TODO: find a way to keep track of individual toggle's on state
+                                .toggleStyle(GlassToggleStyle())
+                        }
+                    }
+                }
+                .opacity(sceneManager.hasLoadedAnyModel ? 1 : 0)
             }
             WelcomeView()
                 .opacity(sceneManager.hasLoadedAnyModel ? 0 : 1)

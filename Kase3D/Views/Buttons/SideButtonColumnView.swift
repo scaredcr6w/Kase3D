@@ -7,55 +7,55 @@
 
 import SwiftUI
 
-struct SideButtonColumnView: View {
-    @State private var selectedButton: SideButton? = nil // TODO: Move buttons to superview, so they can be passed in via a viewbuilder function
-    @State private var hoveredButton: SideButton? = nil
-    let labelWidth: CGFloat = 90
+struct SideButtonColumnView<Content:View>: View {
+    @ViewBuilder var content: Content
     
     var body: some View {
-        GlassEffectContainer(spacing: 10) {
-            VStack(spacing: 20) {
-                
-                // TODO: When a button is selected, other buttons should sift downwards to make space for the selected button's sub items
-                ForEach(SideButton.allCases, id: \.hashValue) { button in
-                    HStack (spacing: 10) {
-                        Image(systemName: button.symbol)
-                            .frame(width: 50, height: 50)
-                            .font(.system(size: 20))
-                            .selectedGlass(button, selected: selectedButton, hovered: hoveredButton)
-                            .contentShape(Circle())
-                            .onTapGesture {
-                                selectedButton = button
-                            }
-                            .onHover { isHovering in
-                                hoveredButton = isHovering ? button : nil
-                            }
-                        
-                        ZStack(alignment: .leading) {
-                            if hoveredButton == button {
-                                Text(button.rawValue)
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 12))
-                                    .padding(6)
-                                    .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 6))
-                                    .transition(.move(edge: .leading).combined(with: .opacity))
-                            } else {
-                                Text(button.rawValue)
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 12))
-                                    .padding(4)
-                                    .hidden()
-                            }
-                        }
-                        .frame(width: labelWidth)
-                    }
-                    .animation(.easeOut(duration: 0.2), value: hoveredButton == button)
-                }
-                .compositingGroup()
+        content
+            .padding(.horizontal)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+struct GlassToggleStyle: ToggleStyle {
+    @State private var isHovering: Bool = false
+    
+    func makeBody(configuration: Configuration) -> some View {
+        HStack {
+            Button {
+                configuration.isOn.toggle()
+            } label: {
+                configuration.label
+                    .font(.system(size: 20))
+                    .frame(width: 50, height: 50)
+                    .contentShape(Circle())
+                    .labelStyle(.iconOnly)
+                    .labelsHidden()
             }
+            .buttonStyle(.plain)
+            .glassEffect(
+                configuration.isOn
+                ? .regular.tint(.blue.opacity(0.7)).interactive()
+                : .regular.tint(.white.opacity(0.3)).interactive()
+            )
+            .onHover { hover in
+                isHovering = hover
+            }
+            
+            ZStack(alignment: .leading) {
+                configuration.label
+                    .font(.system(size: 12))
+                    .padding(6)
+                    .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 6))
+                    .opacity((isHovering && !configuration.isOn) ? 1 : 0)
+                    .offset(x: (isHovering && !configuration.isOn) ? 0 : -8)
+                    .labelStyle(.titleOnly)
+            }
+            .frame(width: 90, alignment: .leading)
+            .animation(.easeOut(duration: 0.2), value: isHovering)
+            .animation(.easeOut(duration: 0.2), value: configuration.isOn)
         }
-        .padding(.horizontal)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .compositingGroup()
     }
 }
 
@@ -71,24 +71,4 @@ enum SideButton: String, CaseIterable {
             "lightbulb"
         }
     }
-}
-
-extension View {
-    @ViewBuilder
-    func selectedGlass(_ button: SideButton, selected: SideButton?, hovered: SideButton?) -> some View {
-        if let selected, selected == button  {
-            self
-                .glassEffect(.regular.tint(.blue.opacity(0.7)).interactive())
-        } else if let hovered, hovered == button{
-            self
-                .glassEffect(.regular.tint(.white.opacity(0.3)).interactive())
-        } else {
-            self
-                .glassEffect()
-        }
-    }
-}
-
-#Preview {
-    SideButtonColumnView()
 }
