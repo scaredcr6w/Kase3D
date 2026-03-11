@@ -14,8 +14,12 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            MetalView()
-                .opacity(sceneManager.hasLoadedAnyModel ? 1 : 0)
+            ZStack {
+                MetalView()
+                    .opacity(sceneManager.hasLoadedAnyModel ? 1 : 0)
+                SideButtonColumnView()
+                    .opacity(sceneManager.hasLoadedAnyModel ? 1 : 0)
+            }
             WelcomeView()
                 .opacity(sceneManager.hasLoadedAnyModel ? 0 : 1)
         }
