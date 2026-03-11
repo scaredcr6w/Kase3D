@@ -12,32 +12,37 @@ struct WelcomeView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Recently Opened Models")
-                .font(.system(size: 40))
-                .fontWeight(.bold)
-                .foregroundStyle(.white)
-                .padding([.top, .leading], 32)
-            
-            Divider()
-            
-            if recentsManager.recentBookmarks.isEmpty {
-                VStack {
-                    Text("You don't have any recently opened models.")
-                        .font(.system(size: 32))
-                        .foregroundStyle(Color(nsColor: .lightGray))
-                        .padding([.top, .leading], 32)
-                }
-            }
-            
-            ScrollView(.horizontal) {
-                HStack {
-                    ForEach(recentsManager.recentBookmarks) { bookmark in
-                        ModelButtonView(bookmark: bookmark)
+            if !recentsManager.recentBookmarks.isEmpty {
+                Text("Recently Opened Models")
+                    .font(.system(size: 40))
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                    .padding([.top, .leading], 32)
+                
+                Divider()
+                
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(recentsManager.recentBookmarks) { bookmark in
+                            ModelButtonView(bookmark: bookmark)
+                        }
                     }
                 }
+                .padding(32)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            } else {
+                VStack {
+                    Text("You don't have any recently opened models.")
+                        .font(.title)
+                        .foregroundStyle(Color(nsColor: .lightGray))
+                    
+                    Text("Import files with ⌘I")
+                        .font(.title2)
+                        .foregroundStyle(Color(nsColor: .lightGray))
+                        .padding(.top, 4)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             }
-            .padding(32)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
         .background(Color(red: 0.15, green: 0.15, blue: 0.15))
     }
