@@ -50,12 +50,13 @@ struct SideButtonColumnView<Content:View>: View {
     }
 }
 
-// TODO: When a button is selected, and another hovered, the selected button's actions should be hidden to show the hovered one's actionLabel
 struct SideButtonView<Content: View, Label: View, Action: View>: View {
     @Binding var isOn: Bool
     @ViewBuilder var content: Content
     @ViewBuilder var contentLabel: Label
     @ViewBuilder var action: Action
+    
+    @Environment(SideButtonViewModel.self) private var buttonsVM
     
     @State private var isHovering: Bool = false
     
@@ -72,8 +73,6 @@ struct SideButtonView<Content: View, Label: View, Action: View>: View {
                     .font(.system(size: 20))
                     .frame(width: 50, height: 50)
                     .contentShape(Circle())
-                    .labelStyle(.iconOnly)
-                    .labelsHidden()
             }
             .buttonStyle(.plain)
             .glassEffect(
@@ -92,9 +91,8 @@ struct SideButtonView<Content: View, Label: View, Action: View>: View {
                     .font(.system(size: 12))
                     .padding(6)
                     .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 6))
-                    .opacity((isHovering && !isOn) ? 1 : 0)
+                    .opacity((isHovering && !isOn && buttonsVM.selected == nil) ? 1 : 0)
                     .offset(x: (isHovering && !isOn) ? 0 : -8)
-                    .labelStyle(.titleOnly)
             }
             .anchorPreference(key: SideButtonActionOverlayPreferenceKey.self, value: .bounds) { anchor in
                 let actionView: AnyView = AnyView(
@@ -102,7 +100,6 @@ struct SideButtonView<Content: View, Label: View, Action: View>: View {
                         .font(.system(size: 12))
                         .padding(6)
                         .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 6))
-                        .labelStyle(.titleOnly)
                 )
                 return [SideButtonActionOverlayPreferenceKey.Item(id: id, anchor: anchor, view: actionView, isOn: isOn)]
             }

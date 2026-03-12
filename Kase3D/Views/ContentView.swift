@@ -29,9 +29,7 @@ struct ContentView: View {
                             } action: {
                                 ScrollView {
                                     VStack(alignment: .leading) {
-                                        Text("Valami nagyon hosszu szoveg")
-                                        Text("Semmi")
-                                        Text("Bugri")
+                                        //
                                     }
                                 }
                             }
@@ -51,9 +49,11 @@ struct ContentView: View {
                 }
             }
         }
+        .environment(buttonViewModel)
     }
 }
 
 #Preview {
     ContentView()
 }
+
