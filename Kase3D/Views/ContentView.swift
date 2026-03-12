@@ -11,7 +11,7 @@ import Kase3DCore
 
 struct ContentView: View {
     @Environment(SceneManager.self) private var sceneManager
-    @State private var isOn = false
+    @State private var toggleStates: [SideButton: Bool] = [:]
     
     var body: some View {
         ZStack {
@@ -22,8 +22,9 @@ struct ContentView: View {
                 SideButtonColumnView {
                     VStack {
                         ForEach(SideButton.allCases, id: \.hashValue) { button in
-                            Toggle(button.rawValue, systemImage: button.symbol, isOn: $isOn) // TODO: find a way to keep track of individual toggle's on state
+                            Toggle(button.rawValue, systemImage: button.symbol, isOn: binding(for: button))
                                 .toggleStyle(GlassToggleStyle())
+                            
                         }
                     }
                 }
@@ -39,6 +40,13 @@ struct ContentView: View {
                 }
             }
         }
+    }
+    
+    private func binding(for button: SideButton) -> Binding<Bool> {
+        Binding(
+            get: { toggleStates[button] ?? false },
+            set: { toggleStates[button] = $0 }
+        )
     }
 }
 
