@@ -22,9 +22,20 @@ struct ContentView: View {
                 SideButtonColumnView {
                     VStack {
                         ForEach(SideButton.allCases, id: \.hashValue) { button in
-                            Toggle(button.rawValue, systemImage: button.symbol, isOn: binding(for: button))
-                                .toggleStyle(GlassToggleStyle())
-                            
+                            SideButtonView(isOn: binding(for: button)) {
+                                Image(systemName: button.symbol)
+                            } contentLabel: {
+                                Text(button.rawValue)
+                            } action: {
+                                ScrollView {
+                                    VStack(alignment: .leading) {
+                                        Text("Valami nagyon hosszu szoveg")
+                                        Text("Semmi")
+                                        Text("Bugri")
+                                    }
+                                }
+                            }
+
                         }
                     }
                 }
