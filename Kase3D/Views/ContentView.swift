@@ -11,7 +11,7 @@ import Kase3DCore
 
 struct ContentView: View {
     @Environment(SceneManager.self) private var sceneManager
-    @State private var toggleStates: [SideButton: Bool] = [:]
+    @State private var buttonViewModel = SideButtonViewModel()
     
     var body: some View {
         ZStack {
@@ -22,7 +22,7 @@ struct ContentView: View {
                 SideButtonColumnView {
                     VStack {
                         ForEach(SideButton.allCases, id: \.hashValue) { button in
-                            SideButtonView(isOn: binding(for: button)) {
+                            SideButtonView(isOn: buttonViewModel.binding(for: button)) {
                                 Image(systemName: button.symbol)
                             } contentLabel: {
                                 Text(button.rawValue)
@@ -51,13 +51,6 @@ struct ContentView: View {
                 }
             }
         }
-    }
-    
-    private func binding(for button: SideButton) -> Binding<Bool> {
-        Binding(
-            get: { toggleStates[button] ?? false },
-            set: { toggleStates[button] = $0 }
-        )
     }
 }
 

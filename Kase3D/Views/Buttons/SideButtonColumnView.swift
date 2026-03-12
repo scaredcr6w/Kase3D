@@ -39,6 +39,7 @@ struct SideButtonColumnView<Content:View>: View {
                         if item.isOn {
                             item.view
                                 .offset(x: proxy[item.anchor].minX, y: proxy[item.anchor].minY)
+                                .fixedSize(horizontal: false, vertical: true)
                                 .transition(.offset(x: -8).combined(with: .opacity))
                                 .animation(.easeOut(duration: 0.2), value: item.isOn)
                         }
@@ -49,6 +50,7 @@ struct SideButtonColumnView<Content:View>: View {
     }
 }
 
+// TODO: When a button is selected, and another hovered, the selected button's actions should be hidden to show the hovered one's actionLabel
 struct SideButtonView<Content: View, Label: View, Action: View>: View {
     @Binding var isOn: Bool
     @ViewBuilder var content: Content
