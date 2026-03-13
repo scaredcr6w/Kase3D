@@ -8,7 +8,6 @@
 import Foundation
 
 @Observable
-@MainActor
 public final class ErrorManager {
     public static let shared = ErrorManager()
     public var current: PresentedError?

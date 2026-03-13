@@ -11,7 +11,7 @@ protocol Camera {
     var projectionMatrix: float4x4 { get }
     var viewMatrix: float4x4 { get }
     mutating func update(size: CGSize)
-    mutating func update(deltaTime: Float)
+    mutating func update(deltaTime: Float, inputProviding: InputProviding)
 }
 
 struct ArcballCamera: Camera {
@@ -60,16 +60,14 @@ struct ArcballCamera: Camera {
         aspect = Float(size.width / size.height)
     }
     
-    mutating func update(deltaTime: Float) {
-        let input = InputController.shared
+    mutating func update(deltaTime: Float, inputProviding: InputProviding) {
+        drag(inputProviding.mouseDelta)
+        pan(inputProviding.mousePan)
+        zoom(Float(inputProviding.magnification))
         
-        drag(input.mouseDelta)
-        pan(input.mousePan)
-        zoom(Float(input.magnification))
-        
-        input.mouseDelta = .zero
-        input.mousePan = .zero
-        input.magnification = .zero
+        inputProviding.mouseDelta = .zero
+        inputProviding.mousePan = .zero
+        inputProviding.magnification = .zero
     }
     
     mutating func drag(_ mouseDelta: float2) {
