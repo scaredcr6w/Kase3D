@@ -8,7 +8,7 @@
 import MetalKit
 
 protocol TextureLoading: AnyObject {
-    var device: MTLDevice { get }
+    var device: any MTLDevice { get }
     func loadTexture(texture: MDLTexture, name: String) -> MTLTexture?
     func loadTexture(name: String) -> MTLTexture?
     func clearCache()

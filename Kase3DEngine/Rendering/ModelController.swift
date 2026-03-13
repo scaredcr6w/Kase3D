@@ -18,15 +18,11 @@ public class ModelController: NSObject {
     
     let renderContext: any RenderContext
     let inputController: any InputProviding
-    let textureService: any TextureLoading
-    let meshService: any MeshLoading
     
     public init?(sceneManager: SceneManager, metalView: MTKView) {
         guard let renderContext = MetalRenderContext(metalView: metalView) else { return nil }
         self.renderContext = renderContext
         self.inputController = InputController()
-        self.textureService = TextureService(device: renderContext.device)
-        self.meshService = MeshService(device: renderContext.device)
         
         guard let renderer = Renderer(metalView: metalView, renderContext: renderContext) else {
             return nil
@@ -36,7 +32,11 @@ public class ModelController: NSObject {
         self.sceneManager = sceneManager
         super.init()
         
-        sceneManager.configure(context: renderContext, textureService: textureService, meshService: meshService)
+        sceneManager.configure(
+            context: renderContext,
+            textureService: renderContext.textureService,
+            meshService: renderContext.meshService
+        )
         sceneManager.modelScene = ModelScene(renderContext: renderContext)
         
         metalView.delegate = self

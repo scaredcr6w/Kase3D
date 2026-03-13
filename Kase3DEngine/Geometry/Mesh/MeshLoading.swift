@@ -8,6 +8,6 @@
 import MetalKit
 
 protocol MeshLoading: AnyObject {
-    var device: MTLDevice { get }
+    var device: any MTLDevice { get }
     func loadMeshes(from assetURL: URL, textureLoader: TextureLoading) throws -> [Mesh]
 }
