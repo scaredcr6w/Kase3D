@@ -21,7 +21,7 @@ struct ContentView: View {
                 
                 SideButtonColumnView {
                     VStack {
-                        ForEach(SideButton.allCases, id: \.hashValue) { button in
+                        ForEach(SideButton.allCases, id: \.self) { button in
                             SideButtonView(isOn: buttonViewModel.binding(for: button)) {
                                 Image(systemName: button.symbol)
                             } contentLabel: {
@@ -41,6 +41,7 @@ struct ContentView: View {
             }
             WelcomeView()
                 .opacity(sceneManager.hasLoadedAnyModel ? 0 : 1)
+                .allowsTightening(!sceneManager.hasLoadedAnyModel)
         }
         .overlay {
             if let error = ErrorManager.shared.current {
