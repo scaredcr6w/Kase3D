@@ -16,15 +16,29 @@ public class ModelController: NSObject {
     var deltaTime: Double = 0
     var lastTime: Double = CFAbsoluteTimeGetCurrent()
     
+    let renderContext: any RenderContext
+    let inputController: any InputProviding
+    let textureService: any TextureLoading
+    let meshService: any MeshLoading
+    
     public init?(sceneManager: SceneManager, metalView: MTKView) {
-        guard let renderer = Renderer(metalView: metalView) else {
+        guard let renderContext = MetalRenderContext(metalView: metalView) else { return nil }
+        self.renderContext = renderContext
+        self.inputController = InputController()
+        self.textureService = TextureService(device: renderContext.device)
+        self.meshService = MeshService(device: renderContext.device)
+        
+        guard let renderer = Renderer(metalView: metalView, renderContext: renderContext) else {
             return nil
         }
         
         self.renderer = renderer
         self.sceneManager = sceneManager
-        sceneManager.modelScene = ModelScene()
         super.init()
+        
+        sceneManager.configure(context: renderContext, textureService: textureService, meshService: meshService)
+        sceneManager.modelScene = ModelScene(renderContext: renderContext)
+        
         metalView.delegate = self
         fps = Double(metalView.preferredFramesPerSecond)
     }
@@ -42,7 +56,8 @@ extension ModelController: MTKViewDelegate {
         let currentTime = CFAbsoluteTimeGetCurrent()
         let deltaTime = (currentTime - lastTime)
         lastTime = currentTime
-        sceneManager.modelScene.update(deltaTime: Float(deltaTime))
+        sceneManager.modelScene.update(deltaTime: Float(deltaTime), inputProviding: inputController)
         renderer.draw(scene: sceneManager.modelScene, in: view)
     }
 }
+
