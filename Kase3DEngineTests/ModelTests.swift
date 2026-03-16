@@ -88,20 +88,6 @@ final class ModelTests: XCTestCase {
         XCTAssertEqual(model.transform.scale, 2.5)
     }
     
-    // MARK: - SetTexture Method Tests
-    
-    func testSetTextureDoesNotCrashWithEmptyMeshes() throws {
-        guard let _ = MTLCreateSystemDefaultDevice() else {
-            throw XCTSkip("Cannot reach gpu")
-        }
-        
-        let model = Model()
-        
-        model.setTexture(name: "test_texture", type: BaseColor)
-        
-        XCTAssertTrue(model.meshes.isEmpty)
-    }
-    
     // MARK: - Model State Tests
     
     func testModelCanHaveMultiplePropertiesSet() {

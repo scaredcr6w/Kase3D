@@ -6,11 +6,16 @@
 //
 
 import Foundation
+import Kase3DCore
 
 @Observable
 @MainActor
 public final class SceneManager {
     var modelScene: ModelScene!
+    
+    var context: (any RenderContext)?
+    var textureService: (any TextureLoading)?
+    var meshService: (any MeshLoading)?
     
     public init() { }
     

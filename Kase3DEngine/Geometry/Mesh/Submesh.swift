@@ -21,20 +21,18 @@ struct Submesh {
 }
 
 extension Submesh {
-    @MainActor
-    init(mdlSubmesh: MDLSubmesh, mtkSubmesh: MTKSubmesh) {
+    init(mdlSubmesh: MDLSubmesh, mtkSubmesh: MTKSubmesh, textureLoader: TextureLoading) {
         indexCount = mtkSubmesh.indexCount
         indexType = mtkSubmesh.indexType
         indexBuffer = mtkSubmesh.indexBuffer.buffer
         indexBufferOffset = mtkSubmesh.indexBuffer.offset
-        textures = Textures(material: mdlSubmesh.material)
+        textures = Textures(material: mdlSubmesh.material, textureLoader: textureLoader)
     }
 }
 
 private extension Submesh.Textures {
-    @MainActor
-    init(material: MDLMaterial?) {
-        baseColor = material?.texture(type: .baseColor)
+    init(material: MDLMaterial?, textureLoader: TextureLoading) {
+        baseColor = material?.texture(type: .baseColor, textureLoader: textureLoader)
     }
 }
 
@@ -45,12 +43,11 @@ private extension MDLMaterialProperty {
 }
 
 private extension MDLMaterial {
-    @MainActor
-    func texture(type semantic: MDLMaterialSemantic) -> MTLTexture? {
+    func texture(type semantic: MDLMaterialSemantic, textureLoader: TextureLoading) -> MTLTexture? {
         if let property = property(with: semantic),
            property.type == .texture,
            let mdlTexture = property.textureSamplerValue?.texture {
-            return TextureController.loadTexture(
+            return textureLoader.loadTexture(
                 texture: mdlTexture,
                 name: property.textureName
             )

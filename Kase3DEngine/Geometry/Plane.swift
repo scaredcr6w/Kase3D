@@ -8,18 +8,17 @@
 import MetalKit
 import Kase3DCore
 
-@MainActor
 final class Plane: Transformable {
     var transform: Transform = .init()
     var mesh: MTKMesh!
     
-    init(size: Float = 10) {
+    init(size: Float = 10, renderContext: RenderContext) {
         self.transform.scale = 1
-        buildMesh(size: size)
+        buildMesh(size: size, renderContext: renderContext)
     }
     
-    private func buildMesh(size: Float) {
-        let allocator = MTKMeshBufferAllocator(device: Renderer.device)
+    private func buildMesh(size: Float, renderContext: RenderContext) {
+        let allocator = MTKMeshBufferAllocator(device: renderContext.device)
         let mdlMesh = MDLMesh(
             planeWithExtent: [size, 0, size],
             segments: [UInt32(size / 2), UInt32(size / 2)],
@@ -30,7 +29,7 @@ final class Plane: Transformable {
         mdlMesh.vertexDescriptor = .simpleLayout
         
         do {
-            mesh = try MTKMesh(mesh: mdlMesh, device: Renderer.device)
+            mesh = try MTKMesh(mesh: mdlMesh, device: renderContext.device)
         } catch {
             fatalError("\(MeshError.failedToLoad): \(error.localizedDescription)")
         }
