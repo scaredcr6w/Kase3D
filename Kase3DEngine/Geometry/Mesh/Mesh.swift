@@ -8,12 +8,11 @@
 import MetalKit
 import Kase3DCore
 
-struct Mesh {
+public struct Mesh {
     var vertexBuffers: [MTLBuffer]
     var submeshes: [Submesh]
     
-    @MainActor
-    init?(mdlMesh: MDLMesh, mtkMesh: MTKMesh) {
+    init?(mdlMesh: MDLMesh, mtkMesh: MTKMesh, textureLoader: TextureLoading) {
         var vertexBuffers: [MTLBuffer] = []
         
         for mtkMeshBuffer in mtkMesh.vertexBuffers {
@@ -35,7 +34,7 @@ struct Mesh {
                 ErrorManager.shared.present(MeshError.failedToLoad)
                 return nil
             }
-            let submesh = Submesh(mdlSubmesh: mdlSubmesh, mtkSubmesh: mtkSub)
+            let submesh = Submesh(mdlSubmesh: mdlSubmesh, mtkSubmesh: mtkSub, textureLoader: textureLoader)
             builtSubmeshes.append(submesh)
         }
         

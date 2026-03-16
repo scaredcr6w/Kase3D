@@ -1,22 +1,26 @@
 //
-//  TextureController.swift
+//  TextureService.swift
 //  Kase3DEngine
 //
-//  Created by Anda Levente on 2026. 01. 25..
+//  Created by Anda Levente on 2026. 03. 13..
 //
 
 import MetalKit
 
-@MainActor
-struct TextureController {
-    static var textures: [String: MTLTexture] = [:]
+final class TextureService: TextureLoading {
+    var device: any MTLDevice
+    var textures: [String: MTLTexture] = [:]
     
-    static func loadTexture(texture: MDLTexture, name: String) -> MTLTexture? {
+    init(device: any MTLDevice) {
+        self.device = device
+    }
+    
+    func loadTexture(texture: MDLTexture, name: String) -> (any MTLTexture)? {
         if let texture = textures[name] {
             return texture
         }
         
-        let textureLoader = MTKTextureLoader(device: Renderer.device)
+        let textureLoader = MTKTextureLoader(device: device)
         let textureLoaderOptions: [MTKTextureLoader.Option: Any] = [
             .origin: MTKTextureLoader.Origin.bottomLeft,
             .generateMipmaps: true
@@ -34,12 +38,12 @@ struct TextureController {
         return nil
     }
     
-    static func loadTexture(name: String) -> MTLTexture? {
+    func loadTexture(name: String) -> (any MTLTexture)? {
         if let texture = textures[name] {
             return texture
         }
         
-        let textureLoader = MTKTextureLoader(device: Renderer.device)
+        let textureLoader = MTKTextureLoader(device: device)
         let texture: MTLTexture?
         texture = try? textureLoader.newTexture(
             name: name,
@@ -53,5 +57,9 @@ struct TextureController {
         }
         
         return nil
+    }
+    
+    func clearCache() {
+        textures.removeAll()
     }
 }
