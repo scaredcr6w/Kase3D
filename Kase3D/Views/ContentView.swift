@@ -11,37 +11,13 @@ import Kase3DCore
 
 struct ContentView: View {
     @Environment(SceneManager.self) private var sceneManager
-    @State private var buttonViewModel = SideButtonViewModel()
     
     var body: some View {
         ZStack {
-            ZStack {
-                MetalView()
-                    .opacity(sceneManager.hasLoadedAnyModel ? 1 : 0)
-                
-                SideButtonColumnView {
-                    VStack {
-                        ForEach(SideButton.allCases, id: \.self) { button in
-                            SideButtonView(isOn: buttonViewModel.binding(for: button)) {
-                                Image(systemName: button.symbol)
-                            } contentLabel: {
-                                Text(button.rawValue)
-                            } action: {
-                                ScrollView {
-                                    VStack(alignment: .leading) {
-                                        //
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
+            MetalView()
                 .opacity(sceneManager.hasLoadedAnyModel ? 1 : 0)
-            }
             WelcomeView()
                 .opacity(sceneManager.hasLoadedAnyModel ? 0 : 1)
-                .allowsTightening(!sceneManager.hasLoadedAnyModel)
         }
         .overlay {
             if let error = ErrorManager.shared.current {
@@ -50,11 +26,9 @@ struct ContentView: View {
                 }
             }
         }
-        .environment(buttonViewModel)
     }
 }
 
 #Preview {
     ContentView()
 }
-

@@ -9,8 +9,10 @@ import MetalKit
 import Kase3DCore
 
 @MainActor
-final class Renderer: NSObject, SceneRendering {
-    let renderContext: any RenderContext
+public final class Renderer: NSObject {
+    static var device: MTLDevice!
+    var commandQueue: MTLCommandQueue
+    var library: MTLLibrary
     var pipelineState: MTLRenderPipelineState!
     var gridPipelineState: MTLRenderPipelineState!
     var depthStencilState: MTLDepthStencilState!
@@ -18,20 +20,34 @@ final class Renderer: NSObject, SceneRendering {
     var uniforms = Uniforms()
     var params = Params()
     
-    init?(metalView: MTKView, renderContext: RenderContext) {
-        self.renderContext = renderContext
-        metalView.device = renderContext.device
+    public init?(metalView: MTKView) {
+        let bundle = Bundle(for: type(of: self))
+        
+        guard let device = MTLCreateSystemDefaultDevice(),
+              let commandQueue = device.makeCommandQueue(),
+              let library = try? device.makeDefaultLibrary(bundle: bundle) else {
+            ErrorManager.shared.present(RendererError.failedToReachGPU)
+            return nil
+        }
+        
+        Self.device = device
+        self.commandQueue = commandQueue
+        self.library = library
+        metalView.device = device
+        
         super.init()
+        
         buildPipelineState(metalView: metalView)
         buildGridPipelineState(metalView: metalView)
         buildDepthStencilState()
+        
         metalView.clearColor = MTLClearColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 0.8)
         metalView.depthStencilPixelFormat = .depth32Float
     }
     
     private func buildPipelineState(metalView: MTKView) {
-        let vertexFunction = renderContext.library.makeFunction(name: "vertex_main")
-        let fragmentFunction = renderContext.library.makeFunction(name: "fragment_main")
+        let vertexFunction = library.makeFunction(name: "vertex_main")
+        let fragmentFunction = library.makeFunction(name: "fragment_main")
         let descriptor = MTLRenderPipelineDescriptor()
         descriptor.vertexFunction = vertexFunction
         descriptor.fragmentFunction = fragmentFunction
@@ -40,15 +56,15 @@ final class Renderer: NSObject, SceneRendering {
         descriptor.vertexDescriptor = MTLVertexDescriptor.defaultLayout
         
         do {
-            self.pipelineState = try renderContext.device.makeRenderPipelineState(descriptor: descriptor)
+            self.pipelineState = try Self.device.makeRenderPipelineState(descriptor: descriptor)
         } catch {
             fatalError(error.localizedDescription)
         }
     }
     
     private func buildGridPipelineState(metalView: MTKView) {
-        let vertexFunction = renderContext.library.makeFunction(name: "vertex_grid_plane")
-        let fragmentFunction = renderContext.library.makeFunction(name: "fragment_grid_plane")
+        let vertexFunction = library.makeFunction(name: "vertex_grid_plane")
+        let fragmentFunction = library.makeFunction(name: "fragment_grid_plane")
         let descriptor = MTLRenderPipelineDescriptor()
         descriptor.vertexFunction = vertexFunction
         descriptor.fragmentFunction = fragmentFunction
@@ -57,7 +73,7 @@ final class Renderer: NSObject, SceneRendering {
         descriptor.vertexDescriptor = MTLVertexDescriptor.simpleLayout
         
         do {
-            self.gridPipelineState = try renderContext.device.makeRenderPipelineState(descriptor: descriptor)
+            self.gridPipelineState = try Self.device.makeRenderPipelineState(descriptor: descriptor)
         } catch {
             fatalError(error.localizedDescription)
         }
@@ -67,7 +83,7 @@ final class Renderer: NSObject, SceneRendering {
         let descriptor = MTLDepthStencilDescriptor()
         descriptor.depthCompareFunction = .less
         descriptor.isDepthWriteEnabled = true
-        self.depthStencilState = renderContext.device.makeDepthStencilState(descriptor: descriptor)
+        self.depthStencilState = Self.device.makeDepthStencilState(descriptor: descriptor)
     }
 }
 
@@ -80,7 +96,7 @@ extension Renderer {
     }
     
     func draw(scene: ModelScene, in view: MTKView) {
-        guard let commandBuffer = renderContext.commandQueue.makeCommandBuffer(),
+        guard let commandBuffer = commandQueue.makeCommandBuffer(),
               let descriptor = view.currentRenderPassDescriptor,
               let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
             return

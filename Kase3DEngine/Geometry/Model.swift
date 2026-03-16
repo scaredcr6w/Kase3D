@@ -17,9 +17,49 @@ final class Model: Transformable {
     
     init() { }
     
-    init(meshes: [Mesh], name: String) {
-        self.meshes = meshes
-        self.name = name
+    init(assetURL: URL) {
+        let allocator = MTKMeshBufferAllocator(device: Renderer.device)
+        let asset = MDLAsset(
+            url: assetURL,
+            vertexDescriptor: .defaultLayout,
+            bufferAllocator: allocator
+        )
+        
+        asset.loadTextures()
+        
+        do {
+            let (mdlMeshes, mtkMeshes) = try MTKMesh.newMeshes(
+                asset: asset,
+                device: Renderer.device
+            )
+            
+            let loadedMeshes = zip(mdlMeshes, mtkMeshes).compactMap {
+                Mesh(mdlMesh: $0.0, mtkMesh: $0.1)
+            }
+            
+            guard loadedMeshes.count == mdlMeshes.count else {
+                meshes = []
+                name = "Untitled"
+                return
+            }
+            meshes = loadedMeshes
+            name = assetURL.lastPathComponent
+        } catch {
+            let kaseError = ErrorManager.shared.map(error)
+            ErrorManager.shared.present(kaseError)
+        }
+    }
+    
+    func setTexture(name: String, type: TextureIndices) {
+        if let texture = TextureController.loadTexture(name: name) {
+            switch type {
+            case BaseColor:
+                guard !meshes.indices.isEmpty, !meshes[0].submeshes.indices.isEmpty else { return }
+                meshes[0].submeshes[0].textures.baseColor = texture
+            default:
+                break
+            }
+        }
     }
     
     func render(

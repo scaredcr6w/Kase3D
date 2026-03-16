@@ -7,12 +7,14 @@
 import Kase3DCore
 import AppKit
 
-final class InputController: InputProviding, @unchecked Sendable {
+final class InputController: @unchecked Sendable {
+    static let shared = InputController()
+    
     @Locked var mouseDelta = float2.zero
     @Locked var magnification: CGFloat = 0
     @Locked var mousePan = float2.zero
     
-    init() {
+    private init() {
         NSEvent.addLocalMonitorForEvents(matching: .leftMouseDragged) { event in
             self.mouseDelta = float2(Float(event.deltaX), -Float(event.deltaY))
             return event
