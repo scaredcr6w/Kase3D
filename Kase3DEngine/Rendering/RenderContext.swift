@@ -7,6 +7,7 @@
 
 import MetalKit
 
+/// @mockable
 protocol RenderContext: AnyObject {
     var device: MTLDevice { get }
     var commandQueue: MTLCommandQueue { get }

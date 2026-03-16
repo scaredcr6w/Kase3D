@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// @mockable
 protocol InputProviding: AnyObject {
     var mouseDelta: float2 { get set }
     var mousePan: float2 { get set }
