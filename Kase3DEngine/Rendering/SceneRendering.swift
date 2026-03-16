@@ -7,6 +7,7 @@
 
 import MetalKit
 
-public protocol SceneRendering: AnyObject {
+/// @mockable
+protocol SceneRendering: AnyObject {
     func draw(scene: ModelScene, in view: MTKView)
 }

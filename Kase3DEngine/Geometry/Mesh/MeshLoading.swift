@@ -7,6 +7,7 @@
 
 import MetalKit
 
+/// @mockable
 protocol MeshLoading: AnyObject {
     var device: any MTLDevice { get }
     func loadMeshes(from assetURL: URL, textureLoader: TextureLoading) throws -> [Mesh]

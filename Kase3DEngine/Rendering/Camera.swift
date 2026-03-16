@@ -7,6 +7,7 @@
 
 import CoreGraphics
 
+/// @mockable
 protocol Camera {
     var projectionMatrix: float4x4 { get }
     var viewMatrix: float4x4 { get }

@@ -7,6 +7,7 @@
 
 import MetalKit
 
+/// @mockable
 protocol TextureLoading: AnyObject {
     var device: any MTLDevice { get }
     func loadTexture(texture: MDLTexture, name: String) -> MTLTexture?

@@ -21,6 +21,7 @@ struct Transform {
     }
 }
 
+/// @mockable
 protocol Transformable {
     var transform: Transform { get set }
 }
