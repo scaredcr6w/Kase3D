@@ -112,6 +112,16 @@
 		0F3797ED2F406FC50036FA99 /* Kase3DEngine.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = Kase3DEngine.xctestplan; path = Kase3DEngineTests/Kase3DEngine.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0FEE6E402F582337001C4DF3 /* Exceptions for "Kase3D" folder in "Kase3D" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0F3555362EC705C2006C8218 /* Kase3D */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0F0250282F4F4F890043B98C /* Kase3DCore */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -135,6 +145,9 @@
 		};
 		0F3555392EC705C2006C8218 /* Kase3D */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0FEE6E402F582337001C4DF3 /* Exceptions for "Kase3D" folder in "Kase3D" target */,
+			);
 			path = Kase3D;
 			sourceTree = "<group>";
 		};
@@ -1030,6 +1043,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kase3D/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Kase3D;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_MetalCaptureEnabled = YES;
@@ -1082,8 +1096,10 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kase3D/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Kase3D;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_MetalCaptureEnabled = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
