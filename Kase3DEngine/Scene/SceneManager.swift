@@ -41,5 +41,6 @@ public final class SceneManager {
     public func unload() {
         guard modelScene != nil else { return }
         modelScene.models.removeAll()
+        hasLoadedAnyModel = false
     }
 }
