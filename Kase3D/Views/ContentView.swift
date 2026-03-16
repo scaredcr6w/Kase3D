@@ -21,20 +21,39 @@ struct ContentView: View {
                 
                 SideButtonColumnView {
                     VStack {
-                        ForEach(SideButton.allCases, id: \.self) { button in
-                            SideButtonView(isOn: buttonViewModel.binding(for: button)) {
-                                Image(systemName: button.symbol)
-                            } contentLabel: {
-                                Text(button.rawValue)
-                            } action: {
-                                ScrollView {
-                                    VStack(alignment: .leading) {
-                                        //
-                                    }
+                        SideButtonExpandingView(isOn: buttonViewModel.binding(for: .mesh)) {
+                            Image(systemName: SideButton.mesh.symbol)
+                        } contentLabel: {
+                            Text(SideButton.mesh.name)
+                        } action: {
+                            ScrollView {
+                                VStack(alignment: .leading) {
+                                    //
                                 }
                             }
-
                         }
+                        
+                        SideButtonExpandingView(isOn: buttonViewModel.binding(for: .lighting)) {
+                            Image(systemName: SideButton.lighting.symbol)
+                        } contentLabel: {
+                            Text(SideButton.lighting.name)
+                        } action: {
+                            ScrollView {
+                                VStack(alignment: .leading) {
+                                    //
+                                }
+                            }
+                        }
+                        
+                        SideButtonStaticView {
+                            Image(systemName: SideButton.closeModel.symbol)
+                        } contentLabel: {
+                            Text(SideButton.closeModel.name)
+                        } action: {
+                            buttonViewModel.selected = nil
+                            sceneManager.unload()
+                        }
+
                     }
                 }
                 .opacity(sceneManager.hasLoadedAnyModel ? 1 : 0)

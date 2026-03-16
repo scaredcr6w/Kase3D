@@ -50,7 +50,7 @@ struct SideButtonColumnView<Content:View>: View {
     }
 }
 
-struct SideButtonView<Content: View, Label: View, Action: View>: View {
+struct SideButtonExpandingView<Content: View, Label: View, Action: View>: View {
     @Binding var isOn: Bool
     @ViewBuilder var content: Content
     @ViewBuilder var contentLabel: Label
@@ -111,9 +111,67 @@ struct SideButtonView<Content: View, Label: View, Action: View>: View {
     }
 }
 
-enum SideButton: String, CaseIterable {
-    case mesh = "Meshes"
-    case lighting = "Lighting"
+struct SideButtonStaticView<Content: View, Label: View>: View {
+    @ViewBuilder var content: Content
+    @ViewBuilder var contentLabel: Label
+    var action: () -> Void
+    
+    @Environment(SideButtonViewModel.self) private var buttonsVM
+    
+    @State private var isHovering: Bool = false
+    
+    private let id = UUID()
+    
+    var body: some View {
+        HStack {
+            Button {
+                action()
+            } label: {
+                content
+                    .font(.system(size: 20))
+                    .frame(width: 50, height: 50)
+                    .contentShape(Circle())
+            }
+            .buttonStyle(.plain)
+            .glassEffect(
+                .regular.tint(.white.opacity(0.3))
+            )
+            .onHover { hover in
+                withAnimation(.easeOut(duration: 0.2)) {
+                    isHovering = hover
+                }
+            }
+            
+            ZStack(alignment: .leading) {
+                contentLabel
+                    .font(.system(size: 12))
+                    .padding(6)
+                    .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 6))
+                    .opacity((isHovering && buttonsVM.selected == nil) ? 1 : 0)
+                    .offset(x: isHovering ? 0 : -8)
+            }
+            .animation(.easeOut(duration: 0.2), value: isHovering)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .compositingGroup()
+    }
+}
+
+enum SideButton: CaseIterable {
+    case mesh
+    case lighting
+    case closeModel
+    
+    var name: String {
+        switch self {
+        case .mesh:
+            String(localized: "Meshes")
+        case .lighting:
+            String(localized: "Lighting")
+        case .closeModel:
+            String(localized: "Close Model")
+        }
+    }
     
     var symbol: String {
         switch self {
@@ -121,6 +179,8 @@ enum SideButton: String, CaseIterable {
             "text.line.first.and.arrowtriangle.forward"
         case .lighting:
             "lightbulb"
+        case .closeModel:
+            "xmark"
         }
     }
 }
