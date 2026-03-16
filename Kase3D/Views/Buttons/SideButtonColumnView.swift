@@ -120,8 +120,6 @@ struct SideButtonStaticView<Content: View, Label: View>: View {
     
     @State private var isHovering: Bool = false
     
-    private let id = UUID()
-    
     var body: some View {
         HStack {
             Button {
