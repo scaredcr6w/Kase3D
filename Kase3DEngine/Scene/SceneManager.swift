@@ -12,6 +12,7 @@ import Kase3DCore
 @MainActor
 public final class SceneManager {
     var modelScene: ModelScene!
+    public var hasLoadedAnyModel: Bool = false
     
     var context: (any RenderContext)?
     var textureService: (any TextureLoading)?
@@ -19,16 +20,22 @@ public final class SceneManager {
     
     public init() { }
     
-    public var hasLoadedAnyModel: Bool {
-        guard modelScene != nil else { return false }
-        return !modelScene.models.isEmpty
+    public func loadModel(from assetURL: URL) {
+        do {
+            guard let meshService, let textureService, modelScene != nil else { return }
+            let meshes = try meshService.loadMeshes(from: assetURL, textureLoader: textureService)
+            let model = Model(meshes: meshes, name: assetURL.lastPathComponent)
+            modelScene.models.append(model)
+            hasLoadedAnyModel = true
+        } catch {
+            ErrorManager.shared.present(ModelError.failedToLoad)
+        }
     }
     
-    public func loadModel(from assetURL: URL) {
-        guard modelScene != nil else { return }
-        
-        let model = Model(assetURL: assetURL)
-        modelScene.models.append(model)
+    func configure(context: RenderContext, textureService: TextureLoading, meshService: MeshLoading) {
+        self.context = context
+        self.textureService = textureService
+        self.meshService = meshService
     }
     
     public func unload() {
