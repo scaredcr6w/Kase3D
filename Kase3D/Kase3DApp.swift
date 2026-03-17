@@ -21,27 +21,6 @@ struct Kase3DApp: App {
             ContentView()
                 .environment(sceneManager)
                 .environment(recentsManager)
-                .toolbar {
-                    if !sceneManager.hasLoadedAnyModel {
-                        Button {
-                            isFileImporterPresented = true
-                        } label: {
-                            HStack {
-                                Image(systemName: "square.and.arrow.down")
-                                Text("Import")
-                            }
-                        }
-                    } else {
-                        Button {
-                            sceneManager.unload()
-                        } label: {
-                            HStack {
-                                Image(systemName: "xmark")
-                                Text("Close Model")
-                            }
-                        }
-                    }
-                }
         }
         .windowResizability(.automatic)
         .commands {
