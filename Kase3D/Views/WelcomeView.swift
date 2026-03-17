@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct WelcomeView: View {
-    @Environment(RecentFilesManager.self) private var recentsManager
+    @Environment(AppCoordinator.self) private var appCoordinator
     
     var body: some View {
         VStack(alignment: .leading) {
-            if !recentsManager.recentBookmarks.isEmpty {
+            if !appCoordinator.recentsManager.recentBookmarks.isEmpty {
                 Text("Recently Opened Models")
                     .font(.system(size: 40))
                     .fontWeight(.bold)
@@ -23,7 +23,7 @@ struct WelcomeView: View {
                 
                 ScrollView(.horizontal) {
                     HStack {
-                        ForEach(recentsManager.recentBookmarks) { bookmark in
+                        ForEach(appCoordinator.recentsManager.recentBookmarks) { bookmark in
                             ModelButtonView(bookmark: bookmark)
                         }
                     }

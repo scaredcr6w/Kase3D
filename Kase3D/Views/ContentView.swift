@@ -10,57 +10,43 @@ import Kase3DEngine
 import Kase3DCore
 
 struct ContentView: View {
-    @Environment(SceneManager.self) private var sceneManager
-    @State private var buttonViewModel = SideButtonViewModel()
+    @Environment(AppCoordinator.self) private var appCoordinator
     
     var body: some View {
         ZStack {
             ZStack {
                 MetalView()
-                    .opacity(sceneManager.hasLoadedAnyModel ? 1 : 0)
+                    .opacity(appCoordinator.sceneManager.hasLoadedAnyModel ? 1 : 0)
                 
                 SideButtonColumnView {
                     VStack {
-                        SideButtonExpandingView(isOn: buttonViewModel.binding(for: .mesh)) {
-                            Image(systemName: SideButton.mesh.symbol)
-                        } contentLabel: {
-                            Text(SideButton.mesh.name)
-                        } action: {
-                            ScrollView {
-                                VStack(alignment: .leading) {
-                                    //
-                                }
+                        ForEach(appCoordinator.panelRegistry.panels, id: \.button) { panel in
+                            SideButtonExpandingView(isOn: appCoordinator.panelCoordinator.binding(for: panel.button)) {
+                                Image(systemName: panel.button.symbol)
+                            } contentLabel: {
+                                Text(panel.button.name)
+                            } action: {
+                                panel.content()
                             }
-                        }
-                        
-                        SideButtonExpandingView(isOn: buttonViewModel.binding(for: .lighting)) {
-                            Image(systemName: SideButton.lighting.symbol)
-                        } contentLabel: {
-                            Text(SideButton.lighting.name)
-                        } action: {
-                            ScrollView {
-                                VStack(alignment: .leading) {
-                                    //
-                                }
-                            }
+
                         }
                         
                         SideButtonStaticView {
-                            Image(systemName: SideButton.closeModel.symbol)
+                            Image(systemName: "xmark")
                         } contentLabel: {
-                            Text(SideButton.closeModel.name)
+                            Text("Close Model")
                         } action: {
-                            buttonViewModel.selected = nil
-                            sceneManager.unload()
+                            appCoordinator.panelCoordinator.deselect()
+                            appCoordinator.unloadModel()
                         }
 
                     }
                 }
-                .opacity(sceneManager.hasLoadedAnyModel ? 1 : 0)
+                .opacity(appCoordinator.sceneManager.hasLoadedAnyModel ? 1 : 0)
             }
             WelcomeView()
-                .opacity(sceneManager.hasLoadedAnyModel ? 0 : 1)
-                .allowsTightening(!sceneManager.hasLoadedAnyModel)
+                .opacity(appCoordinator.sceneManager.hasLoadedAnyModel ? 0 : 1)
+                .allowsHitTesting(!appCoordinator.sceneManager.hasLoadedAnyModel)
         }
         .overlay {
             if let error = ErrorManager.shared.current {
@@ -69,7 +55,6 @@ struct ContentView: View {
                 }
             }
         }
-        .environment(buttonViewModel)
     }
 }
 

@@ -56,7 +56,7 @@ struct SideButtonExpandingView<Content: View, Label: View, Action: View>: View {
     @ViewBuilder var contentLabel: Label
     @ViewBuilder var action: Action
     
-    @Environment(SideButtonViewModel.self) private var buttonsVM
+    @Environment(AppCoordinator.self) private var appCoordinator
     
     @State private var isHovering: Bool = false
     
@@ -91,7 +91,7 @@ struct SideButtonExpandingView<Content: View, Label: View, Action: View>: View {
                     .font(.system(size: 12))
                     .padding(6)
                     .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 6))
-                    .opacity((isHovering && !isOn && buttonsVM.selected == nil) ? 1 : 0)
+                    .opacity((isHovering && !isOn && appCoordinator.panelCoordinator.selected == nil) ? 1 : 0)
                     .offset(x: (isHovering && !isOn) ? 0 : -8)
             }
             .anchorPreference(key: SideButtonActionOverlayPreferenceKey.self, value: .bounds) { anchor in
@@ -116,7 +116,7 @@ struct SideButtonStaticView<Content: View, Label: View>: View {
     @ViewBuilder var contentLabel: Label
     var action: () -> Void
     
-    @Environment(SideButtonViewModel.self) private var buttonsVM
+    @Environment(AppCoordinator.self) private var appCoordinator
     
     @State private var isHovering: Bool = false
     
@@ -145,7 +145,7 @@ struct SideButtonStaticView<Content: View, Label: View>: View {
                     .font(.system(size: 12))
                     .padding(6)
                     .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 6))
-                    .opacity((isHovering && buttonsVM.selected == nil) ? 1 : 0)
+                    .opacity((isHovering && appCoordinator.panelCoordinator.selected == nil) ? 1 : 0)
                     .offset(x: isHovering ? 0 : -8)
             }
             .animation(.easeOut(duration: 0.2), value: isHovering)
@@ -158,7 +158,6 @@ struct SideButtonStaticView<Content: View, Label: View>: View {
 enum SideButton: CaseIterable {
     case mesh
     case lighting
-    case closeModel
     
     var name: String {
         switch self {
@@ -166,8 +165,6 @@ enum SideButton: CaseIterable {
             String(localized: "Meshes")
         case .lighting:
             String(localized: "Lighting")
-        case .closeModel:
-            String(localized: "Close Model")
         }
     }
     
@@ -177,8 +174,6 @@ enum SideButton: CaseIterable {
             "text.line.first.and.arrowtriangle.forward"
         case .lighting:
             "lightbulb"
-        case .closeModel:
-            "xmark"
         }
     }
 }
