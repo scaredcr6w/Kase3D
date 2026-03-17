@@ -23,7 +23,7 @@ final class AppCoordinator {
         panelRegistry = PanelRegistry()
         
         panelRegistry.register(MeshInspectorPanel(sceneManager: sceneManager))
-        panelRegistry.register(LigthInspectorPanel(sceneManager: sceneManager))
+        panelRegistry.register(LightInspectorPanel(sceneManager: sceneManager))
     }
     
     func loadModel(from url: URL) {

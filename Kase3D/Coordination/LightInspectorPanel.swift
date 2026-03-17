@@ -9,7 +9,7 @@ import SwiftUI
 import Kase3DEngine
 
 @MainActor
-final class LigthInspectorPanel: PanelProvider {
+final class LightInspectorPanel: PanelProvider {
     let button: SideButton = .lighting
     private let sceneManager: SceneManager
     
