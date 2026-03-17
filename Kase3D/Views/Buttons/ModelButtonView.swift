@@ -26,7 +26,7 @@ struct ModelButtonView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            appCoordinator.recentsManager.startAccessing(bookmark: viewModel.bookmark, appCoordinator.sceneManager.loadModel(from:))
+            appCoordinator.openRecent(viewModel.bookmark)
         }
     }
 }

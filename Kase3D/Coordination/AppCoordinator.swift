@@ -33,4 +33,16 @@ final class AppCoordinator {
     func unloadModel() {
         sceneManager.unload()
     }
+    
+    func openRecent(_ bookmark: RecentFileBookmark) {
+        recentsManager.startAccessing(bookmark: bookmark, sceneManager.loadModel(from:))
+    }
+    
+    func addRecentFile(_ url: URL) {
+        recentsManager.addRecentFile(url)
+    }
+    
+    func clearRecents() {
+        recentsManager.clearRecents()
+    }
 }

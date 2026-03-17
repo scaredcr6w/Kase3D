@@ -34,7 +34,7 @@ struct Kase3DApp: App {
                         case .success(let url):
                             if url.startAccessingSecurityScopedResource() {
                                 defer { url.stopAccessingSecurityScopedResource() }
-                                appCoordinator.recentsManager.addRecentFile(url)
+                                appCoordinator.addRecentFile(url)
                                 appCoordinator.loadModel(from: url)
                             } else {
                                 isFileImporterPresented = false
@@ -51,14 +51,14 @@ struct Kase3DApp: App {
                 Menu("Open Recent") {
                     ForEach(appCoordinator.recentsManager.recentBookmarks) { bookmark in
                         Button(bookmark.fileName) {
-                            appCoordinator.recentsManager.startAccessing(bookmark: bookmark, appCoordinator.sceneManager.loadModel(from:))
+                            appCoordinator.openRecent(bookmark)
                         }
                     }
                     
                     Divider()
                     
                     Button("Clear Menu") {
-                        appCoordinator.recentsManager.clearRecents()
+                        appCoordinator.clearRecents()
                     }
                 }
             }
