@@ -10,14 +10,14 @@ import MetalKit
 import Kase3DEngine
 
 struct MetalView: View {
-    @Environment(SceneManager.self) private var sceneManager: SceneManager
+    @Environment(AppCoordinator.self) private var appCoordinator
     @State private var metalView: MTKView = MTKView()
     @State private var modelController: ModelController?
     
     var body: some View {
         MetalViewRepresentable(metalView: $metalView, controller: modelController)
             .onAppear {
-                modelController = ModelController(sceneManager: sceneManager, metalView: metalView)
+                modelController = ModelController(sceneManager: appCoordinator.sceneManager, metalView: metalView)
             }
     }
 }

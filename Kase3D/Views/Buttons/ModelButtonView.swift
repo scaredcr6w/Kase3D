@@ -9,8 +9,7 @@ import SwiftUI
 import Kase3DEngine
 
 struct ModelButtonView: View {
-    @Environment(SceneManager.self) private var sceneManager
-    @Environment(RecentFilesManager.self) private var recentsManager
+    @Environment(AppCoordinator.self) private var appCoordinator
     private var viewModel: ModelButtonViewModel
     let size: CGFloat = 300
     
@@ -27,7 +26,7 @@ struct ModelButtonView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            recentsManager.startAccessing(bookmark: viewModel.bookmark, sceneManager.loadModel(from:))
+            appCoordinator.openRecent(viewModel.bookmark)
         }
     }
 }

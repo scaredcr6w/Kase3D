@@ -1,16 +1,15 @@
 //
-//  SideButtonViewModel.swift
+//  SideButtonPanelCoordinator.swift
 //  Kase3D
 //
-//  Created by Anda Levente on 2026. 03. 12..
+//  Created by Anda Levente on 2026. 03. 17..
 //
 
-import Foundation
 import SwiftUI
 
 @Observable
 @MainActor
-final class SideButtonViewModel {
+final class SideButtonPanelCoordinator {
     var selected: SideButton? = nil
     
     func binding(for button: SideButton) -> Binding<Bool> {
@@ -26,5 +25,9 @@ final class SideButtonViewModel {
                 }
             }
         )
+    }
+    
+    func deselect() {
+        selected = nil
     }
 }

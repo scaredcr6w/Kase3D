@@ -13,14 +13,12 @@ import Kase3DCore
 @main
 struct Kase3DApp: App {
     @State private var isFileImporterPresented: Bool = false
-    private var sceneManager: SceneManager = .init()
-    private var recentsManager: RecentFilesManager = .init()
+    @State private var appCoordinator: AppCoordinator = AppCoordinator()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(sceneManager)
-                .environment(recentsManager)
+                .environment(appCoordinator)
         }
         .windowResizability(.automatic)
         .commands {
@@ -36,8 +34,8 @@ struct Kase3DApp: App {
                         case .success(let url):
                             if url.startAccessingSecurityScopedResource() {
                                 defer { url.stopAccessingSecurityScopedResource() }
-                                recentsManager.addRecentFile(url)
-                                sceneManager.loadModel(from: url)
+                                appCoordinator.addRecentFile(url)
+                                appCoordinator.loadModel(from: url)
                             } else {
                                 isFileImporterPresented = false
                                 ErrorManager.shared.present(FileError.accessError) {
@@ -51,16 +49,16 @@ struct Kase3DApp: App {
                     }
                 
                 Menu("Open Recent") {
-                    ForEach(recentsManager.recentBookmarks) { bookmark in
+                    ForEach(appCoordinator.recentsManager.recentBookmarks) { bookmark in
                         Button(bookmark.fileName) {
-                            recentsManager.startAccessing(bookmark: bookmark, sceneManager.loadModel(from:))
+                            appCoordinator.openRecent(bookmark)
                         }
                     }
                     
                     Divider()
                     
                     Button("Clear Menu") {
-                        recentsManager.clearRecents()
+                        appCoordinator.clearRecents()
                     }
                 }
             }
