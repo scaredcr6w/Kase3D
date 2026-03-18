@@ -20,15 +20,14 @@ struct ContentView: View {
                 
                 SideButtonColumnView {
                     VStack {
-                        ForEach(appCoordinator.panelRegistry.panels, id: \.button) { panel in
-                            SideButtonExpandingView(isOn: appCoordinator.panelCoordinator.binding(for: panel.button)) {
+                        ForEach(appCoordinator.uiStore.panelRegistry.panels, id: \.button) { panel in
+                            SideButtonExpandingView(isOn: appCoordinator.uiStore.panelCoordinator.binding(for: panel.button)) {
                                 Image(systemName: panel.button.symbol)
                             } contentLabel: {
                                 Text(panel.button.name)
                             } action: {
                                 panel.content()
                             }
-
                         }
                         
                         SideButtonStaticView {
@@ -36,10 +35,9 @@ struct ContentView: View {
                         } contentLabel: {
                             Text("Close Model")
                         } action: {
-                            appCoordinator.panelCoordinator.deselect()
+                            appCoordinator.deselectPanel()
                             appCoordinator.unloadModel()
                         }
-
                     }
                 }
                 .opacity(appCoordinator.sceneManager.hasLoadedAnyModel ? 1 : 0)

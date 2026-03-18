@@ -13,17 +13,12 @@ import Kase3DEngine
 final class AppCoordinator {
     let sceneManager: SceneManager
     let recentsManager: RecentFilesManager
-    let panelRegistry: PanelRegistry
-    let panelCoordinator: SideButtonPanelCoordinator
+    let uiStore: UIStore
     
     init() {
         sceneManager = SceneManager()
         recentsManager = RecentFilesManager()
-        panelCoordinator = SideButtonPanelCoordinator()
-        panelRegistry = PanelRegistry()
-        
-        panelRegistry.register(MeshInspectorPanel(sceneManager: sceneManager))
-        panelRegistry.register(LightInspectorPanel(sceneManager: sceneManager))
+        uiStore = UIStore(sceneManager: sceneManager)
     }
     
     func loadModel(from url: URL) {
@@ -44,5 +39,9 @@ final class AppCoordinator {
     
     func clearRecents() {
         recentsManager.clearRecents()
+    }
+    
+    func deselectPanel() {
+        uiStore.panelCoordinator.deselect()
     }
 }

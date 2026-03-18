@@ -91,7 +91,7 @@ struct SideButtonExpandingView<Content: View, Label: View, Action: View>: View {
                     .font(.system(size: 12))
                     .padding(6)
                     .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 6))
-                    .opacity((isHovering && !isOn && appCoordinator.panelCoordinator.selected == nil) ? 1 : 0)
+                    .opacity((isHovering && !isOn && appCoordinator.uiStore.panelCoordinator.selected == nil) ? 1 : 0)
                     .offset(x: (isHovering && !isOn) ? 0 : -8)
             }
             .anchorPreference(key: SideButtonActionOverlayPreferenceKey.self, value: .bounds) { anchor in
@@ -145,7 +145,7 @@ struct SideButtonStaticView<Content: View, Label: View>: View {
                     .font(.system(size: 12))
                     .padding(6)
                     .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 6))
-                    .opacity((isHovering && appCoordinator.panelCoordinator.selected == nil) ? 1 : 0)
+                    .opacity((isHovering && appCoordinator.uiStore.panelCoordinator.selected == nil) ? 1 : 0)
                     .offset(x: isHovering ? 0 : -8)
             }
             .animation(.easeOut(duration: 0.2), value: isHovering)
