@@ -155,7 +155,7 @@ struct SideButtonStaticView<Content: View, Label: View>: View {
     }
 }
 
-enum SideButton: CaseIterable {
+enum SideButton: CaseIterable, Hashable {
     case mesh
     case lighting
     

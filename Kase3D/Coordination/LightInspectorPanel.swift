@@ -1,5 +1,5 @@
 //
-//  LigthInspectorPanel.swift
+//  LightInspectorPanel.swift
 //  Kase3D
 //
 //  Created by Anda Levente on 2026. 03. 17..
