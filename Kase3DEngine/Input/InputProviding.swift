@@ -8,8 +8,11 @@
 import Foundation
 
 /// @mockable
-protocol InputProviding: AnyObject {
+public protocol InputProviding: AnyObject {
     var mouseDelta: float2 { get set }
     var mousePan: float2 { get set }
     var magnification: CGFloat { get set }
+    
+    func onDragChanged(_ translation: CGSize)
+    func onMagnificationChanged(_ value: CGFloat)
 }
