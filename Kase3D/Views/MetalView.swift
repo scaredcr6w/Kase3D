@@ -81,6 +81,9 @@ final class CustomMTKView: MTKView {
 
     private func commonInit() {
         isMultipleTouchEnabled = true
+        panRecognizer.delegate = self
+        dragRecognizer.delegate = self
+        pinchRecognizer.delegate = self
         addGestureRecognizer(panRecognizer)
         addGestureRecognizer(pinchRecognizer)
         addGestureRecognizer(dragRecognizer)
@@ -97,6 +100,19 @@ final class CustomMTKView: MTKView {
     }
 
     @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
+        let deadzone: CGFloat = 0.04
+        let velocityThreshold: CGFloat = 0.15
+
+        let delta = abs(gesture.scale - 1.0)
+        let velocity = abs(gesture.velocity)
+
+        if delta < deadzone && velocity < velocityThreshold {
+            if gesture.state == .ended || gesture.state == .cancelled {
+                previousMagnification = 1
+            }
+            return
+        }
+        
         inputController?.onMagnificationChanged(gesture.scale, previousMagnification: previousMagnification)
         previousMagnification = gesture.scale
         
@@ -113,6 +129,19 @@ final class CustomMTKView: MTKView {
         if gesture.state == .ended || gesture.state == .cancelled {
             previousDrag = .zero
         }
+    }
+}
+
+extension CustomMTKView: UIGestureRecognizerDelegate {
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        let isDragAndPan = (gestureRecognizer === dragRecognizer && otherGestureRecognizer === panRecognizer) ||
+                           (gestureRecognizer === panRecognizer && otherGestureRecognizer === dragRecognizer)
+        
+        let involvesPinch = (gestureRecognizer === pinchRecognizer) || (otherGestureRecognizer === pinchRecognizer)
+        return isDragAndPan && !involvesPinch
     }
 }
 #endif
