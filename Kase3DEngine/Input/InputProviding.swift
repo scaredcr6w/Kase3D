@@ -13,7 +13,7 @@ public protocol InputProviding: AnyObject {
     var mousePan: float2 { get set }
     var magnification: CGFloat { get set }
     
-    func onDragChanged(x: Float, y: Float, previousDrag: CGPoint?)
-    func onMagnificationChanged(_ value: CGFloat, previousMagnification: CGFloat?)
-    func onPanChanged(x: Float, y: Float, previousPan: CGPoint?)
+    func onDragChanged(x: Float, y: Float)
+    func onMagnificationChanged(_ value: CGFloat)
+    func onPanChanged(x: Float, y: Float)
 }

@@ -15,35 +15,15 @@ final public class InputController: InputProviding, @unchecked Sendable {
     
     init() { }
     
-    public func onDragChanged(x: Float, y: Float, previousDrag: CGPoint?) {
-        #if os(macOS)
+    public func onDragChanged(x: Float, y: Float) {
         mouseDelta = float2(x, -y)
-        #elseif os(iOS)
-        guard let previousDrag else { return }
-        let width = Float(previousDrag.x)
-        let height = Float(previousDrag.y)
-        mouseDelta = float2(x - width, -(y - height))
-        #endif
     }
     
-    public func onMagnificationChanged(_ value: CGFloat, previousMagnification: CGFloat?) {
-        #if os(macOS)
+    public func onMagnificationChanged(_ value: CGFloat) {
         magnification = value
-        #elseif os(iOS)
-        guard let previousMagnification else { return }
-        let magnification = value - previousMagnification
-        self.magnification = magnification
-        #endif
     }
     
-    public func onPanChanged(x: Float, y: Float, previousPan: CGPoint?) {
-        #if os(macOS)
+    public func onPanChanged(x: Float, y: Float) {
         mousePan = float2(x, y)
-        #elseif os(iOS)
-        guard let previousPan else { return }
-        let width = Float(previousPan.x)
-        let height = Float(previousPan.y)
-        mousePan = float2(x - width, y - height)
-        #endif
     }
 }

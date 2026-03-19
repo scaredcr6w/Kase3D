@@ -102,7 +102,12 @@ final class CustomMTKView: MTKView {
 
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: self)
-        inputController?.onPanChanged(x: Float(translation.x), y: Float(translation.y), previousPan: previousPan)
+        let dx = Float(translation.x - previousPan.x)
+        let dy = Float(translation.y - previousPan.y)
+        inputController?.onPanChanged(
+            x: dx,
+            y: dy
+        )
         previousPan = translation
         
         if gesture.state == .ended || gesture.state == .cancelled {
@@ -124,7 +129,9 @@ final class CustomMTKView: MTKView {
             return
         }
         
-        inputController?.onMagnificationChanged(gesture.scale, previousMagnification: previousMagnification)
+        let magnification = gesture.scale - previousMagnification
+        
+        inputController?.onMagnificationChanged(magnification)
         previousMagnification = gesture.scale
         
         if gesture.state == .ended || gesture.state == .cancelled {
@@ -134,7 +141,13 @@ final class CustomMTKView: MTKView {
     
     @objc private func handleDrag(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: self)
-        inputController?.onDragChanged(x: Float(translation.x), y: Float(translation.y), previousDrag: previousDrag)
+        
+        let dx = Float(translation.x - previousDrag.x)
+        let dy = Float(translation.y - previousDrag.y)
+        inputController?.onDragChanged(
+            x: dx,
+            y: dy
+        )
         previousDrag = translation
         
         if gesture.state == .ended || gesture.state == .cancelled {
