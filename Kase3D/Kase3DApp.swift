@@ -12,23 +12,14 @@ import Kase3DCore
 
 @main
 struct Kase3DApp: App {
-    @State private var isFileImporterPresented: Bool = false
     @State private var appCoordinator: AppCoordinator = AppCoordinator()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(appCoordinator)
-        }
-        .windowResizability(.automatic)
-        .commands {
-            CommandGroup(after: .newItem) {
-                Button("Import File...") {
-                  isFileImporterPresented = true
-                }
-                .keyboardShortcut("i")
                 .fileImporter(
-                    isPresented: $isFileImporterPresented,
+                    isPresented: $appCoordinator.appStore.isFileImporterPresented,
                     allowedContentTypes: [.usdz]) { result in
                         switch result {
                         case .success(let url):
@@ -37,9 +28,9 @@ struct Kase3DApp: App {
                                 appCoordinator.addRecentFile(url)
                                 appCoordinator.loadModel(from: url)
                             } else {
-                                isFileImporterPresented = false
+                                appCoordinator.appStore.isFileImporterPresented = false
                                 ErrorManager.shared.present(FileError.accessError) {
-                                    isFileImporterPresented = true
+                                    appCoordinator.appStore.isFileImporterPresented = true
                                 }
                             }
                         case .failure(let error):
@@ -47,6 +38,14 @@ struct Kase3DApp: App {
                             ErrorManager.shared.present(kaseError)
                         }
                     }
+        }
+        .windowResizability(.automatic)
+        .commands {
+            CommandGroup(after: .newItem) {
+                Button("Import File...") {
+                    appCoordinator.appStore.isFileImporterPresented = true
+                }
+                .keyboardShortcut("i")
                 
                 Menu("Open Recent") {
                     ForEach(appCoordinator.recentsManager.recentBookmarks) { bookmark in
