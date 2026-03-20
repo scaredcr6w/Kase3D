@@ -16,7 +16,9 @@ struct MeshInspectorView: View {
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "cube.transparent")
+                        .font(.callout)
                     Text(modelDescriptor.modelName)
+                        .font(.callout)
                         .fontWeight(.semibold)
                 }
                 
@@ -41,13 +43,13 @@ struct MeshInspectorView: View {
                                     Text(mesh.meshName)
                                 }
                             }
+                            .disclosureGroupStyle(CustomDisclosureGroup())
                             .padding(.leading, 4)
                             .frame(maxWidth: 350, alignment: .leading)
                         }
                     }
-                    .padding(.trailing)
                 }
-                .frame(maxHeight: 200)
+                .frame(maxHeight: 350)
             }
         } else {
             VStack {
