@@ -10,17 +10,13 @@ import Foundation
 @Observable
 public final class ModelDescriptor {
     private let model: Model
+    public let modelName: String
+    private(set) public var meshDescriptors: [MeshDescriptor]
     
     init(model: Model) {
         self.model = model
-    }
-    
-    public var modelName: String {
-        model.name
-    }
-    
-    public var meshDescriptors: [MeshDescriptor] {
-        model.meshes.map { mesh in
+        self.modelName = model.name
+        self.meshDescriptors = model.meshes.map { mesh in
             MeshDescriptor(mesh: mesh)
         }
     }

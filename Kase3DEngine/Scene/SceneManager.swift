@@ -13,7 +13,7 @@ import Kase3DCore
 public final class SceneManager {
     var modelScene: ModelScene!
     public var hasLoadedAnyModel: Bool = false
-    public var modelDescriptor: ModelDescriptor?
+    private(set) public var modelDescriptor: ModelDescriptor?
     
     var context: (any RenderContext)?
     var textureService: (any TextureLoading)?
@@ -43,6 +43,7 @@ public final class SceneManager {
     public func unload() {
         guard modelScene != nil else { return }
         modelScene.models.removeAll()
+        modelDescriptor = nil
         hasLoadedAnyModel = false
     }
 }
