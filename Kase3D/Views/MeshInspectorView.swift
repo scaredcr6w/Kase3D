@@ -17,19 +17,37 @@ struct MeshInspectorView: View {
                 HStack {
                     Image(systemName: "cube.transparent")
                     Text(modelDescriptor.modelName)
+                        .fontWeight(.semibold)
                 }
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
-                        ForEach(modelDescriptor.meshProperties) { mesh in
-                            HStack {
-                                Image(systemName: "squareshape.split.2x2.dotted.inside")
-                                Text(mesh.meshName)
+                        ForEach(modelDescriptor.meshDescriptors) { mesh in
+                            DisclosureGroup {
+                                VStack(spacing: 5) {
+                                    ForEach(mesh.submeshProperties) { submesh in
+                                        HStack {
+                                            Image(systemName: "squareshape.split.2x2.dotted.inside")
+                                            Text(submesh.submeshName)
+                                                .lineLimit(1, reservesSpace: false)
+                                        }
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.leading)
+                                    }
+                                }
+                            } label: {
+                                HStack {
+                                    Image(systemName: "squareshape.split.2x2.dotted.inside")
+                                    Text(mesh.meshName)
+                                }
                             }
+                            .padding(.leading, 4)
+                            .frame(maxWidth: 350, alignment: .leading)
                         }
                     }
+                    .padding(.trailing)
                 }
-                .padding(.leading)
+                .frame(maxHeight: 200)
             }
         } else {
             VStack {

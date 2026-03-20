@@ -19,9 +19,9 @@ public final class ModelDescriptor {
         model.name
     }
     
-    public var meshProperties: [MeshProperties] {
+    public var meshDescriptors: [MeshDescriptor] {
         model.meshes.map { mesh in
-            mesh.meshProperties
+            MeshDescriptor(mesh: mesh)
         }
     }
 }
