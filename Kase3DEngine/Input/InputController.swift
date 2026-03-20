@@ -15,11 +15,15 @@ final public class InputController: InputProviding, @unchecked Sendable {
     
     init() { }
     
-    public func onDragChanged(_ translation: CGSize) {
-        self.mouseDelta = float2(Float(translation.width), -Float(translation.height))
+    public func onDragChanged(x: Float, y: Float) {
+        mouseDelta = float2(x, -y)
     }
     
     public func onMagnificationChanged(_ value: CGFloat) {
         magnification = value
+    }
+    
+    public func onPanChanged(x: Float, y: Float) {
+        mousePan = float2(x, y)
     }
 }

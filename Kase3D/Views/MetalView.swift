@@ -30,28 +30,46 @@ final class CustomMTKView: MTKView {
 
     override func scrollWheel(with event: NSEvent) {
         super.scrollWheel(with: event)
-        inputController?.mousePan = float2(Float(event.scrollingDeltaX), Float(event.scrollingDeltaY))
+        inputController?.onPanChanged(
+            x: Float(event.scrollingDeltaX),
+            y: Float(event.scrollingDeltaY)
+        )
     }
     
     override func magnify(with event: NSEvent) {
         super.magnify(with: event)
-        inputController?.onMagnificationChanged(event.magnification)
+        inputController?.onMagnificationChanged(
+            event.magnification
+        )
     }
 
     override func mouseDragged(with event: NSEvent) {
         super.mouseDragged(with: event)
-        let delta = CGSize(width: Double(event.deltaX), height: Double(event.deltaY))
-        inputController?.onDragChanged(delta)
+        inputController?.onDragChanged(
+            x: Float(event.deltaX),
+            y: Float(event.deltaY)
+        )
     }
 }
-#elseif os(iOS) // TODO: validate in iPadOS support ticket
+#elseif os(iOS)
 import UIKit
 final class CustomMTKView: MTKView {
     weak var inputController: (any InputProviding)?
 
+    private var previousDrag: CGPoint = .zero
+    private var previousMagnification: CGFloat = 1
+    private var previousPan: CGPoint = .zero
+
     private lazy var panRecognizer: UIPanGestureRecognizer = {
         let gr = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        gr.minimumNumberOfTouches = 2
         gr.maximumNumberOfTouches = 2
+        return gr
+    }()
+    
+    private lazy var dragRecognizer: UIPanGestureRecognizer = {
+        let gr = UIPanGestureRecognizer(target: self, action: #selector(handleDrag(_:)))
+        gr.maximumNumberOfTouches = 1
         return gr
     }()
 
@@ -72,23 +90,82 @@ final class CustomMTKView: MTKView {
 
     private func commonInit() {
         isMultipleTouchEnabled = true
+        panRecognizer.delegate = self
+        dragRecognizer.delegate = self
+        pinchRecognizer.delegate = self
         addGestureRecognizer(panRecognizer)
         addGestureRecognizer(pinchRecognizer)
+        addGestureRecognizer(dragRecognizer)
     }
 
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: self)
-        inputController?.onDragChanged(CGSize(width: translation.x, height: translation.y))
-        if gesture.state == .ended || gesture.state == .cancelled {
-            inputController?.onDragEnded()
+        let dx = Float(translation.x - previousPan.x)
+        let dy = Float(translation.y - previousPan.y)
+        inputController?.onPanChanged(
+            x: dx,
+            y: dy
+        )
+        previousPan = translation
+        
+        if gesture.state == .ended || gesture.state == .cancelled || gesture.state == .failed {
+            previousPan = .zero
         }
     }
 
     @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
-        inputController?.onMagnificationChanged(gesture.scale)
-        if gesture.state == .ended || gesture.state == .cancelled {
-            inputController?.onMagnificationEnded()
+        let deadzone: CGFloat = 0.04
+        let velocityThreshold: CGFloat = 0.15
+
+        let delta = abs(gesture.scale - 1.0)
+        let velocity = abs(gesture.velocity)
+
+        if delta < deadzone && velocity < velocityThreshold {
+            if gesture.state == .ended || gesture.state == .cancelled {
+                previousMagnification = 1
+            } else {
+                previousMagnification = gesture.scale
+            }
+            return
         }
+        
+        let magnification = gesture.scale - previousMagnification
+        
+        inputController?.onMagnificationChanged(magnification)
+        previousMagnification = gesture.scale
+        
+        if gesture.state == .ended || gesture.state == .cancelled || gesture.state == .failed {
+            previousMagnification = 1
+        }
+    }
+    
+    @objc private func handleDrag(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: self)
+        
+        let dx = Float(translation.x - previousDrag.x)
+        let dy = Float(translation.y - previousDrag.y)
+        inputController?.onDragChanged(
+            x: dx,
+            y: dy
+        )
+        previousDrag = translation
+        
+        if gesture.state == .ended || gesture.state == .cancelled || gesture.state == .failed {
+            previousDrag = .zero
+        }
+    }
+}
+
+extension CustomMTKView: UIGestureRecognizerDelegate {
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        let isDragAndPan = (gestureRecognizer === dragRecognizer && otherGestureRecognizer === panRecognizer) ||
+                           (gestureRecognizer === panRecognizer && otherGestureRecognizer === dragRecognizer)
+        
+        let involvesPinch = (gestureRecognizer === pinchRecognizer) || (otherGestureRecognizer === pinchRecognizer)
+        return isDragAndPan && !involvesPinch
     }
 }
 #endif

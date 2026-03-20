@@ -14,11 +14,13 @@ final class AppCoordinator {
     let sceneManager: SceneManager
     let recentsManager: RecentFilesManager
     let uiStore: UIStore
+    var appStore: ApplicationStore
     
     init() {
         sceneManager = SceneManager()
         recentsManager = RecentFilesManager()
         uiStore = UIStore(sceneManager: sceneManager)
+        appStore = ApplicationStore()
     }
     
     func loadModel(from url: URL) {
@@ -44,4 +46,10 @@ final class AppCoordinator {
     func deselectPanel() {
         uiStore.panelCoordinator.deselect()
     }
+}
+
+@Observable
+@MainActor
+final class ApplicationStore {
+    var isFileImporterPresented: Bool = false
 }
