@@ -30,7 +30,9 @@ struct MeshInspectorView: View {
                                     ForEach(mesh.submeshProperties) { submesh in
                                         HStack {
                                             Image(systemName: "squareshape.split.2x2.dotted.inside")
+                                                .font(.callout)
                                             Text(submesh.submeshName)
+                                                .font(.callout)
                                                 .lineLimit(1, reservesSpace: false)
                                         }
                                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -40,7 +42,25 @@ struct MeshInspectorView: View {
                             } label: {
                                 HStack {
                                     Image(systemName: "squareshape.split.2x2.dotted.inside")
+                                        .font(.callout)
                                     Text(mesh.meshName)
+                                        .font(.callout)
+                                    
+                                    Spacer()
+                                    
+                                    Button {
+                                        withAnimation {
+                                            mesh.toggleVisibility()
+                                        }
+                                    } label: {
+                                        Image(systemName: mesh.isVisible ? "eye" : "eye.slash")
+                                            .font(.callout)
+                                            .foregroundStyle(.primary)
+                                            .contentShape(.rect)
+                                            .contentTransition(.symbolEffect(.replace))
+                                    }
+                                    .buttonStyle(.plain)
+                                    .padding(.horizontal)
                                 }
                             }
                             .disclosureGroupStyle(CustomDisclosureGroup())
@@ -54,6 +74,7 @@ struct MeshInspectorView: View {
         } else {
             VStack {
                 Text("Model not loaded")
+                    .font(.callout)
             }
         }
     }

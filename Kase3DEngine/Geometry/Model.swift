@@ -45,6 +45,8 @@ final class Model: Transformable {
         )
         
         for mesh in meshes {
+            guard mesh.meshProperties.isVisible else { continue }
+            
             for (index, vertexBuffer) in mesh.vertexBuffers.enumerated() {
                 encoder.setVertexBuffer(
                     vertexBuffer,
