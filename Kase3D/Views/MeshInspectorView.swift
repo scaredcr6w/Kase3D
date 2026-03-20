@@ -12,9 +12,28 @@ struct MeshInspectorView: View {
     let sceneManager: SceneManager
     
     var body: some View {
-        ScrollView {
+        if let modelDescriptor = sceneManager.modelDescriptor {
+            VStack(alignment: .leading) {
+                HStack {
+                    Image(systemName: "cube.transparent")
+                    Text(modelDescriptor.modelName)
+                }
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 10) {
+                        ForEach(modelDescriptor.meshProperties) { mesh in
+                            HStack {
+                                Image(systemName: "squareshape.split.2x2.dotted.inside")
+                                Text(mesh.meshName)
+                            }
+                        }
+                    }
+                }
+                .padding(.leading)
+            }
+        } else {
             VStack {
-                Text("placeholder")
+                Text("Model not loaded")
             }
         }
     }
