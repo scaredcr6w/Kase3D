@@ -12,9 +12,48 @@ struct MeshInspectorView: View {
     let sceneManager: SceneManager
     
     var body: some View {
-        ScrollView {
+        if let modelDescriptor = sceneManager.modelDescriptor {
+            VStack(alignment: .leading) {
+                HStack {
+                    Image(systemName: "cube.transparent")
+                        .font(.callout)
+                    Text(modelDescriptor.modelName)
+                        .font(.callout)
+                        .fontWeight(.semibold)
+                }
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 10) {
+                        ForEach(modelDescriptor.meshDescriptors) { mesh in
+                            DisclosureGroup {
+                                VStack(spacing: 5) {
+                                    ForEach(mesh.submeshProperties) { submesh in
+                                        HStack {
+                                            Image(systemName: "squareshape.split.2x2.dotted.inside")
+                                            Text(submesh.submeshName)
+                                                .lineLimit(1, reservesSpace: false)
+                                        }
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.leading)
+                                    }
+                                }
+                            } label: {
+                                HStack {
+                                    Image(systemName: "squareshape.split.2x2.dotted.inside")
+                                    Text(mesh.meshName)
+                                }
+                            }
+                            .disclosureGroupStyle(CustomDisclosureGroup())
+                            .padding(.leading, 4)
+                            .frame(maxWidth: 350, alignment: .leading)
+                        }
+                    }
+                }
+                .frame(maxHeight: 350)
+            }
+        } else {
             VStack {
-                Text("placeholder")
+                Text("Model not loaded")
             }
         }
     }

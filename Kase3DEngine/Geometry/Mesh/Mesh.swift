@@ -8,12 +8,14 @@
 import MetalKit
 import Kase3DCore
 
-public struct Mesh {
+final class Mesh {
     var vertexBuffers: [MTLBuffer]
     var submeshes: [Submesh]
+    var meshProperties: MeshProperties
     
     init?(mdlMesh: MDLMesh, mtkMesh: MTKMesh, textureLoader: TextureLoading) {
         var vertexBuffers: [MTLBuffer] = []
+        meshProperties = MeshProperties(meshName: mdlMesh.name)
         
         for mtkMeshBuffer in mtkMesh.vertexBuffers {
             vertexBuffers.append(mtkMeshBuffer.buffer)

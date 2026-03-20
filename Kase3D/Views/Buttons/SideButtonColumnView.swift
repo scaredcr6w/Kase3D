@@ -105,9 +105,9 @@ struct SideButtonExpandingView<Content: View, Label: View, Action: View>: View {
             }
             .animation(.easeOut(duration: 0.2), value: isHovering)
             .animation(.easeOut(duration: 0.2), value: isOn)
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .compositingGroup()
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -149,9 +149,9 @@ struct SideButtonStaticView<Content: View, Label: View>: View {
                     .offset(x: isHovering ? 0 : -8)
             }
             .animation(.easeOut(duration: 0.2), value: isHovering)
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .compositingGroup()
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

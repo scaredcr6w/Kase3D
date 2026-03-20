@@ -12,6 +12,7 @@ struct Submesh {
     let indexType: MTLIndexType
     let indexBuffer: MTLBuffer
     let indexBufferOffset: Int
+    let submeshProperties: SubmeshProperties
     
     struct Textures {
         var baseColor: MTLTexture?
@@ -27,6 +28,7 @@ extension Submesh {
         indexBuffer = mtkSubmesh.indexBuffer.buffer
         indexBufferOffset = mtkSubmesh.indexBuffer.offset
         textures = Textures(material: mdlSubmesh.material, textureLoader: textureLoader)
+        submeshProperties = SubmeshProperties(submeshName: mdlSubmesh.material?.name ?? mdlSubmesh.name)
     }
 }
 
