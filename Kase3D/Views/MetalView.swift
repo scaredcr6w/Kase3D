@@ -32,16 +32,14 @@ final class CustomMTKView: MTKView {
         super.scrollWheel(with: event)
         inputController?.onPanChanged(
             x: Float(event.scrollingDeltaX),
-            y: Float(event.scrollingDeltaY),
-            previousPan: nil
+            y: Float(event.scrollingDeltaY)
         )
     }
     
     override func magnify(with event: NSEvent) {
         super.magnify(with: event)
         inputController?.onMagnificationChanged(
-            event.magnification,
-            previousMagnification: nil
+            event.magnification
         )
     }
 
@@ -49,8 +47,7 @@ final class CustomMTKView: MTKView {
         super.mouseDragged(with: event)
         inputController?.onDragChanged(
             x: Float(event.deltaX),
-            y: Float(event.deltaY),
-            previousDrag: nil
+            y: Float(event.deltaY)
         )
     }
 }
