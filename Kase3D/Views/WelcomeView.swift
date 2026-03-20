@@ -30,16 +30,37 @@ struct WelcomeView: View {
                 }
                 .padding(32)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                
+                HStack {
+                    #if os(iOS)
+                    Button("Import") {
+                        appCoordinator.appStore.isFileImporterPresented = true
+                    }
+                    .foregroundStyle(.blue)
+                    .buttonStyle(.glass)
+                    .padding()
+                    #endif
+                    
+                    Spacer()
+                    
+                    Button("Clear Recents") {
+                        appCoordinator.clearRecents()
+                    }
+                    .buttonStyle(.glass)
+                    .padding()
+                }
+                
             } else {
                 VStack {
                     Text("You don't have any recently opened models.")
                         .font(.title)
-                        .foregroundStyle(Color(nsColor: .lightGray))
-                    
-                    Text("Import files with ⌘I")
-                        .font(.title2)
-                        .foregroundStyle(Color(nsColor: .lightGray))
-                        .padding(.top, 4)
+                        .foregroundStyle(Color.lightGrey)
+
+                    Button("Import") {
+                        appCoordinator.appStore.isFileImporterPresented = true
+                    }
+                    .buttonStyle(.glass)
+                    .padding(.top, 4)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             }

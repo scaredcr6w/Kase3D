@@ -30,11 +30,7 @@ final class RecentFilesManager {
                 return
             }
             
-            let bookmarkData = try url.bookmarkData(
-                options: [.withSecurityScope, .securityScopeAllowOnlyReadAccess],
-                includingResourceValuesForKeys: nil,
-                relativeTo: nil
-            )
+            let bookmarkData = try bookmarkData(for: url)
             
             let hashedURL = hashURL(url.absoluteString)
             
@@ -61,12 +57,7 @@ final class RecentFilesManager {
     func resolveBookmark(_ bookmark: RecentFileBookmark) -> URL? {
         do {
             var isStale = false
-            let url = try URL(
-                resolvingBookmarkData: bookmark.bookmarkData,
-                options: .withSecurityScope,
-                relativeTo: nil,
-                bookmarkDataIsStale: &isStale
-            )
+            let url = try resolveURL(for: bookmark.bookmarkData, isStale: &isStale)
             
             if isStale {
                 addRecentFile(url)
@@ -120,5 +111,35 @@ final class RecentFilesManager {
         let data = Data(urlString.utf8)
         let hash = SHA256.hash(data: data)
         return hash.map { String(format: "%02x", $0) }.joined()
+    }
+    
+    private func bookmarkData(for url: URL) throws -> Data {
+        #if os(macOS)
+        return try url.bookmarkData(
+            options: [.withSecurityScope, .securityScopeAllowOnlyReadAccess],
+            includingResourceValuesForKeys: nil,
+            relativeTo: nil
+        )
+        #elseif os(iOS)
+        return try url.bookmarkData()
+        #endif
+    }
+    
+    private func resolveURL(for data: Data, isStale: inout Bool) throws -> URL {
+        #if os(macOS)
+        return try URL(
+            resolvingBookmarkData: data,
+            options: .withSecurityScope,
+            relativeTo: nil,
+            bookmarkDataIsStale: &isStale
+        )
+        #elseif os(iOS)
+        return try URL(
+            resolvingBookmarkData: data,
+            options: [],
+            relativeTo: nil,
+            bookmarkDataIsStale: &isStale
+        )
+        #endif
     }
 }

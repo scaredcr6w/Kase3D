@@ -17,7 +17,7 @@ public class ModelController: NSObject {
     var lastTime: Double = CFAbsoluteTimeGetCurrent()
     
     let renderContext: any RenderContext
-    let inputController: any InputProviding
+    public let inputController: any InputProviding
     
     public init?(sceneManager: SceneManager, metalView: MTKView) {
         guard let renderContext = MetalRenderContext(metalView: metalView) else { return nil }

@@ -169,31 +169,61 @@ class TextureLoadingMock: TextureLoading {
     }
 }
 
-class InputProvidingMock: InputProviding {
-    init() { }
-    init(mouseDelta: float2, mousePan: float2, magnification: CGFloat = 0.0) {
+public class InputProvidingMock: InputProviding {
+    public init() { }
+    public init(mouseDelta: float2, mousePan: float2, magnification: CGFloat = 0.0) {
         self._mouseDelta = mouseDelta
         self._mousePan = mousePan
         self.magnification = magnification
     }
 
 
-    private(set) var mouseDeltaSetCallCount = 0
+    public private(set) var mouseDeltaSetCallCount = 0
     private var _mouseDelta: float2! { didSet { mouseDeltaSetCallCount += 1 } }
-    var mouseDelta: float2 {
+    public var mouseDelta: float2 {
         get { return _mouseDelta }
         set { _mouseDelta = newValue }
     }
 
-    private(set) var mousePanSetCallCount = 0
+    public private(set) var mousePanSetCallCount = 0
     private var _mousePan: float2! { didSet { mousePanSetCallCount += 1 } }
-    var mousePan: float2 {
+    public var mousePan: float2 {
         get { return _mousePan }
         set { _mousePan = newValue }
     }
 
-    private(set) var magnificationSetCallCount = 0
-    var magnification: CGFloat = 0.0 { didSet { magnificationSetCallCount += 1 } }
+    public private(set) var magnificationSetCallCount = 0
+    public var magnification: CGFloat = 0.0 { didSet { magnificationSetCallCount += 1 } }
+
+    public private(set) var onDragChangedCallCount = 0
+    public var onDragChangedHandler: ((Float, Float) -> ())?
+    public func onDragChanged(x: Float, y: Float) {
+        onDragChangedCallCount += 1
+        if let onDragChangedHandler = onDragChangedHandler {
+            onDragChangedHandler(x, y)
+        }
+        
+    }
+
+    public private(set) var onMagnificationChangedCallCount = 0
+    public var onMagnificationChangedHandler: ((CGFloat) -> ())?
+    public func onMagnificationChanged(_ value: CGFloat) {
+        onMagnificationChangedCallCount += 1
+        if let onMagnificationChangedHandler = onMagnificationChangedHandler {
+            onMagnificationChangedHandler(value)
+        }
+        
+    }
+
+    public private(set) var onPanChangedCallCount = 0
+    public var onPanChangedHandler: ((Float, Float) -> ())?
+    public func onPanChanged(x: Float, y: Float) {
+        onPanChangedCallCount += 1
+        if let onPanChangedHandler = onPanChangedHandler {
+            onPanChangedHandler(x, y)
+        }
+        
+    }
 }
 
 class TransformableMock: Transformable {
