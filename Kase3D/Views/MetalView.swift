@@ -66,6 +66,7 @@ final class CustomMTKView: MTKView {
     private lazy var panRecognizer: UIPanGestureRecognizer = {
         let gr = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         gr.minimumNumberOfTouches = 2
+        gr.maximumNumberOfTouches = 2
         return gr
     }()
     
@@ -110,7 +111,7 @@ final class CustomMTKView: MTKView {
         )
         previousPan = translation
         
-        if gesture.state == .ended || gesture.state == .cancelled {
+        if gesture.state == .ended || gesture.state == .cancelled || gesture.state == .failed {
             previousPan = .zero
         }
     }
@@ -125,6 +126,8 @@ final class CustomMTKView: MTKView {
         if delta < deadzone && velocity < velocityThreshold {
             if gesture.state == .ended || gesture.state == .cancelled {
                 previousMagnification = 1
+            } else {
+                previousMagnification = gesture.scale
             }
             return
         }
@@ -134,7 +137,7 @@ final class CustomMTKView: MTKView {
         inputController?.onMagnificationChanged(magnification)
         previousMagnification = gesture.scale
         
-        if gesture.state == .ended || gesture.state == .cancelled {
+        if gesture.state == .ended || gesture.state == .cancelled || gesture.state == .failed {
             previousMagnification = 1
         }
     }
@@ -150,7 +153,7 @@ final class CustomMTKView: MTKView {
         )
         previousDrag = translation
         
-        if gesture.state == .ended || gesture.state == .cancelled {
+        if gesture.state == .ended || gesture.state == .cancelled || gesture.state == .failed {
             previousDrag = .zero
         }
     }
