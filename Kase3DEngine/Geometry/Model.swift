@@ -56,6 +56,7 @@ final class Model: Transformable {
             }
             
             for submesh in mesh.submeshes {
+                guard submesh.submeshProperties.isVisible else { continue }
                 encoder.setFragmentTexture(
                     submesh.textures.baseColor,
                     index: BaseColor.index
