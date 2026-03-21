@@ -45,6 +45,8 @@ final class Model: Transformable {
         )
         
         for mesh in meshes {
+            guard mesh.meshProperties.isVisible else { continue }
+            
             for (index, vertexBuffer) in mesh.vertexBuffers.enumerated() {
                 encoder.setVertexBuffer(
                     vertexBuffer,
@@ -54,6 +56,7 @@ final class Model: Transformable {
             }
             
             for submesh in mesh.submeshes {
+                guard submesh.submeshProperties.isVisible else { continue }
                 encoder.setFragmentTexture(
                     submesh.textures.baseColor,
                     index: BaseColor.index

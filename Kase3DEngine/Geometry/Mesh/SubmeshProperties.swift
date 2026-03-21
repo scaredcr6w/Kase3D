@@ -10,4 +10,5 @@ import Foundation
 public struct SubmeshProperties: Identifiable {
     public let id = UUID()
     public let submeshName: String
+    public var isVisible: Bool = true
 }

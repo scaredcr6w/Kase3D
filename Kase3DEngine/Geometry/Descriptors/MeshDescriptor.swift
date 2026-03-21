@@ -16,17 +16,19 @@ public final class MeshDescriptor: Identifiable {
         mesh.meshProperties.meshName
     }
     
-    public var isVisible: Bool {
-        mesh.meshProperties.isVisible
-    }
+    public var isVisible: Bool
+    public var submeshDescriptors: [SubmeshDescriptor]
     
     init(mesh: Mesh) {
         self.mesh = mesh
+        self.isVisible = mesh.meshProperties.isVisible
+        self.submeshDescriptors = mesh.submeshes.map { submesh in
+            SubmeshDescriptor(submesh: submesh)
+        }
     }
     
-    public var submeshProperties: [SubmeshProperties] {
-        mesh.submeshes.map { submesh in
-            submesh.submeshProperties
-        }
+    public func toggleVisibility() {
+        mesh.meshProperties.isVisible.toggle()
+        isVisible = mesh.meshProperties.isVisible
     }
 }
