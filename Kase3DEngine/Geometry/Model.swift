@@ -8,7 +8,6 @@
 import MetalKit
 import Kase3DCore
 
-@MainActor
 final class Model: Transformable {
     var transform: Transform = .init()
     var meshes: [Mesh] = []
@@ -46,6 +45,8 @@ final class Model: Transformable {
         )
         
         for mesh in meshes {
+            guard mesh.meshProperties.isVisible else { continue }
+            
             for (index, vertexBuffer) in mesh.vertexBuffers.enumerated() {
                 encoder.setVertexBuffer(
                     vertexBuffer,
@@ -55,6 +56,7 @@ final class Model: Transformable {
             }
             
             for submesh in mesh.submeshes {
+                guard submesh.submeshProperties.isVisible else { continue }
                 encoder.setFragmentTexture(
                     submesh.textures.baseColor,
                     index: BaseColor.index

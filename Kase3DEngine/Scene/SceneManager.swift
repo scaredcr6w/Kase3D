@@ -13,6 +13,7 @@ import Kase3DCore
 public final class SceneManager {
     var modelScene: ModelScene!
     public var hasLoadedAnyModel: Bool = false
+    private(set) public var modelDescriptors: [ModelDescriptor] = []
     
     var context: (any RenderContext)?
     var textureService: (any TextureLoading)?
@@ -26,6 +27,7 @@ public final class SceneManager {
             let meshes = try meshService.loadMeshes(from: assetURL, textureLoader: textureService)
             let model = Model(meshes: meshes, name: assetURL.lastPathComponent)
             modelScene.models.append(model)
+            modelDescriptors.append(ModelDescriptor(model: model))
             hasLoadedAnyModel = true
         } catch {
             ErrorManager.shared.present(ModelError.failedToLoad)
@@ -41,6 +43,7 @@ public final class SceneManager {
     public func unload() {
         guard modelScene != nil else { return }
         modelScene.models.removeAll()
+        modelDescriptors = []
         hasLoadedAnyModel = false
     }
 }

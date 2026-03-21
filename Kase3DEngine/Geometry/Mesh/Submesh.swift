@@ -7,26 +7,26 @@
 
 import MetalKit
 
-struct Submesh {
+final class Submesh {
     let indexCount: Int
     let indexType: MTLIndexType
     let indexBuffer: MTLBuffer
     let indexBufferOffset: Int
+    var submeshProperties: SubmeshProperties
     
     struct Textures {
         var baseColor: MTLTexture?
     }
     
     var textures: Textures
-}
-
-extension Submesh {
+    
     init(mdlSubmesh: MDLSubmesh, mtkSubmesh: MTKSubmesh, textureLoader: TextureLoading) {
         indexCount = mtkSubmesh.indexCount
         indexType = mtkSubmesh.indexType
         indexBuffer = mtkSubmesh.indexBuffer.buffer
         indexBufferOffset = mtkSubmesh.indexBuffer.offset
         textures = Textures(material: mdlSubmesh.material, textureLoader: textureLoader)
+        submeshProperties = SubmeshProperties(submeshName: mdlSubmesh.material?.name ?? mdlSubmesh.name)
     }
 }
 
