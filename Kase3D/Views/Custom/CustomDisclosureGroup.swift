@@ -22,13 +22,14 @@ struct CustomDisclosureGroup: DisclosureGroupStyle {
                         .rotationEffect(configuration.isExpanded ? Angle(degrees: 90) : Angle(degrees: 0))
                     configuration.label
                 }
+                .contentShape(.rect)
             }
             .buttonStyle(.plain)
 
             if configuration.isExpanded {
                 configuration.content
                     .padding(.horizontal)
-                    .padding(.top, 0.008)
+                    .padding(.top, 1)
             }
         }
     }

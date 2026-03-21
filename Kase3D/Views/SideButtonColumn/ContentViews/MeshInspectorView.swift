@@ -12,25 +12,31 @@ struct MeshInspectorView: View {
     let sceneManager: SceneManager
     
     var body: some View {
-        if let modelDescriptor = sceneManager.modelDescriptor {
-            VStack(alignment: .leading) {
-                HStack {
-                    Image(systemName: "cube.transparent")
-                        .font(.callout)
-                    Text(modelDescriptor.modelName)
-                        .font(.callout)
-                        .fontWeight(.semibold)
-                }
-                
-                ScrollView { // TODO: Split up to views
-                    VStack(alignment: .leading, spacing: 10) {
-                        ForEach(modelDescriptor.meshDescriptors) { mesh in
-                            MeshDisclosureGroup(mesh: mesh)
+        if !sceneManager.modelDescriptors.isEmpty {
+            ScrollView {
+                VStack {
+                    ForEach(sceneManager.modelDescriptors) { model in
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Image(systemName: "cube.transparent")
+                                    .font(.callout)
+                                Text(model.modelName)
+                                    .font(.callout)
+                                    .fontWeight(.semibold)
+                            }
+                            .padding(.bottom, 5)
+                            
+                            VStack(alignment: .leading, spacing: 10) {
+                                ForEach(model.meshDescriptors) { mesh in
+                                    MeshDisclosureGroup(mesh: mesh)
+                                }
+                            }
                         }
+                        .padding(.bottom, 5)
                     }
                 }
-                .frame(maxHeight: 350)
             }
+            .frame(maxHeight: 350)
         } else {
             VStack {
                 Text("Model not loaded")

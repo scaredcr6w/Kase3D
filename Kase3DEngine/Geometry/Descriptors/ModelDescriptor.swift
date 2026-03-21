@@ -8,7 +8,8 @@
 import Foundation
 
 @Observable
-public final class ModelDescriptor {
+public final class ModelDescriptor: Identifiable {
+    public let id = UUID()
     private let model: Model
     public let modelName: String
     private(set) public var meshDescriptors: [MeshDescriptor]
