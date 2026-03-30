@@ -13,6 +13,9 @@ final class Renderer: NSObject, SceneRendering {
     let renderContext: any RenderContext
     var pipelineState: MTLRenderPipelineState!
     var gridPipelineState: MTLRenderPipelineState!
+    var xAxisLinePipelineState: MTLRenderPipelineState!
+    var yAxisLinePipelineState: MTLRenderPipelineState!
+    var zAxisLinePipelineState: MTLRenderPipelineState!
     var depthStencilState: MTLDepthStencilState!
     
     var uniforms = Uniforms()
@@ -25,6 +28,9 @@ final class Renderer: NSObject, SceneRendering {
         buildPipelineState(metalView: metalView)
         buildGridPipelineState(metalView: metalView)
         buildDepthStencilState()
+        buildXAxisLineState(metalView: metalView)
+        buildYAxisLineState(metalView: metalView)
+        buildZAxisLineState(metalView: metalView)
         metalView.clearColor = MTLClearColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 0.8)
         metalView.depthStencilPixelFormat = .depth32Float
     }
@@ -47,7 +53,7 @@ final class Renderer: NSObject, SceneRendering {
     }
     
     private func buildGridPipelineState(metalView: MTKView) {
-        let vertexFunction = renderContext.library.makeFunction(name: "vertex_grid_plane")
+        let vertexFunction = renderContext.library.makeFunction(name: "vertex_simple")
         let fragmentFunction = renderContext.library.makeFunction(name: "fragment_grid_plane")
         let descriptor = MTLRenderPipelineDescriptor()
         descriptor.vertexFunction = vertexFunction
@@ -58,6 +64,57 @@ final class Renderer: NSObject, SceneRendering {
         
         do {
             self.gridPipelineState = try renderContext.device.makeRenderPipelineState(descriptor: descriptor)
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    private func buildXAxisLineState(metalView: MTKView) {
+        let vertexFunction = renderContext.library.makeFunction(name: "vertex_simple")
+        let fragmentFunction = renderContext.library.makeFunction(name: "fragment_x_axis")
+        let descriptor = MTLRenderPipelineDescriptor()
+        descriptor.vertexFunction = vertexFunction
+        descriptor.fragmentFunction = fragmentFunction
+        descriptor.colorAttachments[0].pixelFormat = metalView.colorPixelFormat
+        descriptor.depthAttachmentPixelFormat = .depth32Float
+        descriptor.vertexDescriptor = MTLVertexDescriptor.simpleLayout
+        
+        do {
+            self.xAxisLinePipelineState = try renderContext.device.makeRenderPipelineState(descriptor: descriptor)
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    private func buildYAxisLineState(metalView: MTKView) {
+        let vertexFunction = renderContext.library.makeFunction(name: "vertex_simple")
+        let fragmentFunction = renderContext.library.makeFunction(name: "fragment_y_axis")
+        let descriptor = MTLRenderPipelineDescriptor()
+        descriptor.vertexFunction = vertexFunction
+        descriptor.fragmentFunction = fragmentFunction
+        descriptor.colorAttachments[0].pixelFormat = metalView.colorPixelFormat
+        descriptor.depthAttachmentPixelFormat = .depth32Float
+        descriptor.vertexDescriptor = MTLVertexDescriptor.simpleLayout
+        
+        do {
+            self.yAxisLinePipelineState = try renderContext.device.makeRenderPipelineState(descriptor: descriptor)
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    private func buildZAxisLineState(metalView: MTKView) {
+        let vertexFunction = renderContext.library.makeFunction(name: "vertex_simple")
+        let fragmentFunction = renderContext.library.makeFunction(name: "fragment_z_axis")
+        let descriptor = MTLRenderPipelineDescriptor()
+        descriptor.vertexFunction = vertexFunction
+        descriptor.fragmentFunction = fragmentFunction
+        descriptor.colorAttachments[0].pixelFormat = metalView.colorPixelFormat
+        descriptor.depthAttachmentPixelFormat = .depth32Float
+        descriptor.vertexDescriptor = MTLVertexDescriptor.simpleLayout
+        
+        do {
+            self.zAxisLinePipelineState = try renderContext.device.makeRenderPipelineState(descriptor: descriptor)
         } catch {
             fatalError(error.localizedDescription)
         }
@@ -89,9 +146,17 @@ extension Renderer {
         updateUniforms(scene: scene)
         
         renderEncoder.setDepthStencilState(depthStencilState)
-        
         renderEncoder.setRenderPipelineState(gridPipelineState)
         scene.gridPlane.render(encoder: renderEncoder, uniforms: uniforms)
+        
+        renderEncoder.setRenderPipelineState(xAxisLinePipelineState)
+        scene.xAxisLine.render(encoder: renderEncoder, uniforms: uniforms)
+        
+        renderEncoder.setRenderPipelineState(yAxisLinePipelineState)
+        scene.yAxisLine.render(encoder: renderEncoder, uniforms: uniforms)
+        
+        renderEncoder.setRenderPipelineState(zAxisLinePipelineState)
+        scene.zAxisLine.render(encoder: renderEncoder, uniforms: uniforms)
         
         renderEncoder.setRenderPipelineState(pipelineState)
         

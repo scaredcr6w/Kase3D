@@ -1,27 +1,29 @@
 //
-//  Plane.swift
+//  DirectionLines.swift
 //  Kase3DEngine
 //
-//  Created by Anda Levente on 2026. 01. 30..
+//  Created by Anda Levente on 2026. 03. 21..
 //
 
 import MetalKit
 import Kase3DCore
 
-final class Plane: Transformable {
+final class AxisLine: Transformable {
     var transform: Transform = .init()
     var mesh: MTKMesh!
     
-    init(size: Float = 10, renderContext: RenderContext) {
+    init(extent: float3, renderContext: RenderContext) {
         transform.scale = 1
-        buildMesh(size: size, renderContext: renderContext)
+        buildMesh(extent: extent, renderContext: renderContext)
     }
     
-    private func buildMesh(size: Float, renderContext: RenderContext) {
+    private func buildMesh(extent: float3, renderContext: RenderContext) {
         let allocator = MTKMeshBufferAllocator(device: renderContext.device)
+        
         let mdlMesh = MDLMesh(
-            planeWithExtent: [size, 0, size],
-            segments: [UInt32(size / 2), UInt32(size / 2)],
+            boxWithExtent: extent,
+            segments: [0, 0, 1],
+            inwardNormals: false,
             geometryType: .lines,
             allocator: allocator
         )

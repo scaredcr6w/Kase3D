@@ -26,8 +26,8 @@ vertex VertexOut vertex_main(VertexIn in [[stage_in]],
     return out;
 }
 
-vertex PositionVertexOut vertex_grid_plane(PositionVertexIn in [[stage_in]],
-                                constant Uniforms &uniforms [[buffer(UniformsBuffer)]]) {
+vertex PositionVertexOut vertex_simple(PositionVertexIn in [[stage_in]],
+                                           constant Uniforms &uniforms [[buffer(UniformsBuffer)]]) {
     float4 position = uniforms.projectionMatrix * uniforms.viewMatrix * uniforms.modelMatrix * in.position;
     
     PositionVertexOut out {
