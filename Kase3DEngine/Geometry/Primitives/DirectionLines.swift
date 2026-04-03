@@ -11,10 +11,15 @@ import Kase3DCore
 final class AxisLine: Transformable {
     var transform: Transform = .init()
     var mesh: MTKMesh!
+    var properties: DirectionLineProperties
     
-    init(extent: float3, renderContext: RenderContext) {
+    init(extent: float3, properties: DirectionLineProperties, renderContext: RenderContext) {
+        self.properties = properties
         transform.scale = 1
-        buildMesh(extent: extent, renderContext: renderContext)
+        
+        var modifiedExtent = extent
+        modifiedExtent.replace(with: properties.lineThickness, where: extent .== 0)
+        buildMesh(extent: modifiedExtent, renderContext: renderContext)
     }
     
     private func buildMesh(extent: float3, renderContext: RenderContext) {
@@ -24,7 +29,7 @@ final class AxisLine: Transformable {
             boxWithExtent: extent,
             segments: [0, 0, 1],
             inwardNormals: false,
-            geometryType: .lines,
+            geometryType: .triangles,
             allocator: allocator
         )
         
@@ -57,7 +62,7 @@ final class AxisLine: Transformable {
         
         for submesh in mesh.submeshes {
             encoder.drawIndexedPrimitives(
-                type: .line,
+                type: .triangle,
                 indexCount: submesh.indexCount,
                 indexType: submesh.indexType,
                 indexBuffer: submesh.indexBuffer.buffer,

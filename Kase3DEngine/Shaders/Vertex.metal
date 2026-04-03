@@ -27,7 +27,7 @@ vertex VertexOut vertex_main(VertexIn in [[stage_in]],
 }
 
 vertex PositionVertexOut vertex_simple(PositionVertexIn in [[stage_in]],
-                                           constant Uniforms &uniforms [[buffer(UniformsBuffer)]]) {
+                                       constant Uniforms &uniforms [[buffer(UniformsBuffer)]]) {
     float4 position = uniforms.projectionMatrix * uniforms.viewMatrix * uniforms.modelMatrix * in.position;
     
     PositionVertexOut out {
