@@ -26,7 +26,7 @@ public struct ModelScene {
         gridPlane = Plane(size: geometrySize, renderContext: renderContext)
         axisLineProperties = DirectionLineProperties()
         
-        axisLines(size: geometrySize, lineThickness: axisLineProperties.lineThickness)
+        axisLines(size: geometrySize, properties: axisLineProperties)
     }
     
     mutating func update(size: CGSize) {
@@ -40,31 +40,28 @@ public struct ModelScene {
             camera.distance * 0.001,
             axisLineProperties.minimumLineThickness
         )
-        axisLines(size: geometrySize, lineThickness: axisLineProperties.lineThickness)
-        
-        
-        print("\(camera.distance), \(axisLineProperties.lineThickness)")
+        axisLines(size: geometrySize, properties: axisLineProperties)
     }
     
-    private mutating func axisLines(size: Float, lineThickness: Float) {
+    private mutating func axisLines(size: Float, properties: DirectionLineProperties) {
         xAxisLine = AxisLine(
             extent: [size, 0, 0],
-            properties: axisLineProperties,
+            properties: properties,
             renderContext: renderContext
         )
         yAxisLine = AxisLine(
             extent: [0, size, 0],
-            properties: axisLineProperties,
+            properties: properties,
             renderContext: renderContext
         )
         zAxisLine = AxisLine(
             extent: [0, 0, size],
-            properties: axisLineProperties,
+            properties: properties,
             renderContext: renderContext
         )
         
-        xAxisLine.position.x = (size / 2) + (axisLineProperties.lineThickness / 2)
-        yAxisLine.position.y = (size / 2) - (axisLineProperties.lineThickness / 2)
-        zAxisLine.position.z = (size / 2) + (axisLineProperties.lineThickness / 2)
+        xAxisLine.position.x = (size / 2) + (properties.lineThickness / 2)
+        yAxisLine.position.y = (size / 2) - (properties.lineThickness / 2)
+        zAxisLine.position.z = (size / 2) + (properties.lineThickness / 2)
     }
 }
