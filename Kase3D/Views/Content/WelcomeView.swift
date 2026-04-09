@@ -6,9 +6,22 @@
 //
 
 import SwiftUI
+import Kase3DCore
+import UniformTypeIdentifiers
 
 struct WelcomeView: View {
     @Environment(AppCoordinator.self) private var appCoordinator
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
+    
+    @State private var pendingURL: URL?
+
+    private var isFileImporterPresentedBinding: Binding<Bool> {
+        Binding(
+            get: { appCoordinator.appStore.isFileImporterPresented },
+            set: { appCoordinator.appStore.isFileImporterPresented = $0 }
+        )
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -66,6 +79,41 @@ struct WelcomeView: View {
             }
         }
         .background(Color(red: 0.15, green: 0.15, blue: 0.15))
+        .onChange(of: appCoordinator.appStore.isFileImporterPresented) { _, newValue in
+            guard !newValue, let pendingURL else { return }
+
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(1))
+                
+                openWindow(
+                    id: WindowKeys.editor.rawValue,
+                    value: FileInfo(
+                        fileName: pendingURL.lastPathComponent,
+                        path: pendingURL
+                    )
+                )
+                dismissWindow(id: WindowKeys.welcome.rawValue)
+            }
+        }
+        .fileImporter(
+            isPresented: isFileImporterPresentedBinding,
+            allowedContentTypes: [.usdz]) { result in
+                switch result {
+                case .success(let url):
+                    let needsScopedAccess = url.startAccessingSecurityScopedResource()
+                    defer {
+                        if needsScopedAccess {
+                            url.stopAccessingSecurityScopedResource()
+                        }
+                    }
+                    appCoordinator.addRecentFile(url)
+                    pendingURL = url
+                    appCoordinator.appStore.isFileImporterPresented = false
+                case .failure(let error):
+                    let kaseError = ErrorManager.shared.map(error)
+                    ErrorManager.shared.present(kaseError)
+                }
+            }
     }
 }
 

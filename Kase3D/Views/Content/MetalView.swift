@@ -8,11 +8,22 @@
 import SwiftUI
 import MetalKit
 import Kase3DEngine
+import Kase3DCore
+import UniformTypeIdentifiers
 
 struct MetalView: View {
     @Environment(AppCoordinator.self) private var appCoordinator
     @State private var metalView: CustomMTKView = CustomMTKView()
     @State private var modelController: ModelController?
+    
+    @State private var pendingURL: URL?
+    
+    private var isFileImporterPresentedBinding: Binding<Bool> {
+        Binding(
+            get: { appCoordinator.appStore.isFileImporterPresented },
+            set: { appCoordinator.appStore.isFileImporterPresented = $0 }
+        )
+    }
     
     var body: some View {
         MetalViewRepresentable(metalView: $metalView, controller: modelController)
@@ -20,6 +31,24 @@ struct MetalView: View {
                 modelController = ModelController(sceneManager: appCoordinator.sceneManager, metalView: metalView)
                 metalView.inputController = modelController?.inputController
             }
+            .fileImporter(
+                isPresented: isFileImporterPresentedBinding,
+                allowedContentTypes: [.usdz]) { result in
+                    switch result {
+                    case .success(let url):
+                        let needsScopedAccess = url.startAccessingSecurityScopedResource()
+                        defer {
+                            if needsScopedAccess {
+                                url.stopAccessingSecurityScopedResource()
+                            }
+                        }
+                        appCoordinator.addRecentFile(url)
+                        appCoordinator.loadModel(from: url)
+                    case .failure(let error):
+                        let kaseError = ErrorManager.shared.map(error)
+                        ErrorManager.shared.present(kaseError)
+                    }
+                }
     }
 }
 

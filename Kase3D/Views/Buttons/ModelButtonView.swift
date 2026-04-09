@@ -10,6 +10,9 @@ import Kase3DEngine
 
 struct ModelButtonView: View {
     @Environment(AppCoordinator.self) private var appCoordinator
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
+    
     private var viewModel: ModelButtonViewModel
     let size: CGFloat = 300
     
@@ -26,7 +29,20 @@ struct ModelButtonView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            appCoordinator.openRecent(viewModel.bookmark)
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(1))
+                
+                appCoordinator.startAccessing(bookmark: viewModel.bookmark) { url in
+                    openWindow(
+                        id: WindowKeys.editor.rawValue,
+                        value: FileInfo(
+                            fileName: viewModel.bookmark.fileName,
+                            path: url
+                        )
+                    )
+                    dismissWindow(id: WindowKeys.welcome.rawValue)
+                }
+            }
         }
     }
 }

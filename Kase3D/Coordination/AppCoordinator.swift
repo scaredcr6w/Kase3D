@@ -35,6 +35,10 @@ final class AppCoordinator {
         recentsManager.startAccessing(bookmark: bookmark, sceneManager.loadModel(from:))
     }
     
+    func startAccessing(bookmark: RecentFileBookmark, completion: (URL) -> Void) {
+        recentsManager.startAccessing(bookmark: bookmark, completion)
+    }
+    
     func addRecentFile(_ url: URL) {
         recentsManager.addRecentFile(url)
     }
