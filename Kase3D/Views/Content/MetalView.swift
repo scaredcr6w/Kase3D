@@ -16,8 +16,6 @@ struct MetalView: View {
     @State private var metalView: CustomMTKView = CustomMTKView()
     @State private var modelController: ModelController?
     
-    @State private var pendingURL: URL?
-    
     private var isFileImporterPresentedBinding: Binding<Bool> {
         Binding(
             get: { appCoordinator.appStore.isFileImporterPresented },
