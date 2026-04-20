@@ -160,7 +160,7 @@ struct WelcomeView: View {
                         )
                         dismissWindow(id: WindowKeys.welcome.rawValue)
                         #elseif os(iOS)
-                        appCoordinator.loadModel(from: pendingURL)
+                        appCoordinator.loadModel(from: resolvedURL)
                         #endif
                     }
                 case .failure(let error):
