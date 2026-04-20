@@ -15,7 +15,7 @@ struct WelcomeViewButtonStyle: ButtonStyle {
             .padding()
             .buttonStyle(.plain)
             .background {
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: 24)
                     .foregroundStyle(configuration.isPressed ? .thinMaterial : .ultraThinMaterial)
             }
             .compositingGroup()

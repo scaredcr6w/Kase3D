@@ -32,7 +32,7 @@ struct WelcomeView: View {
                         dismissWindow(id: WindowKeys.welcome.rawValue)
                     } label: {
                         Image(systemName: "x.circle.fill")
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(.white.opacity(0.8))
                             .frame(minWidth: 50, minHeight: 50)
                     }
                     .buttonStyle(.plain)
@@ -43,13 +43,20 @@ struct WelcomeView: View {
                 Spacer()
                 
                 VStack {
-                    RoundedRectangle(cornerRadius: 16)
-                        .foregroundStyle(.blue)
-                        .frame(width: 120, height: 120)
-                        .shadow(color: .white.opacity(0.2), radius: 10)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 24)
+                            .foregroundStyle(.black)
+                            .shadow(color: .white.opacity(0.2), radius: 10)
+                        
+                        Image("kase")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    }
+                    .frame(width: 120, height: 120)
                     
                     Text("Kase3D")
                         .font(.title)
+                        .fontWeight(.semibold)
                     
                     Text("Version: 0.2")
                         .font(.caption)
@@ -75,7 +82,6 @@ struct WelcomeView: View {
                 .padding()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.thinMaterial)
             
             if !appCoordinator.recentsManager.recentBookmarks.isEmpty{
                 ScrollView {
@@ -108,17 +114,17 @@ struct WelcomeView: View {
                     .padding()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(.thickMaterial)
             } else {
                 VStack {
                     Text("You don't have any recently opened models.")
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(.thickMaterial)
             }
         }
+        .compositingGroup()
+        .background(.thinMaterial)
         #if os(macOS)
-        .clipShape(.rect(cornerRadius: 16))
+        .clipShape(.rect(cornerRadius: 24))
         #endif
         .fileImporter(
             isPresented: isFileImporterPresentedBinding,

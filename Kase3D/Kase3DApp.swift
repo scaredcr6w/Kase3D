@@ -21,13 +21,7 @@ struct Kase3DApp: App {
                 WelcomeView()
                     .frame(width: 700, height: 500)
                     .environment(appCoordinator)
-                    .background(
-                        Group {
-                            WindowAccessor { window in
-                                window.isMovableByWindowBackground = true
-                            }
-                        }
-                    )
+                    .gesture(WindowDragGesture())
                     .overlay {
                         if let error = ErrorManager.shared.current {
                             ErrorAlert(message: error.message, retry: error.retry) {
@@ -67,8 +61,15 @@ struct Kase3DApp: App {
                                 }
                             }
                         }
+                        .toolbar(removing: .title)
+                        .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
+                        .ignoresSafeArea(edges: .top)
+                        .toolbar {
+                            Text("")
+                        }
                 }
             }
+            .windowStyle(.hiddenTitleBar)
             .restorationBehavior(.disabled)
             .windowResizability(.automatic)
             .defaultWindowPlacement { content, context in
@@ -116,24 +117,6 @@ struct Kase3DApp: App {
         }
     }
 }
-
-#if os(macOS)
-import AppKit
-struct WindowAccessor: NSViewRepresentable {
-    var onResolve: (NSWindow) -> Void
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        DispatchQueue.main.async { [weak view] in
-            if let window = view?.window {
-                onResolve(window)
-            }
-        }
-        return view
-    }
-    func updateNSView(_ nsView: NSView, context: Context) {}
-}
-#endif
-
 
 enum WindowKeys: String {
     case welcome = "welcome"
