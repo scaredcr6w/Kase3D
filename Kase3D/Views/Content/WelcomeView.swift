@@ -45,7 +45,7 @@ struct WelcomeView: View {
                 VStack {
                     ZStack {
                         RoundedRectangle(cornerRadius: 24)
-                            .foregroundStyle(.black)
+                            .fill(.black.gradient)
                             .shadow(color: .white.opacity(0.2), radius: 10)
                         
                         Image("kase")
@@ -82,6 +82,10 @@ struct WelcomeView: View {
                 .padding()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            Divider()
+                .background(Color.white.opacity(0.15))
+                .padding(.vertical)
             
             if !appCoordinator.recentsManager.recentBookmarks.isEmpty{
                 ScrollView {
