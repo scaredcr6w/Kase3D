@@ -230,33 +230,38 @@ struct new_WelcomeView: View {
         .onChange(of: appCoordinator.appStore.isFileImporterPresented) { _, newValue in
             guard !newValue, let pendingURL else { return }
 
-            Task { @MainActor in
-                try? await Task.sleep(for: .seconds(1))
-                
-                openWindow(
-                    id: WindowKeys.editor.rawValue,
-                    value: FileInfo(
-                        fileName: pendingURL.lastPathComponent,
-                        path: pendingURL
-                    )
-                )
-                dismissWindow(id: WindowKeys.welcome.rawValue)
-            }
+            
         }
         .fileImporter(
             isPresented: isFileImporterPresentedBinding,
             allowedContentTypes: [.usdz]) { result in
                 switch result {
                 case .success(let url):
-                    let needsScopedAccess = url.startAccessingSecurityScopedResource()
-                    defer {
-                        if needsScopedAccess {
-                            url.stopAccessingSecurityScopedResource()
+                    Task { @MainActor in
+                        let needsScopedAccess = url.startAccessingSecurityScopedResource()
+                        defer {
+                            if needsScopedAccess {
+                                url.stopAccessingSecurityScopedResource()
+                            }
                         }
+                        appCoordinator.addRecentFile(url)
+                        guard let latestRecent = appCoordinator.getLatestRecentFileBookmark(url.lastPathComponent) else { return }
+                        let url = appCoordinator.recentsManager.resolveBookmark(latestRecent)
+                        pendingURL = url
+                        appCoordinator.appStore.isFileImporterPresented = false
+                        
+                        guard let pendingURL else { return }
+                        try? await Task.sleep(for: .seconds(1))
+                        
+                        openWindow(
+                            id: WindowKeys.editor.rawValue,
+                            value: FileInfo(
+                                fileName: pendingURL.lastPathComponent,
+                                path: pendingURL
+                            )
+                        )
+                        dismissWindow(id: WindowKeys.welcome.rawValue)
                     }
-                    appCoordinator.addRecentFile(url)
-                    pendingURL = url
-                    appCoordinator.appStore.isFileImporterPresented = false
                 case .failure(let error):
                     let kaseError = ErrorManager.shared.map(error)
                     ErrorManager.shared.present(kaseError)

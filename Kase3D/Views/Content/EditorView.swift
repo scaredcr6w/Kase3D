@@ -35,6 +35,7 @@ struct EditorView: View {
                     } action: {
                         openWindow(id: WindowKeys.welcome.rawValue)
                         dismissWindow(id: WindowKeys.editor.rawValue)
+                        appCoordinator.unloadModel()
                     }
                 }
             }

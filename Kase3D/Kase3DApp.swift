@@ -75,15 +75,8 @@ struct Kase3DApp: App {
                     EditorView()
                         .environment(appCoordinator)
                         .onAppear {
-                            if fileInfo.path.startAccessingSecurityScopedResource() {
-                                defer { fileInfo.path.stopAccessingSecurityScopedResource() }
-                                appCoordinator.loadModel(from: fileInfo.path)
-                            } else {
-                                appCoordinator.appStore.isFileImporterPresented = false
-                                ErrorManager.shared.present(FileError.accessError) {
-                                    appCoordinator.appStore.isFileImporterPresented = true
-                                }
-                            }
+                            print("onAppear: \(fileInfo.fileName)")
+                            appCoordinator.loadModel(from: fileInfo.path)
                         }
                 }
             }
