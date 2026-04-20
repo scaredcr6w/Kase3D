@@ -18,7 +18,7 @@ struct Kase3DApp: App {
         Group {
             #if os(macOS)
             WindowGroup("Welcome", id: WindowKeys.welcome.rawValue) {
-                new_WelcomeView()
+                WelcomeView()
                     .frame(width: 700, height: 500)
                     .environment(appCoordinator)
                     .background(
@@ -28,6 +28,13 @@ struct Kase3DApp: App {
                             }
                         }
                     )
+                    .overlay {
+                        if let error = ErrorManager.shared.current {
+                            ErrorAlert(message: error.message, retry: error.retry) {
+                                ErrorManager.shared.dismiss()
+                            }
+                        }
+                    }
             }
             .windowStyle(.plain)
             .defaultWindowPlacement { content, context in
@@ -53,6 +60,13 @@ struct Kase3DApp: App {
                                 }
                             }
                         }
+                        .overlay {
+                            if let error = ErrorManager.shared.current {
+                                ErrorAlert(message: error.message, retry: error.retry) {
+                                    ErrorManager.shared.dismiss()
+                                }
+                            }
+                        }
                 }
             }
             .restorationBehavior(.disabled)
@@ -65,24 +79,16 @@ struct Kase3DApp: App {
                 return WindowPlacement(position, size: context.defaultDisplay.bounds.size)
             }
             #elseif os(iOS)
-//            WindowGroup("Welcome", id: WindowKeys.welcome.rawValue) {
-//                new_WelcomeView()
-//                    .environment(appCoordinator)
-//            }
-//            
-//            WindowGroup("Editor", id: WindowKeys.editor.rawValue, for: FileInfo.self) { $fileInfo in
-//                if let fileInfo {
-//                    EditorView()
-//                        .environment(appCoordinator)
-//                        .onAppear {
-//                            print("onAppear: \(fileInfo.fileName)")
-//                            appCoordinator.loadModel(from: fileInfo.path)
-//                        }
-//                }
-//            }
             WindowGroup {
                 ContentView()
                     .environment(appCoordinator)
+                    .overlay {
+                        if let error = ErrorManager.shared.current {
+                            ErrorAlert(message: error.message, retry: error.retry) {
+                                ErrorManager.shared.dismiss()
+                            }
+                        }
+                    }
             }
             #endif
         }
