@@ -65,20 +65,24 @@ struct Kase3DApp: App {
                 return WindowPlacement(position, size: context.defaultDisplay.bounds.size)
             }
             #elseif os(iOS)
-            WindowGroup("Welcome", id: WindowKeys.welcome.rawValue) {
-                new_WelcomeView()
+//            WindowGroup("Welcome", id: WindowKeys.welcome.rawValue) {
+//                new_WelcomeView()
+//                    .environment(appCoordinator)
+//            }
+//            
+//            WindowGroup("Editor", id: WindowKeys.editor.rawValue, for: FileInfo.self) { $fileInfo in
+//                if let fileInfo {
+//                    EditorView()
+//                        .environment(appCoordinator)
+//                        .onAppear {
+//                            print("onAppear: \(fileInfo.fileName)")
+//                            appCoordinator.loadModel(from: fileInfo.path)
+//                        }
+//                }
+//            }
+            WindowGroup {
+                ContentView()
                     .environment(appCoordinator)
-            }
-            
-            WindowGroup("Editor", id: WindowKeys.editor.rawValue, for: FileInfo.self) { $fileInfo in
-                if let fileInfo {
-                    EditorView()
-                        .environment(appCoordinator)
-                        .onAppear {
-                            print("onAppear: \(fileInfo.fileName)")
-                            appCoordinator.loadModel(from: fileInfo.path)
-                        }
-                }
             }
             #endif
         }

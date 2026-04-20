@@ -194,6 +194,7 @@ struct new_WelcomeView: View {
                             Task { @MainActor in
                                 try? await Task.sleep(for: .seconds(1))
                                 
+                                #if os(macOS)
                                 appCoordinator.startAccessing(bookmark: bookmark) { url in
                                     openWindow(
                                         id: WindowKeys.editor.rawValue,
@@ -204,6 +205,9 @@ struct new_WelcomeView: View {
                                     )
                                     dismissWindow(id: WindowKeys.welcome.rawValue)
                                 }
+                                #elseif os(iOS)
+                                appCoordinator.openRecent(bookmark)
+                                #endif
                             }
                         } label: {
                             Label(bookmark.fileName, systemImage: "document")
@@ -227,11 +231,6 @@ struct new_WelcomeView: View {
         #if os(macOS)
         .clipShape(.rect(cornerRadius: 16))
         #endif
-        .onChange(of: appCoordinator.appStore.isFileImporterPresented) { _, newValue in
-            guard !newValue, let pendingURL else { return }
-
-            
-        }
         .fileImporter(
             isPresented: isFileImporterPresentedBinding,
             allowedContentTypes: [.usdz]) { result in
@@ -253,6 +252,7 @@ struct new_WelcomeView: View {
                         guard let pendingURL else { return }
                         try? await Task.sleep(for: .seconds(1))
                         
+                        #if os(macOS)
                         openWindow(
                             id: WindowKeys.editor.rawValue,
                             value: FileInfo(
@@ -261,6 +261,9 @@ struct new_WelcomeView: View {
                             )
                         )
                         dismissWindow(id: WindowKeys.welcome.rawValue)
+                        #elseif os(iOS)
+                        appCoordinator.loadModel(from: pendingURL)
+                        #endif
                     }
                 case .failure(let error):
                     let kaseError = ErrorManager.shared.map(error)

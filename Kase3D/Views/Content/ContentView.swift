@@ -42,10 +42,11 @@ struct ContentView: View {
                 }
                 .opacity(appCoordinator.sceneManager.hasLoadedAnyModel ? 1 : 0)
             }
-            WelcomeView()
+            new_WelcomeView()
                 .opacity(appCoordinator.sceneManager.hasLoadedAnyModel ? 0 : 1)
                 .allowsHitTesting(!appCoordinator.sceneManager.hasLoadedAnyModel)
         }
+        .animation(.snappy(duration: 0.2), value: appCoordinator.sceneManager.hasLoadedAnyModel)
         .overlay {
             if let error = ErrorManager.shared.current {
                 ErrorAlert(message: error.message, retry: error.retry) {
