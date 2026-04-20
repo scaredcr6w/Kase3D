@@ -62,17 +62,15 @@ struct WelcomeView: View {
                         appCoordinator.appStore.isFileImporterPresented = true
                     } label: {
                         Label("Import", systemImage: "square.and.arrow.down")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
                     }
+                    .buttonStyle(WelcomeViewButtonStyle())
                     
                     Button {
                         appCoordinator.clearRecents()
                     } label: {
                         Label("Clear Recents", systemImage: "trash")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
                     }
+                    .buttonStyle(WelcomeViewButtonStyle())
                 }
                 .padding()
             }
@@ -103,9 +101,8 @@ struct WelcomeView: View {
                             }
                         } label: {
                             Label(bookmark.fileName, systemImage: "document")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding()
                         }
+                        .buttonStyle(WelcomeViewButtonStyle())
                     }
                     .frame(alignment: .leading)
                     .padding()
