@@ -10,5 +10,4 @@ import Foundation
 struct FileInfo: Codable, Hashable {
     let fileName: String
     let path: URL
-//    let isBookmarked: Bool
 }

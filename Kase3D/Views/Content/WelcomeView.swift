@@ -13,8 +13,6 @@ struct WelcomeView: View {
     @Environment(AppCoordinator.self) private var appCoordinator
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismissWindow) private var dismissWindow
-    
-    @State private var pendingURL: URL?
 
     private var isFileImporterPresentedBinding: Binding<Bool> {
         Binding(
@@ -54,12 +52,14 @@ struct WelcomeView: View {
                     }
                     .frame(width: 120, height: 120)
                     
-                    Text("Kase3D")
+                    Text(verbatim: "Kase3D")
                         .font(.title)
                         .fontWeight(.semibold)
                     
-                    Text("Version: 0.2")
-                        .font(.caption)
+                    if let versionNumber = Bundle.main.versionNumber {
+                        Text("Version: \(versionNumber)")
+                            .font(.caption)
+                    }
                 }
                 
                 Spacer()
@@ -136,27 +136,26 @@ struct WelcomeView: View {
                 switch result {
                 case .success(let url):
                     Task { @MainActor in
-                        let needsScopedAccess = url.startAccessingSecurityScopedResource()
-                        defer {
-                            if needsScopedAccess {
-                                url.stopAccessingSecurityScopedResource()
-                            }
+                        guard url.startAccessingSecurityScopedResource() else {
+                            ErrorManager.shared.present(FileError.accessError)
+                            return
                         }
+                        defer { url.stopAccessingSecurityScopedResource() }
+                        
                         appCoordinator.addRecentFile(url)
-                        guard let latestRecent = appCoordinator.getLatestRecentFileBookmark(url.lastPathComponent) else { return }
-                        let url = appCoordinator.recentsManager.resolveBookmark(latestRecent)
-                        pendingURL = url
+                        guard let latestRecent = appCoordinator.getLatestRecentFileBookmark(url.lastPathComponent),
+                              let resolvedURL = appCoordinator.recentsManager.resolveBookmark(latestRecent) else { return }
+                        
                         appCoordinator.appStore.isFileImporterPresented = false
                         
-                        guard let pendingURL else { return }
                         try? await Task.sleep(for: .seconds(1))
                         
                         #if os(macOS)
                         openWindow(
                             id: WindowKeys.editor.rawValue,
                             value: FileInfo(
-                                fileName: pendingURL.lastPathComponent,
-                                path: pendingURL
+                                fileName: resolvedURL.lastPathComponent,
+                                path: resolvedURL
                             )
                         )
                         dismissWindow(id: WindowKeys.welcome.rawValue)
