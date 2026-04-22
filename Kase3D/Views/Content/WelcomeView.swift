@@ -84,7 +84,18 @@ struct WelcomeView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
             Divider()
-                .background(Color.white.opacity(0.15))
+                .background(
+                    LinearGradient(
+                        colors: [
+                            .gray.opacity(0.15),
+                            .white.opacity(0.15),
+                            .white.opacity(0.15),
+                            .gray.opacity(0.15)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
                 .padding(.vertical)
             
             if !appCoordinator.recentsManager.recentBookmarks.isEmpty{
