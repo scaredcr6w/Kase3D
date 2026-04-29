@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct DirectionLineProperties: Identifiable {
+struct AxisLinesProperties: Identifiable {
     let id = UUID()
-    var lineThickness: Float = 0.02
-    let minimumLineThickness: Float = 0.002
+    var isVisible: Bool = true // for future feature
 }

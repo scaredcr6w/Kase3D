@@ -150,13 +150,14 @@ extension Renderer {
         scene.gridPlane.render(encoder: renderEncoder, uniforms: uniforms)
         
         renderEncoder.setRenderPipelineState(xAxisLinePipelineState)
-        scene.xAxisLine.render(encoder: renderEncoder, uniforms: uniforms)
-        
-        renderEncoder.setRenderPipelineState(yAxisLinePipelineState)
-        scene.yAxisLine.render(encoder: renderEncoder, uniforms: uniforms)
-        
-        renderEncoder.setRenderPipelineState(zAxisLinePipelineState)
-        scene.zAxisLine.render(encoder: renderEncoder, uniforms: uniforms)
+//        scene.xAxisLine.render(encoder: renderEncoder, uniforms: uniforms)
+//        
+//        renderEncoder.setRenderPipelineState(yAxisLinePipelineState)
+//        scene.yAxisLine.render(encoder: renderEncoder, uniforms: uniforms)
+//        
+//        renderEncoder.setRenderPipelineState(zAxisLinePipelineState)
+//        scene.zAxisLine.render(encoder: renderEncoder, uniforms: uniforms)
+        scene.axisLines.render(encoder: renderEncoder, uniforms: uniforms)
         
         renderEncoder.setRenderPipelineState(pipelineState)
         

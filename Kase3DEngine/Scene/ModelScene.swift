@@ -10,10 +10,7 @@ import MetalKit
 public struct ModelScene {
     var models: [Model] = []
     var gridPlane: Plane
-    var xAxisLine: AxisLine!
-    var yAxisLine: AxisLine!
-    var zAxisLine: AxisLine!
-    var axisLineProperties: DirectionLineProperties
+    var axisLines: AxisLines
     var camera = ArcballCamera()
     let lighting = SceneLighting()
     let renderContext: RenderContext
@@ -23,10 +20,8 @@ public struct ModelScene {
     init(renderContext: RenderContext) {
         self.renderContext = renderContext
         
-        gridPlane = Plane(size: geometrySize, renderContext: renderContext)
-        axisLineProperties = DirectionLineProperties()
-        
-        axisLines(size: geometrySize, properties: axisLineProperties)
+        gridPlane = Plane(size: geometrySize * 2, renderContext: renderContext)
+        axisLines = AxisLines(size: geometrySize, renderContext: renderContext)
     }
     
     mutating func update(size: CGSize) {
@@ -36,32 +31,10 @@ public struct ModelScene {
     mutating func update(deltaTime: Float, inputProviding: InputProviding) {
         camera.update(deltaTime: deltaTime, inputProviding: inputProviding)
         
-        axisLineProperties.lineThickness = max(
-            camera.distance * 0.001,
-            axisLineProperties.minimumLineThickness
+        let lineThickness = max(
+            camera.distance,
+            camera.minDistance
         )
-        axisLines(size: geometrySize, properties: axisLineProperties)
-    }
-    
-    private mutating func axisLines(size: Float, properties: DirectionLineProperties) {
-        xAxisLine = AxisLine(
-            extent: [size, 0, 0],
-            properties: properties,
-            renderContext: renderContext
-        )
-        yAxisLine = AxisLine(
-            extent: [0, size, 0],
-            properties: properties,
-            renderContext: renderContext
-        )
-        zAxisLine = AxisLine(
-            extent: [0, 0, size],
-            properties: properties,
-            renderContext: renderContext
-        )
-        
-        xAxisLine.position.x = (size / 2) + (properties.lineThickness / 2)
-        yAxisLine.position.y = (size / 2) - (properties.lineThickness / 2)
-        zAxisLine.position.z = (size / 2) + (properties.lineThickness / 2)
+        axisLines.update(thickness: lineThickness)
     }
 }

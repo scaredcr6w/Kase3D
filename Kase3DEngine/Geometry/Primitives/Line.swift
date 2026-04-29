@@ -1,5 +1,5 @@
 //
-//  DirectionLines.swift
+//  Line.swift
 //  Kase3DEngine
 //
 //  Created by Anda Levente on 2026. 03. 21..
@@ -8,17 +8,15 @@
 import MetalKit
 import Kase3DCore
 
-final class AxisLine: Transformable {
+final class Line: Transformable {
     var transform: Transform = .init()
     var mesh: MTKMesh!
-    var properties: DirectionLineProperties
     
-    init(extent: float3, properties: DirectionLineProperties, renderContext: RenderContext) {
-        self.properties = properties
+    init(extent: float3, renderContext: RenderContext) {
         transform.scale = 1
         
         var modifiedExtent = extent
-        modifiedExtent.replace(with: properties.lineThickness, where: extent .== 0)
+        modifiedExtent.replace(with: 0.02, where: extent .== 0)
         buildMesh(extent: modifiedExtent, renderContext: renderContext)
     }
     
@@ -40,6 +38,11 @@ final class AxisLine: Transformable {
         } catch {
             fatalError("\(MeshError.failedToLoad): \(error.localizedDescription)")
         }
+    }
+    
+    func update(thickness: Float, position: float3) {
+        transform.scale = thickness
+        transform.position = position
     }
     
     func render(encoder: MTLRenderCommandEncoder, uniforms: Uniforms) {
