@@ -30,7 +30,8 @@ typedef enum {
     UVBuffer = 1,
     UniformsBuffer = 11,
     ParamsBuffer = 12,
-    LightBuffer = 13
+    LightBuffer = 13,
+    ColorBuffer = 14
 } BufferIndices;
 
 typedef enum {

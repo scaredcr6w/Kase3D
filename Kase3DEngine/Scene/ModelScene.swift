@@ -10,11 +10,19 @@ import MetalKit
 public struct ModelScene {
     var models: [Model] = []
     var gridPlane: Plane
+    var axisLines: AxisLines
     var camera = ArcballCamera()
     let lighting = SceneLighting()
+    let renderContext: RenderContext
+    
+    private let geometrySize: Float = 100
     
     init(renderContext: RenderContext) {
-        gridPlane = Plane(size: 100, renderContext: renderContext)
+        self.renderContext = renderContext
+        
+        gridPlane = Plane(size: geometrySize * 2, renderContext: renderContext)
+        axisLines = AxisLines(size: geometrySize, renderContext: renderContext)
+        axisLines.setPosition()
     }
     
     mutating func update(size: CGSize) {

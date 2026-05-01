@@ -31,6 +31,8 @@ fragment float4 fragment_main(constant Params &params [[buffer(ParamsBuffer)]],
     return float4(color, 1);
 }
 
-fragment float4 fragment_grid_plane(PositionVertexOut in [[stage_in]]) { // will be used to draw the main lines
-    return float4(1, 1, 1, 1);
+fragment float4 fragment_simple(PositionVertexOut in [[stage_in]],
+                                    constant float4 &color [[buffer(ColorBuffer)]])
+{
+    return color;
 }
