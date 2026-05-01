@@ -40,8 +40,7 @@ final class Line: Transformable {
         }
     }
     
-    func update(thickness: Float, position: float3) {
-        transform.scale = thickness
+    func set(position: float3) {
         transform.position = position
     }
     

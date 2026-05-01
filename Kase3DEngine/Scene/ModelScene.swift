@@ -22,6 +22,7 @@ public struct ModelScene {
         
         gridPlane = Plane(size: geometrySize * 2, renderContext: renderContext)
         axisLines = AxisLines(size: geometrySize, renderContext: renderContext)
+        axisLines.setPosition()
     }
     
     mutating func update(size: CGSize) {
@@ -30,11 +31,5 @@ public struct ModelScene {
     
     mutating func update(deltaTime: Float, inputProviding: InputProviding) {
         camera.update(deltaTime: deltaTime, inputProviding: inputProviding)
-        
-        let lineThickness = max(
-            camera.distance,
-            camera.minDistance
-        )
-        axisLines.update(thickness: lineThickness)
     }
 }

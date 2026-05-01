@@ -31,19 +31,8 @@ fragment float4 fragment_main(constant Params &params [[buffer(ParamsBuffer)]],
     return float4(color, 1);
 }
 
-fragment float4 fragment_grid_plane(PositionVertexOut in [[stage_in]]) {
-    return float4(1, 1, 1, 1);
+fragment float4 fragment_simple(PositionVertexOut in [[stage_in]],
+                                    constant float4 &color [[buffer(ColorBuffer)]])
+{
+    return color;
 }
-
-fragment float4 fragment_x_axis(PositionVertexOut in [[stage_in]]) {
-    return float4(1, 0, 0, 1);
-}
-
-fragment float4 fragment_y_axis(PositionVertexOut in [[stage_in]]) {
-    return float4(0, 1, 0, 1);
-}
-
-fragment float4 fragment_z_axis(PositionVertexOut in [[stage_in]]) {
-    return float4(0, 0, 1, 1);
-}
-

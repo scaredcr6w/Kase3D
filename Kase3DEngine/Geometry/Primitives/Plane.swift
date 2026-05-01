@@ -45,6 +45,13 @@ final class Plane: Transformable {
             index: UniformsBuffer.index
         )
         
+        var gridColor = float4(1, 1, 1, 1)
+        encoder.setFragmentBytes(
+            &gridColor,
+            length: MemoryLayout<float4>.stride,
+            index: ColorBuffer.index
+        )
+        
         for (index, vertexBuffer) in mesh.vertexBuffers.enumerated() {
             encoder.setVertexBuffer(
                 vertexBuffer.buffer,
