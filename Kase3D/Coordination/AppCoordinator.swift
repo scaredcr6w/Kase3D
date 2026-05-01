@@ -22,34 +22,4 @@ final class AppCoordinator {
         uiStore = UIStore(sceneManager: sceneManager)
         appStore = ApplicationStore()
     }
-    
-    func loadModel(from url: URL) {
-        sceneManager.loadModel(from: url)
-    }
-    
-    func unloadModel() {
-        sceneManager.unload()
-    }
-    
-    func openRecent(_ bookmark: RecentFileBookmark) {
-        recentsManager.startAccessing(bookmark: bookmark, sceneManager.loadModel(from:))
-    }
-    
-    func addRecentFile(_ url: URL) {
-        recentsManager.addRecentFile(url)
-    }
-    
-    func clearRecents() {
-        recentsManager.clearRecents()
-    }
-    
-    func deselectPanel() {
-        uiStore.panelCoordinator.deselect()
-    }
-}
-
-@Observable
-@MainActor
-final class ApplicationStore {
-    var isFileImporterPresented: Bool = false
 }
