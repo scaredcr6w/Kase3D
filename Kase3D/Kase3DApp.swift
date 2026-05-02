@@ -15,31 +15,84 @@ struct Kase3DApp: App {
     @State private var appCoordinator: AppCoordinator = AppCoordinator()
     
     var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environment(appCoordinator)
-                .fileImporter(
-                    isPresented: $appCoordinator.appStore.isFileImporterPresented,
-                    allowedContentTypes: [.usdz]) { result in
-                        switch result {
-                        case .success(let url):
-                            if url.startAccessingSecurityScopedResource() {
-                                defer { url.stopAccessingSecurityScopedResource() }
-                                appCoordinator.addRecentFile(url)
-                                appCoordinator.loadModel(from: url)
+        Group {
+            #if os(macOS)
+            WindowGroup("Welcome", id: WindowKeys.welcome.rawValue) {
+                WelcomeView()
+                    .frame(width: 700, height: 500)
+                    .environment(appCoordinator)
+                    .gesture(WindowDragGesture())
+                    .overlay {
+                        if let error = ErrorManager.shared.current {
+                            ErrorAlert(message: error.message, retry: error.retry) {
+                                ErrorManager.shared.dismiss()
+                            }
+                        }
+                    }
+            }
+            .windowStyle(.plain)
+            .defaultWindowPlacement { content, context in
+                let size = content.sizeThatFits(.unspecified)
+                let posX = context.defaultDisplay.bounds.midX - (size.width / 2)
+                let posY = context.defaultDisplay.bounds.maxY - size.height
+                let position = CGPoint(x: posX, y: posY)
+                return WindowPlacement(position, size: size)
+            }
+            
+            WindowGroup("Editor", id: WindowKeys.editor.rawValue, for: FileInfo.self) { $fileInfo in
+                if let fileInfo {
+                    EditorView()
+                        .environment(appCoordinator)
+                        .onAppear {
+                            if fileInfo.path.startAccessingSecurityScopedResource() {
+                                defer { fileInfo.path.stopAccessingSecurityScopedResource() }
+                                appCoordinator.loadModel(from: fileInfo.path)
                             } else {
                                 appCoordinator.appStore.isFileImporterPresented = false
                                 ErrorManager.shared.present(FileError.accessError) {
                                     appCoordinator.appStore.isFileImporterPresented = true
                                 }
                             }
-                        case .failure(let error):
-                            let kaseError = ErrorManager.shared.map(error)
-                            ErrorManager.shared.present(kaseError)
+                        }
+                        .overlay {
+                            if let error = ErrorManager.shared.current {
+                                ErrorAlert(message: error.message, retry: error.retry) {
+                                    ErrorManager.shared.dismiss()
+                                }
+                            }
+                        }
+                        .toolbar(removing: .title)
+                        .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
+                        .ignoresSafeArea(edges: .top)
+                        .toolbar {
+                            Text("")
+                        }
+                }
+            }
+            .windowStyle(.hiddenTitleBar)
+            .restorationBehavior(.disabled)
+            .windowResizability(.automatic)
+            .defaultWindowPlacement { content, context in
+                let size = content.sizeThatFits(.unspecified)
+                let posX = context.defaultDisplay.bounds.midX - size.width
+                let posY = context.defaultDisplay.bounds.maxY - size.height
+                let position = CGPoint(x: posX, y: posY)
+                return WindowPlacement(position, size: context.defaultDisplay.bounds.size)
+            }
+            #elseif os(iOS)
+            WindowGroup {
+                ContentView()
+                    .environment(appCoordinator)
+                    .overlay {
+                        if let error = ErrorManager.shared.current {
+                            ErrorAlert(message: error.message, retry: error.retry) {
+                                ErrorManager.shared.dismiss()
+                            }
                         }
                     }
+            }
+            #endif
         }
-        .windowResizability(.automatic)
         .commands {
             CommandGroup(after: .newItem) {
                 Button("Import File...") {
@@ -63,4 +116,9 @@ struct Kase3DApp: App {
             }
         }
     }
+}
+
+enum WindowKeys: String {
+    case welcome = "welcome"
+    case editor = "editor"
 }
