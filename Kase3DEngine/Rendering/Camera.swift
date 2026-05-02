@@ -80,7 +80,7 @@ struct ArcballCamera: Camera {
         let yawQuat = simd_quatf(angle: deltaX, axis: float3(0, 1, 0))
         let tempOrientation = yawQuat * orientation
         
-        let forward = tempOrientation.act(float3(0, 0, 1))
+        let forward = tempOrientation.act(float3(0, 0, -1))
         let currentPitch = asin(max(-1.0, min(1.0, forward.y)))
         let maxPitch: Float = .pi / 2 - 0.01
         let clampedDeltaY = max(-maxPitch - currentPitch, min(maxPitch - currentPitch, -deltaY))
@@ -113,11 +113,11 @@ struct ArcballCamera: Camera {
         let topDownFactor = abs(sin(pitchAngle))
         
         let horizontalPan = right * panInput.x * panSens
-        target += horizontalPan
+        target -= horizontalPan
         
         let forwardPan = float3(forward.x, 0, forward.z)
         let forwardPanNormalized = length(forwardPan) > 0.001 ? normalize(forwardPan) : float3(0, 0, 1)
-        target -= forwardPanNormalized * panInput.y * panSens * topDownFactor
-        target.y -= panInput.y * panSens * horizontalFactor
+        target += forwardPanNormalized * panInput.y * panSens * topDownFactor
+        target.y += panInput.y * panSens * horizontalFactor
     }
 }

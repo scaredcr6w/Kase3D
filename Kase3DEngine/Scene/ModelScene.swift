@@ -35,25 +35,22 @@ public struct ModelScene {
         
         let clipX = (2 * point.x) / screenSize.x - 1
         let clipY = 1 - (2 * point.y) / screenSize.y
-        let clipCoords = float4(clipX, clipY, 0, 1)
+        let viewProjection = camera.projectionMatrix * camera.viewMatrix
+        let inverseVP = viewProjection.inverse
         
-        let projectionMatrix = camera.projectionMatrix
-        let inverseProjectionMatrix = projectionMatrix.inverse
+        let nearClip = float4(clipX, clipY, 0, 1)
+        let farClip = float4(clipX, clipY, 1, 1)
         
-        var eyeRayDir = inverseProjectionMatrix * clipCoords
-        eyeRayDir.z = -1
-        eyeRayDir.w = 0
+        var nearWorld = inverseVP * nearClip
+        nearWorld /= nearWorld.w
         
-        let viewMatrix = camera.viewMatrix
-        let inverseViewMatrix = viewMatrix.inverse
+        var farWorld = inverseVP * farClip
+        farWorld /= farWorld.w
         
-        var worldRayDir = (inverseViewMatrix * eyeRayDir).xyz
-        worldRayDir = normalize(worldRayDir)
+        let origin = nearWorld.xyz
+        let direction = normalize(farWorld.xyz - nearWorld.xyz)
         
-        let eyeRayOrigin = float4(camera.position, 1)
-        let worldRayOrigin = (inverseViewMatrix * eyeRayOrigin).xyz
-        
-        let ray = Ray(origin: worldRayOrigin, direction: worldRayDir)
+        let ray = Ray(origin: origin, direction: direction)
         if let hit = hitTest(ray) {
             print("Hit model \(hit.model.name)\nat \(hit.intersectionPoint)")
             print("Parameter: \(hit.parameter)")
