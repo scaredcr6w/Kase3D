@@ -24,6 +24,7 @@ public struct ModelScene {
     mutating func update(deltaTime: Float, inputProviding: InputProviding) {
         camera.update(deltaTime: deltaTime, inputProviding: inputProviding)
         if inputProviding.location != .zero {
+            print("start hit testing")
             shouldHitTest(inputProviding: inputProviding)
         }
     }

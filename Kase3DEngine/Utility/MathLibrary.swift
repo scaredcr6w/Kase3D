@@ -46,8 +46,7 @@ extension float4x4 {
     }
     
     init(scaling: Float) {
-        self = matrix_identity_float4x4
-        columns.3.w = 1 / scaling
+        self = float4x4(scaling: float3(scaling, scaling, scaling))
     }
     
     // MARK: - Rotate

@@ -29,14 +29,14 @@ struct ArcballCamera: Camera {
     var maxDistance: Float = 20
     
     var position: float3 {
-        let localOffset = float3(0, 0, distance)
+        let localOffset = float3(0, 0, -distance)
         return target + orientation.act(localOffset)
     }
     
     var viewMatrix: float4x4 {
         let position = position
         let rotationMatrix = float4x4(orientation.conjugate)
-        let translationMatrix = float4x4(translation: position)
+        let translationMatrix = float4x4(translation: -position)
         
         return rotationMatrix * translationMatrix
     }
@@ -80,7 +80,7 @@ struct ArcballCamera: Camera {
         let yawQuat = simd_quatf(angle: deltaX, axis: float3(0, 1, 0))
         let tempOrientation = yawQuat * orientation
         
-        let forward = tempOrientation.act(float3(0, 0, -1))
+        let forward = tempOrientation.act(float3(0, 0, 1))
         let currentPitch = asin(max(-1.0, min(1.0, forward.y)))
         let maxPitch: Float = .pi / 2 - 0.01
         let clampedDeltaY = max(-maxPitch - currentPitch, min(maxPitch - currentPitch, -deltaY))
