@@ -23,5 +23,67 @@ public struct ModelScene {
     
     mutating func update(deltaTime: Float, inputProviding: InputProviding) {
         camera.update(deltaTime: deltaTime, inputProviding: inputProviding)
+        if inputProviding.location != .zero {
+            shouldHitTest(inputProviding: inputProviding)
+        }
+    }
+    
+    private func shouldHitTest(inputProviding: InputProviding) {
+        let point = inputProviding.location
+        let screenSize = camera.screenSize
+        
+        let clipX = (2 * point.x) / screenSize.x - 1
+        let clipY = 1 - (2 * point.y) / screenSize.y
+        let clipCoords = float4(clipX, clipY, 0, 1)
+        
+        let projectionMatrix = camera.projectionMatrix
+        let inverseProjectionMatrix = projectionMatrix.inverse
+        
+        var eyeRayDir = inverseProjectionMatrix * clipCoords
+        eyeRayDir.z = -1
+        eyeRayDir.w = 0
+        
+        let viewMatrix = camera.viewMatrix
+        let inverseViewMatrix = viewMatrix.inverse
+        
+        var worldRayDir = (inverseViewMatrix * eyeRayDir).xyz
+        worldRayDir = normalize(worldRayDir)
+        
+        let eyeRayOrigin = float4(camera.position, 1)
+        let worldRayOrigin = (inverseViewMatrix * eyeRayOrigin).xyz
+        
+        let ray = Ray(origin: worldRayOrigin, direction: worldRayDir)
+        if let hit = hitTest(ray) {
+            print("Hit model \(hit.model.name)\nat \(hit.intersectionPoint)")
+            print("Parameter: \(hit.parameter)")
+        }
+        
+        inputProviding.location = .zero
+    }
+    
+    private func hitTest(_ ray: Ray) -> HitResult? {
+        var nearest: HitResult?
+        var nearestT = Float.greatestFiniteMagnitude
+        
+        for model in models {
+            let invModel = model.transform.modelMatrix.inverse
+            let localRay = invModel * ray
+            
+            for mesh in model.meshes where mesh.meshProperties.isVisible {
+                if let hit = mesh.orientedBoundingBox.intersect(ray: localRay) {
+                    let t = hit.w
+                    if t >= 0 && t < nearestT {
+                        nearestT = t
+                        
+                        let worldPoint = model.transform.modelMatrix * hit
+                        let worldParameter = ray.interpolate(worldPoint)
+                        
+                        nearest = HitResult(model: model, ray: ray, parameter: worldParameter)
+                    }
+                }
+            }
+        }
+        
+        return nearest
     }
 }

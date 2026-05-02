@@ -12,6 +12,7 @@ final public class InputController: InputProviding, @unchecked Sendable {
     @Locked public var mouseDelta = float2.zero
     @Locked public var magnification: CGFloat = 0
     @Locked public var mousePan = float2.zero
+    @Locked public var location = float2.zero
     
     init() { }
     
@@ -25,5 +26,9 @@ final public class InputController: InputProviding, @unchecked Sendable {
     
     public func onPanChanged(x: Float, y: Float) {
         mousePan = float2(x, y)
+    }
+    
+    public func onTapLocation(x: Float, y: Float) {
+        location = float2(x: x, y: y)
     }
 }

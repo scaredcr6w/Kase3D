@@ -52,6 +52,7 @@ struct MetalView: View {
 
 #if os(macOS)
 import AppKit
+
 final class CustomMTKView: MTKView {
     weak var inputController: (any InputProviding)?
 
@@ -77,9 +78,16 @@ final class CustomMTKView: MTKView {
             y: Float(event.deltaY)
         )
     }
+    
+    override func mouseDown(with event: NSEvent) {
+        var location = convert(event.locationInWindow, from: nil)
+        location.y = bounds.height - location.y
+        inputController?.onTapLocation(x: Float(location.x), y: Float(location.y))
+    }
 }
 #elseif os(iOS)
 import UIKit
+
 final class CustomMTKView: MTKView {
     weak var inputController: (any InputProviding)?
 
@@ -104,6 +112,11 @@ final class CustomMTKView: MTKView {
         let gr = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
         return gr
     }()
+    
+    private lazy var tapRecognizer: UITapGestureRecognizer = {
+        let gr = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        return gr
+    }()
 
     override init(frame frameRect: CGRect, device: MTLDevice?) {
         super.init(frame: frameRect, device: device)
@@ -120,9 +133,11 @@ final class CustomMTKView: MTKView {
         panRecognizer.delegate = self
         dragRecognizer.delegate = self
         pinchRecognizer.delegate = self
+        tapRecognizer.delegate = self
         addGestureRecognizer(panRecognizer)
         addGestureRecognizer(pinchRecognizer)
         addGestureRecognizer(dragRecognizer)
+        addGestureRecognizer(tapRecognizer)
     }
 
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -180,6 +195,11 @@ final class CustomMTKView: MTKView {
         if gesture.state == .ended || gesture.state == .cancelled || gesture.state == .failed {
             previousDrag = .zero
         }
+    }
+    
+    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
+        let location = gesture.location(in: self)
+        inputController?.onTapLocation(x: Float(location.x), y: Float(location.y))
     }
 }
 
