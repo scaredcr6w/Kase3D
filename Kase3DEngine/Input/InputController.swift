@@ -28,7 +28,7 @@ final public class InputController: InputProviding, @unchecked Sendable {
         mousePan = float2(x, y)
     }
     
-    public func onTapLocation(x: Float, y: Float) {
+    public func onTapLocationChanged(x: Float, y: Float) {
         location = float2(x: x, y: y)
     }
 }

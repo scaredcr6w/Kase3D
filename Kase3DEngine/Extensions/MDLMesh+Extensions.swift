@@ -21,8 +21,6 @@ extension MDLMesh {
             extents: extents
         )
         
-        print("OBB Center: \(center), extents: \(extents)")
-        
         return obb
     }
 }

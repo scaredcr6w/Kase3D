@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import Combine
 
 public struct ModelScene {
     var models: [Model] = []
@@ -24,7 +25,6 @@ public struct ModelScene {
     mutating func update(deltaTime: Float, inputProviding: InputProviding) {
         camera.update(deltaTime: deltaTime, inputProviding: inputProviding)
         if inputProviding.location != .zero {
-            print("start hit testing")
             shouldHitTest(inputProviding: inputProviding)
         }
     }
@@ -52,8 +52,10 @@ public struct ModelScene {
         
         let ray = Ray(origin: origin, direction: direction)
         if let hit = hitTest(ray) {
-            print("Hit model \(hit.model.name)\nat \(hit.intersectionPoint)")
-            print("Parameter: \(hit.parameter)")
+            deselect(models: models)
+            select(model: hit.model)
+        } else {
+            deselect(models: models)
         }
         
         inputProviding.location = .zero
@@ -83,5 +85,13 @@ public struct ModelScene {
         }
         
         return nearest
+    }
+    
+    private func select(model: Model) {
+        model.properties.isSelected.send(true)
+    }
+    
+    private func deselect(models: [Model]) {
+        models.forEach { $0.properties.isSelected.send(false) }
     }
 }

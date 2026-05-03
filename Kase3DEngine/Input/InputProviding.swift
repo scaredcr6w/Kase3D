@@ -17,5 +17,5 @@ public protocol InputProviding: AnyObject {
     func onDragChanged(x: Float, y: Float)
     func onMagnificationChanged(_ value: CGFloat)
     func onPanChanged(x: Float, y: Float)
-    func onTapLocation(x: Float, y: Float)
+    func onTapLocationChanged(x: Float, y: Float)
 }
