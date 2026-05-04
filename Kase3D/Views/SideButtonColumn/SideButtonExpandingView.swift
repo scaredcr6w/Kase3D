@@ -51,19 +51,24 @@ struct SideButtonExpandingView<Content: View, Label: View, Action: View>: View {
                     .opacity((isHovering && !isOn && appCoordinator.uiStore.panelCoordinator.selected == nil) ? 1 : 0)
                     .offset(x: (isHovering && !isOn) ? 0 : -8)
             }
-            .anchorPreference(key: SideButtonActionOverlayPreferenceKey.self, value: .bounds) { anchor in
-                let actionView: AnyView = AnyView(
-                    action
-                        .font(.system(size: 12))
-                        .padding(6)
-                        .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 6))
-                )
-                return [SideButtonActionOverlayPreferenceKey.Item(id: id, anchor: anchor, view: actionView, isOn: isOn)]
-            }
             .animation(.easeOut(duration: 0.2), value: isHovering)
             .animation(.easeOut(duration: 0.2), value: isOn)
         }
         .compositingGroup()
         .frame(maxWidth: .infinity, alignment: .leading)
+        .anchorPreference(key: SideButtonActionOverlayPreferenceKey.self, value: .bounds) { anchor in
+            let actionView: AnyView = AnyView(
+                HStack {
+                    action
+                        .font(.system(size: 12))
+                        .padding(6)
+                        .frame(width: 250)
+                }
+                .frame(maxHeight: .infinity)
+                .clipped()
+                .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 24))
+            )
+            return [SideButtonActionOverlayPreferenceKey.Item(id: id, anchor: anchor, view: actionView, isOn: isOn)]
+        }
     }
 }
