@@ -129,6 +129,7 @@ struct WelcomeView: View {
                     .padding()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
             } else {
                 VStack {
                     Text("You don't have any recently opened models.")
@@ -137,9 +138,12 @@ struct WelcomeView: View {
             }
         }
         .compositingGroup()
-        .background(.thinMaterial)
         #if os(macOS)
+        .contentShape(.rect(cornerRadius: 24))
+        .glassEffect(.regular.tint(.white.opacity(0.1)), in: .rect)
         .clipShape(.rect(cornerRadius: 24))
+        #elseif os(iOS)
+        .background(.thinMaterial)
         #endif
         .fileImporter(
             isPresented: isFileImporterPresentedBinding,
