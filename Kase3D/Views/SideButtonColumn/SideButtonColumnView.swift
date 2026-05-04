@@ -39,7 +39,7 @@ struct SideButtonColumnView<Content:View>: View {
                         if item.isOn {
                             item.view
                                 .padding(.vertical)
-                                .offset(x: proxy[item.anchor].maxX - 250, y: proxy.safeAreaInsets.top) // TODO: introduce constants for magic numbers
+                                .offset(x: proxy[item.anchor].maxX - 250) // TODO: introduce constants for magic numbers
                                 .fixedSize(horizontal: true, vertical: false)
                                 .transition(.offset(x: 16).combined(with: .opacity))
                                 .animation(.easeOut(duration: 0.2), value: item.isOn)

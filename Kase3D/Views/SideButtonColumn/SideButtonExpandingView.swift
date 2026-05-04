@@ -34,8 +34,8 @@ struct SideButtonExpandingView<Content: View, Label: View, Action: View>: View {
             .buttonStyle(.plain)
             .glassEffect(
                 isOn
-                ? .regular.tint(.blue.opacity(0.7)).interactive()
-                : .regular.tint(.white.opacity(0.3)).interactive()
+                ? .regular.tint(.blue).interactive()
+                : .regular.tint(.white.opacity(0.1)).interactive()
             )
             .onHover { hover in
                 withAnimation(.easeOut(duration: 0.2)) {
@@ -47,7 +47,7 @@ struct SideButtonExpandingView<Content: View, Label: View, Action: View>: View {
                 contentLabel
                     .font(.system(size: 12))
                     .padding(6)
-                    .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 6))
+                    .glassEffect(.regular.tint(.white.opacity(0.1)), in: .rect(cornerRadius: 6))
                     .opacity((isHovering && !isOn && appCoordinator.uiStore.panelCoordinator.selected == nil) ? 1 : 0)
                     .offset(x: (isHovering && !isOn) ? 0 : -8)
             }
@@ -66,7 +66,7 @@ struct SideButtonExpandingView<Content: View, Label: View, Action: View>: View {
                 }
                 .frame(maxHeight: .infinity)
                 .clipped()
-                .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 24))
+                .glassEffect(.regular.tint(.white.opacity(0.1)), in: .rect(cornerRadius: 24))
             )
             return [SideButtonActionOverlayPreferenceKey.Item(id: id, anchor: anchor, view: actionView, isOn: isOn)]
         }

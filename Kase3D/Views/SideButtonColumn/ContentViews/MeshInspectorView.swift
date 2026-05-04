@@ -25,7 +25,18 @@ struct MeshInspectorView: View {
                                         .font(.callout)
                                         .fontWeight(.semibold)
                                 }
-                                .padding(.bottom, 5)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(5)
+                                .contentShape(.rect)
+                                .onTapGesture {
+                                    model.toggleSelection()
+                                }
+                                .background {
+                                    if model.isSelected {
+                                        RoundedRectangle(cornerRadius: 24)
+                                            .glassEffect(.regular.tint(.blue))
+                                    }
+                                }
                                 
                                 VStack(alignment: .leading, spacing: 10) {
                                     ForEach(model.meshDescriptors) { mesh in

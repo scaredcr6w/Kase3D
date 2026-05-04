@@ -199,7 +199,7 @@ final class CustomMTKView: MTKView {
     
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
         let location = gesture.location(in: self)
-        inputController?.onTapLocation(x: Float(location.x), y: Float(location.y))
+        inputController?.onTapLocationChanged(x: Float(location.x), y: Float(location.y))
     }
 }
 

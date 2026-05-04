@@ -31,4 +31,9 @@ public final class ModelDescriptor: Identifiable {
             }
             .store(in: &cancellables)
     }
+    
+    public func toggleSelection() {
+        let newValue: Bool = !isSelected
+        model.properties.isSelected.send(newValue)
+    }
 }

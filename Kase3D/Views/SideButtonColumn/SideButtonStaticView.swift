@@ -28,7 +28,7 @@ struct SideButtonStaticView<Content: View, Label: View>: View {
             }
             .buttonStyle(.plain)
             .glassEffect(
-                .regular.tint(.white.opacity(0.3))
+                .regular.tint(.white.opacity(0.1))
             )
             .onHover { hover in
                 withAnimation(.easeOut(duration: 0.2)) {
@@ -40,7 +40,7 @@ struct SideButtonStaticView<Content: View, Label: View>: View {
                 contentLabel
                     .font(.system(size: 12))
                     .padding(6)
-                    .glassEffect(.regular.tint(.white.opacity(0.3)), in: .rect(cornerRadius: 6))
+                    .glassEffect(.regular.tint(.white.opacity(0.1)), in: .rect(cornerRadius: 6))
                     .opacity((isHovering && appCoordinator.uiStore.panelCoordinator.selected == nil) ? 1 : 0)
                     .offset(x: isHovering ? 0 : -8)
             }
