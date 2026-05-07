@@ -28,7 +28,7 @@ final class ArcballCameraTests: XCTestCase {
     }
     
     func testInitialPosition() {
-        let expectedPosition = float3(0, 0, 5.0)
+        let expectedPosition = float3(0, 0, -5.0)
         XCTAssertEqual(camera.position.x, expectedPosition.x, accuracy: 0.001)
         XCTAssertEqual(camera.position.y, expectedPosition.y, accuracy: 0.001)
         XCTAssertEqual(camera.position.z, expectedPosition.z, accuracy: 0.001)
