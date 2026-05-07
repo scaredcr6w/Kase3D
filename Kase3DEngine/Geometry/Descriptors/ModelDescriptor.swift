@@ -36,4 +36,16 @@ public final class ModelDescriptor: Identifiable {
         let newValue: Bool = !isSelected
         model.properties.isSelected.send(newValue)
     }
+    
+    public func setPosition(x: Float) {
+        model.transform.position.x = x
+    }
+    
+    public func setPosition(y: Float) {
+        model.transform.position.y = y
+    }
+    
+    public func setPosition(z: Float) {
+        model.transform.position.z = z
+    }
 }

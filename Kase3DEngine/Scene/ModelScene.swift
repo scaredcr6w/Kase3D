@@ -54,8 +54,6 @@ public struct ModelScene {
         if let hit = hitTest(ray) {
             deselect(models: models)
             select(model: hit.model)
-        } else {
-            deselect(models: models)
         }
         
         inputProviding.location = .zero

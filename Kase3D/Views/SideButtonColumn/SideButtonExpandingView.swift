@@ -58,15 +58,13 @@ struct SideButtonExpandingView<Content: View, Label: View, Action: View>: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .anchorPreference(key: SideButtonActionOverlayPreferenceKey.self, value: .bounds) { anchor in
             let actionView: AnyView = AnyView(
-                HStack {
+                ZStack {
                     action
                         .font(.system(size: 12))
                         .padding(6)
                         .frame(width: trailingPanelWidth)
                 }
                 .frame(maxHeight: .infinity)
-                .clipped()
-                .glassEffect(.regular.tint(.white.opacity(0.1)), in: .rect(cornerRadius: 24))
             )
             return [SideButtonActionOverlayPreferenceKey.Item(id: id, anchor: anchor, view: actionView, isOn: isOn)]
         }

@@ -80,6 +80,8 @@ final class CustomMTKView: MTKView {
     }
     
     override func mouseUp(with event: NSEvent) {
+        super.mouseUp(with: event)
+        
         var location = convert(event.locationInWindow, from: nil)
         location.y = bounds.height - location.y
         inputController?.onTapLocationChanged(x: Float(location.x), y: Float(location.y))
