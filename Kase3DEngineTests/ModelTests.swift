@@ -17,7 +17,7 @@ final class ModelTests: XCTestCase {
     func testDefaultInitialization() {
         let model = Model()
         
-        XCTAssertEqual(model.name, "Untitled")
+        XCTAssertEqual(model.properties.name, "Untitled")
         XCTAssertEqual(model.tiling, 1)
         XCTAssertTrue(model.meshes.isEmpty)
         XCTAssertEqual(model.transform.position, float3(0, 0, 0))
@@ -30,9 +30,9 @@ final class ModelTests: XCTestCase {
     func testNameProperty() {
         let model = Model()
         
-        model.name = "TestModel"
+        model.properties.name = "TestModel"
         
-        XCTAssertEqual(model.name, "TestModel")
+        XCTAssertEqual(model.properties.name, "TestModel")
     }
     
     func testTilingProperty() {
@@ -93,13 +93,13 @@ final class ModelTests: XCTestCase {
     func testModelCanHaveMultiplePropertiesSet() {
         var model = Model()
         
-        model.name = "ComplexModel"
+        model.properties.name = "ComplexModel"
         model.tiling = 3
         model.position = float3(1, 2, 3)
         model.rotation = float3(0.1, 0.2, 0.3)
         model.scale = 1.5
         
-        XCTAssertEqual(model.name, "ComplexModel")
+        XCTAssertEqual(model.properties.name, "ComplexModel")
         XCTAssertEqual(model.tiling, 3)
         XCTAssertEqual(model.position, float3(1, 2, 3))
         XCTAssertEqual(model.rotation, float3(0.1, 0.2, 0.3))
@@ -130,7 +130,7 @@ final class ModelTests: XCTestCase {
     func testDefaultNameIsUntitled() {
         let model = Model()
         
-        XCTAssertEqual(model.name, "Untitled", "Default name should be 'Untitled'")
+        XCTAssertEqual(model.properties.name, "Untitled", "Default name should be 'Untitled'")
     }
     
     func testDefaultMeshesArrayIsEmpty() {

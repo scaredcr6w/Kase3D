@@ -14,6 +14,7 @@ struct SideButtonActionOverlayPreferenceKey: PreferenceKey {
         let anchor: Anchor<CGRect>
         let view: AnyView
         let isOn: Bool
+        let width: CGFloat = 250
     }
 
     static var defaultValue: [Item] = []
@@ -30,7 +31,7 @@ struct SideButtonColumnView<Content:View>: View {
         ZStack(alignment: .topLeading) {
             content
                 .padding(.horizontal)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
         .overlayPreferenceValue(SideButtonActionOverlayPreferenceKey.self) { items in
             GeometryReader { proxy in
@@ -38,9 +39,10 @@ struct SideButtonColumnView<Content:View>: View {
                     ForEach(items) { item in
                         if item.isOn {
                             item.view
-                                .offset(x: proxy[item.anchor].minX, y: proxy[item.anchor].minY)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .transition(.offset(x: -8).combined(with: .opacity))
+                                .padding(.vertical)
+                                .offset(x: proxy[item.anchor].maxX - item.view.trailingPanelWidth) // TODO: introduce constants for magic numbers
+                                .fixedSize(horizontal: true, vertical: false)
+                                .transition(.offset(x: 16).combined(with: .opacity))
                                 .animation(.easeOut(duration: 0.2), value: item.isOn)
                         }
                     }

@@ -8,10 +8,11 @@
 import MetalKit
 import Kase3DCore
 
-final class Mesh {
+final class Mesh: HitTestable {
     var vertexBuffers: [MTLBuffer]
     var submeshes: [Submesh]
     var meshProperties: MeshProperties
+    var orientedBoundingBox: OrientedBoundingBox
     
     init?(mdlMesh: MDLMesh, mtkMesh: MTKMesh, textureLoader: TextureLoading) {
         var vertexBuffers: [MTLBuffer] = []
@@ -41,5 +42,6 @@ final class Mesh {
         }
         
         self.submeshes = builtSubmeshes
+        self.orientedBoundingBox = mdlMesh.orientedBoundingBox
     }
 }

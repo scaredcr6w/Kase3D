@@ -75,7 +75,7 @@ final class TransformTests: XCTestCase {
         
         let modelMatrix = transform.modelMatrix
         
-        XCTAssertEqual(modelMatrix.columns.3.w, 0.5, accuracy: 0.001)
+        XCTAssertEqual(modelMatrix.columns.3.w, 1.0, accuracy: 0.001)
     }
     
     func testModelMatrixWithRotationOnly() {

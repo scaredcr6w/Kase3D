@@ -47,7 +47,7 @@ public class ModelController: NSObject {
 extension ModelController: MTKViewDelegate {
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         guard sceneManager.modelScene != nil else { return }
-        sceneManager.modelScene.update(size: size)
+        sceneManager.modelScene.update(size: view.bounds.size)
     }
     
     public func draw(in view: MTKView) {
@@ -56,6 +56,7 @@ extension ModelController: MTKViewDelegate {
         let currentTime = CFAbsoluteTimeGetCurrent()
         let deltaTime = (currentTime - lastTime)
         lastTime = currentTime
+        sceneManager.modelScene.update(size: view.bounds.size)
         sceneManager.modelScene.update(deltaTime: Float(deltaTime), inputProviding: inputController)
         renderer.draw(scene: sceneManager.modelScene, in: view)
     }

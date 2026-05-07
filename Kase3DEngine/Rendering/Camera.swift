@@ -29,14 +29,14 @@ struct ArcballCamera: Camera {
     var maxDistance: Float = 20
     
     var position: float3 {
-        let localOffset = float3(0, 0, distance)
+        let localOffset = float3(0, 0, -distance)
         return target + orientation.act(localOffset)
     }
     
     var viewMatrix: float4x4 {
         let position = position
         let rotationMatrix = float4x4(orientation.conjugate)
-        let translationMatrix = float4x4(translation: position)
+        let translationMatrix = float4x4(translation: -position)
         
         return rotationMatrix * translationMatrix
     }
@@ -113,11 +113,11 @@ struct ArcballCamera: Camera {
         let topDownFactor = abs(sin(pitchAngle))
         
         let horizontalPan = right * panInput.x * panSens
-        target += horizontalPan
+        target -= horizontalPan
         
         let forwardPan = float3(forward.x, 0, forward.z)
         let forwardPanNormalized = length(forwardPan) > 0.001 ? normalize(forwardPan) : float3(0, 0, 1)
-        target -= forwardPanNormalized * panInput.y * panSens * topDownFactor
-        target.y -= panInput.y * panSens * horizontalFactor
+        target += forwardPanNormalized * panInput.y * panSens * topDownFactor
+        target.y += panInput.y * panSens * horizontalFactor
     }
 }

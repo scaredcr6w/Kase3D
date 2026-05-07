@@ -11,14 +11,14 @@ import Kase3DCore
 final class Model: Transformable {
     var transform: Transform = .init()
     var meshes: [Mesh] = []
-    var name: String = "Untitled"
     var tiling: UInt32 = 1
+    var properties: ModelProperties = .init()
     
     init() { }
     
     init(meshes: [Mesh], name: String) {
         self.meshes = meshes
-        self.name = name
+        self.properties.name = name
     }
     
     func render(

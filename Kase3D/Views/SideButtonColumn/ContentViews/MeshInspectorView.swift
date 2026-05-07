@@ -13,30 +13,45 @@ struct MeshInspectorView: View {
     
     var body: some View {
         if !sceneManager.modelDescriptors.isEmpty {
-            ScrollView {
-                VStack {
-                    ForEach(sceneManager.modelDescriptors) { model in
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Image(systemName: "cube.transparent")
-                                    .font(.callout)
-                                Text(model.modelName)
-                                    .font(.callout)
-                                    .fontWeight(.semibold)
-                            }
-                            .padding(.bottom, 5)
-                            
-                            VStack(alignment: .leading, spacing: 10) {
-                                ForEach(model.meshDescriptors) { mesh in
-                                    MeshDisclosureGroup(mesh: mesh)
+            VStack {
+                ScrollView {
+                    VStack {
+                        ForEach(sceneManager.modelDescriptors) { model in
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Image(systemName: "cube.transparent")
+                                        .font(.callout)
+                                    Text(model.modelName)
+                                        .font(.callout)
+                                        .fontWeight(.semibold)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(5)
+                                .contentShape(.rect)
+                                .onTapGesture {
+                                    model.toggleSelection()
+                                }
+                                .background {
+                                    if model.isSelected {
+                                        RoundedRectangle(cornerRadius: 24)
+                                            .glassEffect(.regular.tint(.blue))
+                                    }
+                                }
+                                
+                                VStack(alignment: .leading, spacing: 10) {
+                                    ForEach(model.meshDescriptors) { mesh in
+                                        MeshDisclosureGroup(mesh: mesh)
+                                    }
                                 }
                             }
+                            .padding(.bottom, 5)
                         }
-                        .padding(.bottom, 5)
                     }
                 }
+                .contentMargins(.zero)
             }
-            .frame(maxHeight: 350)
+            .clipped()
+            .padding(8)
         } else {
             VStack {
                 Text("Model not loaded")
@@ -106,6 +121,5 @@ struct MeshDisclosureGroup: View {
         }
         .disclosureGroupStyle(CustomDisclosureGroup())
         .padding(.leading, 4)
-        .frame(maxWidth: 350, alignment: .leading)
     }
 }

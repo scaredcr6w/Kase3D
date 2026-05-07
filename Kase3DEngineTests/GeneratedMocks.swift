@@ -171,10 +171,11 @@ class TextureLoadingMock: TextureLoading {
 
 public class InputProvidingMock: InputProviding {
     public init() { }
-    public init(mouseDelta: float2, mousePan: float2, magnification: CGFloat = 0.0) {
+    public init(mouseDelta: float2, mousePan: float2, magnification: CGFloat = 0.0, location: float2) {
         self._mouseDelta = mouseDelta
         self._mousePan = mousePan
         self.magnification = magnification
+        self._location = location
     }
 
 
@@ -194,6 +195,13 @@ public class InputProvidingMock: InputProviding {
 
     public private(set) var magnificationSetCallCount = 0
     public var magnification: CGFloat = 0.0 { didSet { magnificationSetCallCount += 1 } }
+
+    public private(set) var locationSetCallCount = 0
+    private var _location: float2! { didSet { locationSetCallCount += 1 } }
+    public var location: float2 {
+        get { return _location }
+        set { _location = newValue }
+    }
 
     public private(set) var onDragChangedCallCount = 0
     public var onDragChangedHandler: ((Float, Float) -> ())?
@@ -221,6 +229,16 @@ public class InputProvidingMock: InputProviding {
         onPanChangedCallCount += 1
         if let onPanChangedHandler = onPanChangedHandler {
             onPanChangedHandler(x, y)
+        }
+        
+    }
+
+    public private(set) var onTapLocationChangedCallCount = 0
+    public var onTapLocationChangedHandler: ((Float, Float) -> ())?
+    public func onTapLocationChanged(x: Float, y: Float) {
+        onTapLocationChangedCallCount += 1
+        if let onTapLocationChangedHandler = onTapLocationChangedHandler {
+            onTapLocationChangedHandler(x, y)
         }
         
     }
