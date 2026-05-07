@@ -51,7 +51,7 @@ struct MeshInspectorView: View {
                 .contentMargins(.zero)
             }
             .clipped()
-            .padding(5)
+            .padding(8)
         } else {
             VStack {
                 Text("Model not loaded")
