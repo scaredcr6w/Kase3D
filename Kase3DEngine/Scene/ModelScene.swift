@@ -71,13 +71,13 @@ public struct ModelScene {
             
             for mesh in model.meshes where mesh.meshProperties.isVisible {
                 if let hit = mesh.orientedBoundingBox.intersect(ray: localRay) {
-                    let t = hit.w
-                    if t >= 0 && t < nearestT {
-                        nearestT = t
-                        
-                        let worldPoint = model.transform.modelMatrix * hit
-                        let worldParameter = ray.interpolate(worldPoint)
-                        
+                    let worldPoint = model.transform.modelMatrix * hit
+                    let worldParameter = ray.interpolate(worldPoint)
+                    
+                    print("World parameter for \(model.properties.name): \(worldParameter), worldPoint: \(worldPoint)")
+                    
+                    if worldParameter >= 0 && worldParameter < nearestT {
+                        nearestT = worldParameter
                         nearest = HitResult(model: model, ray: ray, parameter: worldParameter)
                     }
                 }

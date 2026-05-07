@@ -62,7 +62,7 @@ struct SideButtonExpandingView<Content: View, Label: View, Action: View>: View {
                     action
                         .font(.system(size: 12))
                         .padding(6)
-                        .frame(width: 250)
+                        .frame(width: trailingPanelWidth)
                 }
                 .frame(maxHeight: .infinity)
                 .clipped()
