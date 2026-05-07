@@ -12,6 +12,10 @@ struct OrientedBoundingBox {
     var axes: (float3, float3, float3)
     var extents: float3
     
+    var volume: Float {
+        return 8 * extents.x * extents.y * extents.z
+    }
+    
     func intersect(ray: Ray) -> float4? {
         var tMin = -Float.greatestFiniteMagnitude
         var tMax = Float.greatestFiniteMagnitude

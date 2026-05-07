@@ -62,8 +62,13 @@ public struct ModelScene {
     }
     
     private func hitTest(_ ray: Ray) -> HitResult? {
-        var nearest: HitResult?
-        var nearestT = Float.greatestFiniteMagnitude
+        struct CandidateHit {
+            let model: Model
+            let distance: Float
+            let volume: Float
+        }
+        
+        var candidates: [CandidateHit] = []
         
         for model in models {
             let invModel = model.transform.modelMatrix.inverse
@@ -71,20 +76,26 @@ public struct ModelScene {
             
             for mesh in model.meshes where mesh.meshProperties.isVisible {
                 if let hit = mesh.orientedBoundingBox.intersect(ray: localRay) {
-                    let worldPoint = model.transform.modelMatrix * hit
-                    let worldParameter = ray.interpolate(worldPoint)
+                    let localHitPoint = float4(hit.xyz, 1)
+                    let worldPoint = model.transform.modelMatrix * localHitPoint
+                    let distance = length(worldPoint.xyz - ray.origin)
+                    let scaleFactor = model.transform.scale
+                    let worldVolume = mesh.orientedBoundingBox.volume * scaleFactor * scaleFactor * scaleFactor
                     
-                    print("World parameter for \(model.properties.name): \(worldParameter), worldPoint: \(worldPoint)")
-                    
-                    if worldParameter >= 0 && worldParameter < nearestT {
-                        nearestT = worldParameter
-                        nearest = HitResult(model: model, ray: ray, parameter: worldParameter)
-                    }
+                    candidates.append(CandidateHit(model: model, distance: distance, volume: worldVolume))
                 }
             }
         }
         
-        return nearest
+        guard !candidates.isEmpty else { return nil }
+        
+        candidates.sort { a, b in
+            return a.volume < b.volume
+        }
+        
+        let best = candidates[0]
+        
+        return HitResult(model: best.model, ray: ray, parameter: best.distance)
     }
     
     private func select(model: Model) {
