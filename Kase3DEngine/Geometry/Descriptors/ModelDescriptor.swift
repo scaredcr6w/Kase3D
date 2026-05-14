@@ -48,4 +48,14 @@ public final class ModelDescriptor: Identifiable {
     public func setPosition(z: Float) {
         model.transform.position.z = z
     }
+    
+    public func getPosition() -> float3 {
+        model.transform.position
+    }
+}
+
+extension ModelDescriptor: Equatable {
+    public static func == (lhs: ModelDescriptor, rhs: ModelDescriptor) -> Bool {
+        lhs === rhs
+    }
 }

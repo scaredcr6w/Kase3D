@@ -38,11 +38,14 @@ public enum MeshError: KaseError {
 
 public enum ModelError: KaseError {
     case failedToLoad
+    case invalidDimension
     
     public var localizedDescription: String {
         switch self {
         case .failedToLoad:
             String(localized: "Failed to load Model.")
+        case .invalidDimension:
+            String(localized: "Invalid dimensions given.")
         }
     }
 }

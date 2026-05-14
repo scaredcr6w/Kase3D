@@ -7,19 +7,26 @@
 
 import SwiftUI
 import Kase3DEngine
+import Kase3DCore
 
 struct MeshInspectorView: View {
     let sceneManager: SceneManager
     
-    @State private var xPosition: Float = 0
-    @State private var yPosition: Float = 0
-    @State private var zPosition: Float = 0
+    @State private var xPosition: String = ""
+    @State private var yPosition: String = ""
+    @State private var zPosition: String = ""
     @Namespace private var namespace
     
     
     private var didSelectModels: Bool {
         sceneManager.modelDescriptors.contains(where: { $0.isSelected })
     }
+    
+    private var selectedModels: [ModelDescriptor] {
+        sceneManager.modelDescriptors.filter { $0.isSelected }
+    }
+    
+    @State private var shouldPresentTranslations: Bool = false
     
     var body: some View {
         Group {
@@ -33,6 +40,7 @@ struct MeshInspectorView: View {
                                         HStack {
                                             Image(systemName: "cube.transparent")
                                                 .font(.callout)
+                                            
                                             Text(model.modelName)
                                                 .font(.callout)
                                                 .fontWeight(.semibold)
@@ -41,9 +49,7 @@ struct MeshInspectorView: View {
                                         .padding(5)
                                         .contentShape(.rect)
                                         .onTapGesture {
-                                            withAnimation(.easeInOut(duration: 0.2)) {
-                                                model.toggleSelection()
-                                            }
+                                            model.toggleSelection()
                                         }
                                         .background {
                                             if model.isSelected {
@@ -68,44 +74,14 @@ struct MeshInspectorView: View {
                         .glassEffect(.regular.tint(.white.opacity(0.1)), in: .rect(cornerRadius: 24))
                         .glassEffectID("meshes", in: namespace)
                         
-                        if didSelectModels { // TODO: No animation when model is selected with hit testing (if selected from the list animation goes through). Getting rid of GlassEffectContainer is the best bet
-                            VStack {
-                                Text("Transform")
-                                    .font(.callout)
-                                    .fontWeight(.semibold)
-                                
-                                Form {
-                                    HStack {
-                                        TextField("X", value: $xPosition, format: .number)
-                                            .textFieldStyle(.roundedBorder)
-                                            .padding()
-                                            .onSubmit {
-                                                for model in sceneManager.modelDescriptors where model.isSelected {
-                                                    model.setPosition(x: xPosition)
-                                                }
-                                            }
-                                        
-                                        TextField("Y", value: $yPosition, format: .number)
-                                            .textFieldStyle(.roundedBorder)
-                                            .padding()
-                                            .onSubmit {
-                                                for model in sceneManager.modelDescriptors where model.isSelected {
-                                                    model.setPosition(y: yPosition)
-                                                }
-                                            }
-                                        
-                                        TextField("Z", value: $zPosition, format: .number)
-                                            .textFieldStyle(.roundedBorder)
-                                            .padding()
-                                            .onSubmit {
-                                                for model in sceneManager.modelDescriptors where model.isSelected {
-                                                    model.setPosition(z: zPosition)
-                                                }
-                                            }
-                                    }
-                                    
-                                }
-                            }
+                        
+                        if shouldPresentTranslations {
+                            ModelTransformView(
+                                sceneManager: sceneManager,
+                                xPosition: $xPosition,
+                                yPosition: $yPosition,
+                                zPosition: $zPosition
+                            )
                             .padding(8)
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                             .glassEffect(.regular.tint(.white.opacity(0.1)), in: .rect(cornerRadius: 24))
@@ -120,6 +96,128 @@ struct MeshInspectorView: View {
                 }
             }
         }
+        .onChange(of: didSelectModels) { _, newValue in
+            withAnimation(.easeOut(duration: 0.2)) {
+                shouldPresentTranslations = newValue
+            }
+        }
+        .onChange(of: selectedModels) { _, newValue in
+            setTransformFields(newValue: newValue)
+        }
+    }
+    
+    func setTransformFields(newValue: [ModelDescriptor]) {
+        if newValue.count > 1 {
+            setFieldsForMultipleSelected()
+        } else if newValue.count != 0 {
+            let selectedModel = newValue[0]
+            setFields(for: selectedModel)
+        } else {
+            resetFields()
+        }
+    }
+    
+    private func setFieldsForMultipleSelected() {
+        let positions = sceneManager.modelDescriptors.map { $0.getPosition() }
+        let xPositionsAvg = positions.reduce(0.0) { $0 + $1.x } / Float(positions.count)
+        let yPositionsAvg = positions.reduce(0.0) { $0 + $1.y } / Float(positions.count)
+        let zPositionsAvg = positions.reduce(0.0) { $0 + $1.z } / Float(positions.count)
+        
+        xPosition = "\(xPositionsAvg)"
+        yPosition = "\(yPositionsAvg)"
+        zPosition = "\(zPositionsAvg)"
+    }
+    
+    private func setFields(for model: ModelDescriptor) {
+        let position = model.getPosition()
+        
+        xPosition = String(position.x)
+        yPosition = String(position.y)
+        zPosition = String(position.z)
+    }
+    
+    private func resetFields() {
+        xPosition = ""
+        yPosition = ""
+        zPosition = ""
+    }
+}
+
+struct ModelTransformView: View {
+    let sceneManager: SceneManager
+    
+    @Binding var xPosition: String
+    @Binding var yPosition: String
+    @Binding var zPosition: String
+    
+    var body: some View {
+        GeometryReader { geometry in
+            VStack {
+                Text("Transform")
+                    .font(.callout)
+                    .fontWeight(.semibold)
+                
+                Form {
+                    VStack {
+                        HStack {
+                            TextField("X", text: $xPosition, prompt: Text("X"))
+                                .textFieldStyle(.roundedBorder)
+        //                        .padding()
+        //                        .frame(width: geometry.size.width / 3)
+                                .onSubmit {
+                                    for model in sceneManager.modelDescriptors where model.isSelected {
+                                        switch validateInput(xPosition) {
+                                        case .success(let position):
+                                            model.setPosition(x: position)
+                                            
+                                        case .failure(let error):
+                                            ErrorManager.shared.present(error)
+                                        }
+                                    }
+                                }
+                        }
+                        
+                        TextField("Y", text: $yPosition, prompt: Text("Y"))
+                            .textFieldStyle(.roundedBorder)
+    //                        .padding()
+                            .onSubmit {
+                                for model in sceneManager.modelDescriptors where model.isSelected {
+                                    switch validateInput(yPosition) {
+                                    case .success(let position):
+                                        model.setPosition(y: position)
+                                        
+                                    case .failure(let error):
+                                        ErrorManager.shared.present(error)
+                                    }
+                                }
+                            }
+                        
+                        TextField("Z", text: $zPosition, prompt: Text("Z"))
+                            .textFieldStyle(.roundedBorder)
+    //                        .padding()
+                            .onSubmit {
+                                for model in sceneManager.modelDescriptors where model.isSelected {
+                                    switch validateInput(zPosition) {
+                                    case .success(let position):
+                                        model.setPosition(z: position)
+                                        
+                                    case .failure(let error):
+                                        ErrorManager.shared.present(error)
+                                    }
+                                }
+                            }
+                    }
+                }
+            }
+        }
+    }
+    
+    private func validateInput(_ input: String) -> Result<Float, ModelError> { // TODO: Create parser for handling - and + inputs
+        if let floatValue = Float(input) {
+            return .success(floatValue)
+        }
+        
+        return .failure(.invalidDimension)
     }
 }
 
