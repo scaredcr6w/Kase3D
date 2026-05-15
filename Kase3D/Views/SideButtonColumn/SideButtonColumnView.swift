@@ -37,14 +37,13 @@ struct SideButtonColumnView<Content:View>: View {
             GeometryReader { proxy in
                 ZStack(alignment: .topLeading) {
                     ForEach(items) { item in
-                        if item.isOn {
-                            item.view
-                                .padding(.vertical)
-                                .offset(x: proxy[item.anchor].maxX - item.view.trailingPanelWidth) // TODO: introduce constants for magic numbers
-                                .fixedSize(horizontal: true, vertical: false)
-                                .transition(.offset(x: 16).combined(with: .opacity))
-                                .animation(.easeOut(duration: 0.2), value: item.isOn)
-                        }
+                        item.view
+                            .padding(.vertical)
+                            .opacity(item.isOn ? 1 : 0)
+                            .offset(x: proxy[item.anchor].maxX - item.view.trailingPanelWidth)
+                            .fixedSize(horizontal: true, vertical: false)
+                            .transition(.offset(x: 16).combined(with: .opacity))
+                            .animation(.easeOut(duration: 0.2), value: item.isOn)
                     }
                 }
             }

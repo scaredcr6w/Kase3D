@@ -17,16 +17,15 @@ struct MeshInspectorView: View {
     @State private var zPosition: String = ""
     @Namespace private var namespace
     
-    
-    private var didSelectModels: Bool {
-        sceneManager.modelDescriptors.contains(where: { $0.isSelected })
-    }
+    @Environment(AppCoordinator.self) private var appCoordinator
     
     private var selectedModels: [ModelDescriptor] {
         sceneManager.modelDescriptors.filter { $0.isSelected }
     }
     
-    @State private var shouldPresentTranslations: Bool = false
+    private var shouldPresentTransformView: Bool {
+        !selectedModels.isEmpty
+    }
     
     var body: some View {
         Group {
@@ -34,48 +33,46 @@ struct MeshInspectorView: View {
                 GlassEffectContainer(spacing: 20) {
                     VStack(spacing: 20) {
                         ScrollView {
-                            VStack {
-                                ForEach(sceneManager.modelDescriptors) { model in
-                                    VStack(alignment: .leading) {
-                                        HStack {
-                                            Image(systemName: "cube.transparent")
-                                                .font(.callout)
-                                            
-                                            Text(model.modelName)
-                                                .font(.callout)
-                                                .fontWeight(.semibold)
-                                        }
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(5)
-                                        .contentShape(.rect)
-                                        .onTapGesture {
-                                            model.toggleSelection()
-                                        }
-                                        .background {
-                                            if model.isSelected {
-                                                RoundedRectangle(cornerRadius: 24)
-                                                    .glassEffect(.regular.tint(.blue))
-                                            }
-                                        }
+                            ForEach(sceneManager.modelDescriptors) { model in
+                                VStack(alignment: .leading) {
+                                    HStack {
+                                        Image(systemName: "cube.transparent")
+                                            .font(.callout)
                                         
-                                        VStack(alignment: .leading, spacing: 10) {
-                                            ForEach(model.meshDescriptors) { mesh in
-                                                MeshDisclosureGroup(mesh: mesh)
-                                            }
+                                        Text(model.modelName)
+                                            .font(.callout)
+                                            .fontWeight(.semibold)
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(5)
+                                    .contentShape(.rect)
+                                    .onTapGesture {
+                                        model.toggleSelection()
+                                    }
+                                    .background {
+                                        if model.isSelected {
+                                            RoundedRectangle(cornerRadius: 24)
+                                                .glassEffect(.regular.tint(.blue))
                                         }
                                     }
-                                    .padding(.bottom, 5)
+                                    
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        ForEach(model.meshDescriptors) { mesh in
+                                            MeshDisclosureGroup(mesh: mesh)
+                                        }
+                                    }
                                 }
+                                .padding(.bottom, 5)
                             }
                         }
                         .contentMargins(.zero)
+                        .scrollIndicators(.hidden)
                         .clipped()
                         .padding(8)
                         .glassEffect(.regular.tint(.white.opacity(0.1)), in: .rect(cornerRadius: 24))
                         .glassEffectID("meshes", in: namespace)
                         
-                        
-                        if shouldPresentTranslations {
+                        if shouldPresentTransformView {
                             ModelTransformView(
                                 sceneManager: sceneManager,
                                 xPosition: $xPosition,
@@ -83,11 +80,25 @@ struct MeshInspectorView: View {
                                 zPosition: $zPosition
                             )
                             .padding(8)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                            .frame(maxWidth: .infinity, alignment: .topLeading)
                             .glassEffect(.regular.tint(.white.opacity(0.1)), in: .rect(cornerRadius: 24))
                             .glassEffectID("transforms", in: namespace)
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
+                            
+                            ModelTransformView(
+                                sceneManager: sceneManager,
+                                xPosition: $xPosition,
+                                yPosition: $yPosition,
+                                zPosition: $zPosition
+                            )
+                            .padding(8)
+                            .frame(maxWidth: .infinity, alignment: .topLeading)
+                            .glassEffect(.regular.tint(.white.opacity(0.1)), in: .rect(cornerRadius: 24))
+                            .glassEffectID("transforms", in: namespace)
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
                         }
                     }
+                    .animation(.easeOut(duration: 0.2), value: shouldPresentTransformView)
                 }
             } else {
                 VStack {
@@ -96,19 +107,18 @@ struct MeshInspectorView: View {
                 }
             }
         }
-        .onChange(of: didSelectModels) { _, newValue in
-            withAnimation(.easeOut(duration: 0.2)) {
-                shouldPresentTranslations = newValue
-            }
-        }
         .onChange(of: selectedModels) { _, newValue in
             setTransformFields(newValue: newValue)
+            
+            withAnimation(.easeOut(duration: 0.2)) {
+                appCoordinator.uiStore.panelCoordinator.selected = .mesh
+            }
         }
     }
     
-    func setTransformFields(newValue: [ModelDescriptor]) {
+    private func setTransformFields(newValue: [ModelDescriptor]) {
         if newValue.count > 1 {
-            setFieldsForMultipleSelected()
+            setFieldsForMultipleSelected(selected: newValue)
         } else if newValue.count != 0 {
             let selectedModel = newValue[0]
             setFields(for: selectedModel)
@@ -117,8 +127,8 @@ struct MeshInspectorView: View {
         }
     }
     
-    private func setFieldsForMultipleSelected() {
-        let positions = sceneManager.modelDescriptors.map { $0.getPosition() }
+    private func setFieldsForMultipleSelected(selected: [ModelDescriptor]) {
+        let positions = selected.map { $0.getPosition() }
         let xPositionsAvg = positions.reduce(0.0) { $0 + $1.x } / Float(positions.count)
         let yPositionsAvg = positions.reduce(0.0) { $0 + $1.y } / Float(positions.count)
         let zPositionsAvg = positions.reduce(0.0) { $0 + $1.z } / Float(positions.count)
@@ -151,55 +161,21 @@ struct ModelTransformView: View {
     @Binding var zPosition: String
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack {
-                Text("Transform")
-                    .font(.callout)
-                    .fontWeight(.semibold)
-                
-                Form {
-                    VStack {
-                        HStack {
-                            TextField("X", text: $xPosition, prompt: Text("X"))
-                                .textFieldStyle(.roundedBorder)
-        //                        .padding()
-        //                        .frame(width: geometry.size.width / 3)
-                                .onSubmit {
-                                    for model in sceneManager.modelDescriptors where model.isSelected {
-                                        switch validateInput(xPosition) {
-                                        case .success(let position):
-                                            model.setPosition(x: position)
-                                            
-                                        case .failure(let error):
-                                            ErrorManager.shared.present(error)
-                                        }
-                                    }
-                                }
-                        }
-                        
-                        TextField("Y", text: $yPosition, prompt: Text("Y"))
+        VStack {
+            Text("Transform")
+                .font(.callout)
+                .fontWeight(.semibold)
+            
+            Form {
+                VStack {
+                    HStack {
+                        TextField("X", text: $xPosition, prompt: Text("X"))
                             .textFieldStyle(.roundedBorder)
-    //                        .padding()
                             .onSubmit {
                                 for model in sceneManager.modelDescriptors where model.isSelected {
-                                    switch validateInput(yPosition) {
+                                    switch validateInput(xPosition) {
                                     case .success(let position):
-                                        model.setPosition(y: position)
-                                        
-                                    case .failure(let error):
-                                        ErrorManager.shared.present(error)
-                                    }
-                                }
-                            }
-                        
-                        TextField("Z", text: $zPosition, prompt: Text("Z"))
-                            .textFieldStyle(.roundedBorder)
-    //                        .padding()
-                            .onSubmit {
-                                for model in sceneManager.modelDescriptors where model.isSelected {
-                                    switch validateInput(zPosition) {
-                                    case .success(let position):
-                                        model.setPosition(z: position)
+                                        model.setPosition(x: position)
                                         
                                     case .failure(let error):
                                         ErrorManager.shared.present(error)
@@ -207,6 +183,34 @@ struct ModelTransformView: View {
                                 }
                             }
                     }
+                    
+                    TextField("Y", text: $yPosition, prompt: Text("Y"))
+                        .textFieldStyle(.roundedBorder)
+                        .onSubmit {
+                            for model in sceneManager.modelDescriptors where model.isSelected {
+                                switch validateInput(yPosition) {
+                                case .success(let position):
+                                    model.setPosition(y: position)
+                                    
+                                case .failure(let error):
+                                    ErrorManager.shared.present(error)
+                                }
+                            }
+                        }
+                    
+                    TextField("Z", text: $zPosition, prompt: Text("Z"))
+                        .textFieldStyle(.roundedBorder)
+                        .onSubmit {
+                            for model in sceneManager.modelDescriptors where model.isSelected {
+                                switch validateInput(zPosition) {
+                                case .success(let position):
+                                    model.setPosition(z: position)
+                                    
+                                case .failure(let error):
+                                    ErrorManager.shared.present(error)
+                                }
+                            }
+                        }
                 }
             }
         }

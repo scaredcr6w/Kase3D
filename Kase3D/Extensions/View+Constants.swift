@@ -9,6 +9,6 @@ import SwiftUI
 
 extension View {
     var trailingPanelWidth: CGFloat {
-        return 250
+        return 280
     }
 }
