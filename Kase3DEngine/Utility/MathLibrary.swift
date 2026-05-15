@@ -13,11 +13,11 @@ public typealias float3 = SIMD3<Float>
 public typealias float4 = SIMD4<Float>
 
 extension Float {
-    var toDegrees: Float {
+    public var toDegrees: Float {
         (self / .pi) * 180
     }
     
-    var toRadians: Float {
+    public var toRadians: Float {
         (self / 180) * .pi
     }
 }

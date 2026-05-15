@@ -11,7 +11,7 @@ import Combine
 @Observable
 public final class ModelDescriptor: Identifiable {
     public let id = UUID()
-    private let model: Model
+    private var model: Model
     public let modelName: String
     public var isSelected: Bool
     private(set) public var meshDescriptors: [MeshDescriptor]
@@ -51,6 +51,30 @@ public final class ModelDescriptor: Identifiable {
     
     public func getPosition() -> float3 {
         model.transform.position
+    }
+    
+    public func setRotation(x: Float) {
+        model.transform.rotation.x = x.toRadians
+    }
+    
+    public func setRotation(y: Float) {
+        model.transform.rotation.y = y.toRadians
+    }
+    
+    public func setRotation(z: Float) {
+        model.transform.rotation.z = z.toRadians
+    }
+    
+    public func getRotation() -> float3 {
+        model.transform.rotation
+    }
+    
+    public func setScale(_ scale: Float) {
+        model.scale = scale
+    }
+    
+    public func getScale() -> Float {
+        model.transform.scale
     }
 }
 
