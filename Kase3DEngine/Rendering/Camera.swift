@@ -25,7 +25,7 @@ struct ArcballCamera: Camera {
     var aspect: Float = 1
     var near: Float = 0.1
     var far: Float = 100
-    var minDistance: Float = 0.1
+    var minDistance: Float = 0.5
     var maxDistance: Float = 20
     
     var position: float3 {
